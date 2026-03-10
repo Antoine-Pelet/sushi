@@ -1,0 +1,55 @@
+@charset "UTF-8";
+body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background: #f7f7f7;
+        }
+
+        form {
+            background: white;
+            padding: 20px;
+            max-width: 700px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 10px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 6px;
+        }
+
+        .ingredient {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-top: 15px;
+            border-radius: 6px;
+            background: #fafafa;
+        }
+
+        .actions {
+            margin-top: 10px;
+        }
+
+        button {
+            margin-top: 15px;
+            padding: 8px 14px;
+            cursor: pointer;
+        }
+
+        .remove {
+            background: #e74c3c;
+            color: white;
+            border: none;
+        }
+
+        .add {
+            background: #2ecc71;
+            color: white;
+            border: none;
+        }

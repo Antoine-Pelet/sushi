@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<donnees xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="donnee.xsd">
+
+  <produits>
+    <produit id="1" nom="Riz à sushi"/>
+    <produit id="2" nom="Vinaigre de riz"/>
+    <produit id="3" nom="Sucre"/>
+    <produit id="4" nom="Sel"/>
+    <produit id="5" nom="Feuilles de nori"/>
+    <produit id="6" nom="Saumon frais"/>
+    <produit id="7" nom="Thon frais"/>
+    <produit id="8" nom="Concombre"/>
+    <produit id="9" nom="Avocat"/>
+    <produit id="10" nom="Wasabi"/>
+    <produit id="11" nom="Sauce soja"/>
+    <produit id="12" nom="Gingembre mariné"/>
+    <produit id="13" nom="Graines de sésame"/>
+  </produits>
+
+  <recettes>
+    <recette id="101">
+      <titre>Maki saumon avocat</titre>
+      <descriptionEtapes>
+1) Cuire et assaisonner le riz (vinaigre de riz, sucre, sel).
+2) Poser une feuille de nori sur le tapis, étaler le riz.
+3) Ajouter saumon et avocat, rouler puis découper.
+      </descriptionEtapes>
+      <ingredients>
+        <ingredient produitId="1" quantite="250" unite="g"/>
+        <ingredient produitId="2" quantite="30" unite="ml"/>
+        <ingredient produitId="3" quantite="10" unite="g"/>
+        <ingredient produitId="4" quantite="3" unite="g"/>
+        <ingredient produitId="5" quantite="2" unite="feuilles"/>
+        <ingredient produitId="6" quantite="120" unite="g"/>
+        <ingredient produitId="9" quantite="1" unite="piece"/>
+        <ingredient produitId="11" quantite="20" unite="ml"/>
+      </ingredients>
+    </recette>
+
+
+    <recette id="102">
+      <titre>Nigiri thon</titre>
+      <descriptionEtapes>
+1) Former des petits boudins de riz à sushi.
+2) Déposer une tranche de thon sur chaque boudin.
+3) Servir avec wasabi et sauce soja.
+      </descriptionEtapes>
+      <ingredients>
+        <ingredient produitId="1" quantite="200" unite="g"/>
+        <ingredient produitId="2" quantite="25" unite="ml"/>
+        <ingredient produitId="3" quantite="8" unite="g"/>
+        <ingredient produitId="4" quantite="2" unite="g"/>
+        <ingredient produitId="7" quantite="150" unite="g"/>
+        <ingredient produitId="10" quantite="5" unite="g"/>
+        <ingredient produitId="11" quantite="20" unite="ml"/>
+      </ingredients>
+    </recette>
+
+    <recette id="103">
+      <titre>California concombre sésame</titre>
+      <descriptionEtapes>
+1) Étaler le riz sur le nori puis retourner (riz à l'extérieur).
+2) Garnir avec concombre, rouler fermement.
+3) Parsemer de sésame, découper et servir.
+      </descriptionEtapes>
+      <ingredients>
+        <ingredient produitId="1" quantite="250" unite="g"/>
+        <ingredient produitId="2" quantite="30" unite="ml"/>
+        <ingredient produitId="3" quantite="10" unite="g"/>
+        <ingredient produitId="4" quantite="3" unite="g"/>
+        <ingredient produitId="5" quantite="2" unite="feuilles"/>
+        <ingredient produitId="8" quantite="0.5" unite="piece"/>
+        <ingredient produitId="13" quantite="10" unite="g"/>
+      </ingredients>
+    </recette>
+  </recettes>
+
+</donnees>
