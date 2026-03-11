@@ -41,7 +41,7 @@ public class Recette {
 		return steps;
 	}
 	
-	public void setRecipe(String steps) {
+	public void setSteps(String steps) {
 		this.steps = steps;
 	}
 	
@@ -61,7 +61,7 @@ public class Recette {
 		this.quantities = quantities;
 	}
 	
-	public static HashSet<Recette> getListeRecette() {
+	public static HashSet<Recette> getRecipeList() {
 		return recipeList;
 	}
 }
