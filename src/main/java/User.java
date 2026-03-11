@@ -84,4 +84,8 @@ public class User {
 		this.basket.put(recipe, this.basket.get(recipe) - quantity);
 		if (this.basket.get(recipe) <= 0) this.basket.remove(recipe);
 	}
+	
+	public void deleteBasket() {
+		this.basket = null;
+	}
 }
