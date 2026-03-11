@@ -10,7 +10,7 @@ public class User {
 	String avatar;
 	HashSet<Recette> favorite;
 	HashMap<Recette, Integer> basket;
-	
+	HashSet<Commande> history;
 	
 	public User(String name, String password) {
 		this.name = name;
@@ -18,6 +18,7 @@ public class User {
 		this.admin = false;
 		this.favorite = new HashSet<>();
 		this.basket = new HashMap<>();
+		this.history = new HashSet<>();
 	}
 
 	public String getName() {
@@ -87,5 +88,13 @@ public class User {
 	
 	public void deleteBasket() {
 		this.basket = null;
+	}
+	
+	public HashSet<Commande> getHistory() {
+		return history;
+	}
+	
+	public void buy() {
+		history.add(new Commande(this));
 	}
 }
