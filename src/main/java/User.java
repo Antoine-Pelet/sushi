@@ -8,16 +8,16 @@ public class User {
 	String password;
 	boolean admin;
 	String avatar;
-	HashSet<Recette> favoris;
-	HashMap<Recette, Integer> panier;
+	HashSet<Recette> favorite;
+	HashMap<Recette, Integer> basket;
 	
 	
 	public User(String name, String password) {
 		this.name = name;
 		this.password = password;
 		this.admin = false;
-		this.favoris = new HashSet<>();
-		this.panier = new HashMap<>();
+		this.favorite = new HashSet<>();
+		this.basket = new HashMap<>();
 	}
 
 	public String getName() {
@@ -52,25 +52,36 @@ public class User {
 		this.avatar = avatar;
 	}
 
-	public HashSet<Recette> getFavoris() {
-		return favoris;
+	public HashSet<Recette> getFavorite() {
+		return favorite;
 	}
 
-	public void addFavoris(Recette recette) {
-		this.favoris.add(recette);
+	public void addFavorite(Recette recipe) {
+		this.favorite.add(recipe);
 	}
 	
-	public void removeFavoris(Recette recette) {
-		this.favoris.remove(recette);
+	public void removeFavorite(Recette recipe) {
+		this.favorite.remove(recipe);
 	}
 	
-	public void addPanier(Recette recette, int quantity) {
-		//Vérification qu'on a le stocks
-		this.panier.putIfAbsent(recette, 0);
-		this.panier.put(recette, this.panier.get(recette) + quantity);
+	public void addBasket(Recette recipe, int quantity) {
+		boolean ok = true;
+		for (Ingredient i : recipe.quantities.keySet()) {
+			if (recipe.quantities.get(i) < i.stock) {
+				ok = false;
+				break;
+			}
+		}
+		if (ok) {
+			this.basket.putIfAbsent(recipe, 0);
+			this.basket.put(recipe, this.basket.get(recipe) + quantity);			
+		} else {
+			System.out.println("Stock insuffisant");
+		}
 	}
 	
-	public void removePanier(Recette recette, int quantity) {
-		//TODO
+	public void removeBasket(Recette recipe, int quantity) {
+		this.basket.put(recipe, this.basket.get(recipe) - quantity);
+		if (this.basket.get(recipe) <= 0) this.basket.remove(recipe);
 	}
 }
