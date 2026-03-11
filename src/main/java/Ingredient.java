@@ -7,14 +7,14 @@ public class Ingredient {
 	int stock;
 	String unit;
 	String price;
-	static HashSet<Ingredient> listeIngredient = new HashSet<>();
+	static HashSet<Ingredient> ingredientList = new HashSet<>();
 	
 	public Ingredient (String name, String unit, String price) {
 		this.name = name;
 		this.stock = 0;
 		this.unit = unit;
 		this.price = price;
-		listeIngredient.add(this);
+		ingredientList.add(this);
 	}
 
 	public String getName() {
@@ -53,8 +53,7 @@ public class Ingredient {
 		this.price = price;
 	}
 
-
-	public static HashSet<Ingredient> getListeIngredient() {
-		return listeIngredient;
+	public static HashSet<Ingredient> getIngredientList() {
+		return ingredientList;
 	}
 }
