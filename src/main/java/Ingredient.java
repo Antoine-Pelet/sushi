@@ -6,10 +6,10 @@ public class Ingredient {
 	String name;
 	int stock;
 	String unit;
-	String price;
+	Float price;
 	static HashSet<Ingredient> ingredientList = new HashSet<>();
 	
-	public Ingredient (String name, String unit, String price) {
+	public Ingredient (String name, String unit, Float price) {
 		this.name = name;
 		this.stock = 0;
 		this.unit = unit;
@@ -45,11 +45,11 @@ public class Ingredient {
 		this.unit = unit;
 	}
 
-	public String getPrice() {
+	public Float getPrice() {
 		return price;
 	}
 
-	public void setPrice(String price) {
+	public void setPrice(Float price) {
 		this.price = price;
 	}
 
