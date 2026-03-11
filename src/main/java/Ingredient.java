@@ -17,6 +17,14 @@ public class Ingredient {
 		listeIngredient.add(this);
 	}
 
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+	
 	public int getStock() {
 		return stock;
 	}
@@ -24,9 +32,9 @@ public class Ingredient {
 	public void setStock(int stock) {
 		this.stock = stock;
 	}
-
-	public String getName() {
-		return name;
+	
+	public void addStock(int stock) {
+		this.stock = this.stock + stock;
 	}
 
 	public String getUnit() {
@@ -45,9 +53,6 @@ public class Ingredient {
 		this.price = price;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
 
 	public static HashSet<Ingredient> getListeIngredient() {
 		return listeIngredient;
