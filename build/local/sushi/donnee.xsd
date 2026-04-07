@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <!-- Racine -->
+  <xs:element name="donnees">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="produits" type="ProduitsType"/>
+        <xs:element name="recettes" type="RecettesType"/>
+      </xs:sequence>
+    </xs:complexType>
+
+    <!-- clé: un produit est identifié par son @id -->
+    <xs:key name="produitKey">
+      <xs:selector xpath="produits/produit"/>
+      <xs:field xpath="@id"/>
+    </xs:key>
+
+    <!-- référence: ingredient/@produitId doit exister dans produits/produit/@id -->
+    <xs:keyref name="ingredientProduitRef" refer="produitKey">
+      <xs:selector xpath="recettes/recette/ingredients/ingredient"/>
+      <xs:field xpath="@produitId"/>
+    </xs:keyref>
+  </xs:element>
+
+  <!-- Produits -->
+  <xs:complexType name="ProduitsType">
+    <xs:sequence>
+      <xs:element name="produit" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:attribute name="id" type="xs:positiveInteger" use="required"/>
+          <xs:attribute name="nom" type="xs:string" use="required"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- Recettes -->
+  <xs:complexType name="RecettesType">
+    <xs:sequence>
+      <xs:element name="recette" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="titre" type="xs:string"/>
+            <xs:element name="descriptionEtapes" type="xs:string"/>
+            <xs:element name="ingredients" type="IngredientsType"/>
+          </xs:sequence>
+          <xs:attribute name="id" type="xs:positiveInteger" use="required"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- Ingrédients -->
+  <xs:complexType name="IngredientsType">
+    <xs:sequence>
+      <xs:element name="ingredient" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:attribute name="produitId" type="xs:positiveInteger" use="required"/>
+          <xs:attribute name="quantite" type="xs:decimal" use="required"/>
+          <xs:attribute name="unite" type="xs:string" use="optional"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+</xs:schema>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<store>
+  <users nextId="3">
+    <user id="1" username="admin" passwordHash="8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918" admin="true">
+      <favorites/>
+      <cart/>
+    </user>
+    <user id="2" username="demo" passwordHash="2a97516c354b68848cdbd8f54a226a0a55b21ed138e207ad6c5cbb9c00aa5aea" admin="false">
+      <favorites>
+        <recipeRef id="101"/>
+      </favorites>
+      <cart>
+        <item recipeId="103" quantity="1"/>
+      </cart>
+    </user>
+  </users>
+  <products nextId="14">
+    <product id="1" name="Riz a sushi" stock="8000" unit="g" price="0.02"/>
+    <product id="2" name="Vinaigre de riz" stock="2500" unit="ml" price="0.015"/>
+    <product id="3" name="Sucre" stock="3000" unit="g" price="0.004"/>
+    <product id="4" name="Sel" stock="1500" unit="g" price="0.002"/>
+    <product id="5" name="Feuilles de nori" stock="80" unit="feuilles" price="0.35"/>
+    <product id="6" name="Saumon frais" stock="2500" unit="g" price="0.045"/>
+    <product id="7" name="Thon frais" stock="2000" unit="g" price="0.052"/>
+    <product id="8" name="Concombre" stock="30" unit="piece" price="0.9"/>
+    <product id="9" name="Avocat" stock="24" unit="piece" price="1.2"/>
+    <product id="10" name="Wasabi" stock="400" unit="g" price="0.08"/>
+    <product id="11" name="Sauce soja" stock="3000" unit="ml" price="0.012"/>
+    <product id="12" name="Gingembre marine" stock="1000" unit="g" price="0.02"/>
+    <product id="13" name="Graines de sesame" stock="800" unit="g" price="0.018"/>
+  </products>
+  <recipes nextId="104">
+    <recipe id="101" price="12.9">
+      <title>Maki saumon avocat</title>
+      <description>1) Cuire et assaisonner le riz.
+2) Etaler le riz sur la feuille de nori.
+3) Ajouter saumon et avocat, rouler puis decouper.</description>
+      <ingredients>
+        <ingredient productId="1" quantity="250" unit="g"/>
+        <ingredient productId="2" quantity="30" unit="ml"/>
+        <ingredient productId="3" quantity="10" unit="g"/>
+        <ingredient productId="4" quantity="3" unit="g"/>
+        <ingredient productId="5" quantity="2" unit="feuilles"/>
+        <ingredient productId="6" quantity="120" unit="g"/>
+        <ingredient productId="9" quantity="1" unit="piece"/>
+      </ingredients>
+    </recipe>
+    <recipe id="102" price="14.5">
+      <title>Nigiri thon</title>
+      <description>1) Former des boudins de riz.
+2) Deposer le thon sur chaque piece.
+3) Servir avec wasabi et sauce soja.</description>
+      <ingredients>
+        <ingredient productId="1" quantity="200" unit="g"/>
+        <ingredient productId="2" quantity="25" unit="ml"/>
+        <ingredient productId="3" quantity="8" unit="g"/>
+        <ingredient productId="4" quantity="2" unit="g"/>
+        <ingredient productId="7" quantity="150" unit="g"/>
+        <ingredient productId="10" quantity="5" unit="g"/>
+        <ingredient productId="11" quantity="20" unit="ml"/>
+      </ingredients>
+    </recipe>
+    <recipe id="103" price="9.5">
+      <title>California concombre sesame</title>
+      <description>1) Etaler le riz sur le nori puis retourner.
+2) Garnir avec concombre et rouler.
+3) Parsemer de sesame, decouper et servir.</description>
+      <ingredients>
+        <ingredient productId="1" quantity="250" unit="g"/>
+        <ingredient productId="2" quantity="30" unit="ml"/>
+        <ingredient productId="3" quantity="10" unit="g"/>
+        <ingredient productId="4" quantity="3" unit="g"/>
+        <ingredient productId="5" quantity="2" unit="feuilles"/>
+        <ingredient productId="8" quantity="0.5" unit="piece"/>
+        <ingredient productId="13" quantity="10" unit="g"/>
+      </ingredients>
+    </recipe>
+  </recipes>
+  <orders nextId="1"/>
+</store>
