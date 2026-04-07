@@ -7,6 +7,7 @@ public class Recette {
     private int id;
     private String titre;
     private String descriptionEtapes;
+    private double prix;
     private List<Ingredient> ingredients = new ArrayList<>();
 
     public int getId() { return id; }
@@ -17,6 +18,9 @@ public class Recette {
 
     public String getDescriptionEtapes() { return descriptionEtapes; }
     public void setDescriptionEtapes(String descriptionEtapes) { this.descriptionEtapes = descriptionEtapes; }
+
+    public double getPrix() { return prix; }
+    public void setPrix(double prix) { this.prix = prix; }
 
     public List<Ingredient> getIngredients() { return ingredients; }
     public void setIngredients(List<Ingredient> ingredients) { this.ingredients = ingredients; }
