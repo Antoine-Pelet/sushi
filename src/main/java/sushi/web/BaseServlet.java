@@ -60,10 +60,26 @@ public abstract class BaseServlet extends HttpServlet {
     }
 
     protected void redirectToApp(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        StringBuilder target = new StringBuilder(request.getContextPath()).append("/app");
+        String returnPage = request.getParameter("returnPage");
+        StringBuilder target = new StringBuilder(request.getContextPath());
+        if ("recipe".equals(returnPage)) {
+            target.append("/recipe");
+        } else if ("workspace".equals(returnPage)) {
+            target.append("/workspace");
+        } else {
+            target.append("/app");
+        }
         List<String> query = new ArrayList<>();
         appendQuery(query, "recipeId", request.getParameter("returnRecipeId"));
         appendQuery(query, "editRecipeId", request.getParameter("returnEditRecipeId"));
+
+        if ("recipe".equals(returnPage)) {
+            String recipeId = request.getParameter("returnRecipeId");
+            if (recipeId != null && !recipeId.isBlank()) {
+                query.clear();
+                appendQuery(query, "id", recipeId);
+            }
+        }
 
         if (!query.isEmpty()) {
             target.append('?').append(String.join("&", query));

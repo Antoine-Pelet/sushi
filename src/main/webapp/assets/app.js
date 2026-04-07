@@ -55,15 +55,19 @@ function initIngredientRows() {
 function initStepPlayers() {
     document.querySelectorAll("[data-step-player]").forEach((player) => {
         const slides = Array.from(player.querySelectorAll("[data-step-slide]"));
-        const prevButton = player.querySelector("[data-step-prev]");
-        const nextButton = player.querySelector("[data-step-next]");
+        const prevButtons = Array.from(player.querySelectorAll("[data-step-prev]"));
+        const nextButtons = Array.from(player.querySelectorAll("[data-step-next]"));
         const indicator = player.parentElement ? player.parentElement.querySelector("[data-step-indicator]") : null;
+        const jumpButtons = Array.from(player.querySelectorAll("[data-step-jump]"));
 
         if (slides.length === 0) {
             return;
         }
 
-        let index = 0;
+        let index = slides.findIndex((slide) => slide.classList.contains("is-active") && !slide.hidden);
+        if (index < 0) {
+            index = 0;
+        }
 
         const update = () => {
             slides.forEach((slide, currentIndex) => {
@@ -71,36 +75,46 @@ function initStepPlayers() {
                 slide.classList.toggle("is-active", currentIndex === index);
             });
 
-            if (prevButton) {
-                prevButton.disabled = index === 0;
-            }
-            if (nextButton) {
-                nextButton.disabled = index === slides.length - 1;
-            }
+            prevButtons.forEach((button) => {
+                button.disabled = index === 0;
+            });
+            nextButtons.forEach((button) => {
+                button.disabled = index === slides.length - 1;
+            });
+
             if (indicator) {
                 indicator.textContent = `${index + 1} / ${slides.length}`;
             }
         };
 
-        if (prevButton) {
-            prevButton.addEventListener("click", () => {
+        prevButtons.forEach((button) => {
+            button.addEventListener("click", () => {
                 if (index > 0) {
                     index -= 1;
                     update();
                 }
             });
-        }
+        });
 
-        if (nextButton) {
-            nextButton.addEventListener("click", () => {
+        nextButtons.forEach((button) => {
+            button.addEventListener("click", () => {
                 if (index < slides.length - 1) {
                     index += 1;
                     update();
                 }
             });
-        }
+        });
+
+        jumpButtons.forEach((button) => {
+            button.addEventListener("click", () => {
+                const nextIndex = Number.parseInt(button.getAttribute("data-step-jump") || "", 10);
+                if (!Number.isNaN(nextIndex) && nextIndex >= 0 && nextIndex < slides.length) {
+                    index = nextIndex;
+                    update();
+                }
+            });
+        });
 
         update();
     });
 }
-
