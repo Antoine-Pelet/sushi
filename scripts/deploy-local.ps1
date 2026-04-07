@@ -207,7 +207,7 @@ $buildRoot = Join-Path $projectRoot "build\local"
 $stagingDir = Join-Path $buildRoot $context
 $classesDir = Join-Path $stagingDir "WEB-INF\classes"
 $warPath = Join-Path $buildRoot "$context.war"
-$catalinaBaseDir = Join-Path $buildRoot ("tomcat-base-" + $context)
+$catalinaBaseDir = $null
 $resolvedTomcatPath = $null
 $deployDir = $null
 $httpPort = 8080 + $PortOffset
@@ -309,6 +309,8 @@ if (-not $BuildOnly) {
         }
     }
 
+    $catalinaBaseDir = Join-Path $buildRoot ("tomcat-base-" + $context + "-" + $httpPort)
+
     Prepare-CatalinaBase -TomcatHome $resolvedTomcatPath -CatalinaBase $catalinaBaseDir -ShutdownPort $shutdownPort -HttpPort $httpPort -HttpsPort $httpsPort
 
     $webappsDir = Join-Path $catalinaBaseDir "webapps"
@@ -360,3 +362,5 @@ if (-not $BuildOnly) {
 Write-Host "URL          : $deployedUrl"
 Write-Host ""
 Write-Host "Comptes de test : demo/demo et admin/admin"
+
+

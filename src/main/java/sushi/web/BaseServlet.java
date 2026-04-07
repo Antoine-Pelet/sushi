@@ -7,6 +7,10 @@ import jakarta.servlet.http.HttpSession;
 import sushi.SushiService;
 
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class BaseServlet extends HttpServlet {
     protected SushiService service(HttpServletRequest request) {
@@ -56,7 +60,24 @@ public abstract class BaseServlet extends HttpServlet {
     }
 
     protected void redirectToApp(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        response.sendRedirect(request.getContextPath() + "/app");
+        StringBuilder target = new StringBuilder(request.getContextPath()).append("/app");
+        List<String> query = new ArrayList<>();
+        appendQuery(query, "recipeId", request.getParameter("returnRecipeId"));
+        appendQuery(query, "editRecipeId", request.getParameter("returnEditRecipeId"));
+
+        if (!query.isEmpty()) {
+            target.append('?').append(String.join("&", query));
+        }
+
+        String section = request.getParameter("returnSection");
+        if (section != null && !section.isBlank()) {
+            String cleanSection = section.trim().replaceAll("[^A-Za-z0-9_-]", "");
+            if (!cleanSection.isBlank()) {
+                target.append('#').append(cleanSection);
+            }
+        }
+
+        response.sendRedirect(target.toString());
     }
 
     protected int requiredInt(HttpServletRequest request, String parameterName) {
@@ -99,5 +120,14 @@ public abstract class BaseServlet extends HttpServlet {
     }
 
     protected record Flash(String type, String message) {
+    }
+
+    private void appendQuery(List<String> query, String key, String value) {
+        if (value == null || value.isBlank()) {
+            return;
+        }
+
+        query.add(URLEncoder.encode(key, StandardCharsets.UTF_8) + "="
+                + URLEncoder.encode(value.trim(), StandardCharsets.UTF_8));
     }
 }
