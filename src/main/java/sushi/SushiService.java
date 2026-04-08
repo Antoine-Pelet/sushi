@@ -63,15 +63,46 @@ public class SushiService {
 
         synchronized (lock) {
             StoreData data = repository.load();
-            for (User user : data.getUsers()) {
-                if (user.getUsername() != null && user.getUsername().equalsIgnoreCase(username.trim())) {
-                    if (SecurityUtil.matches(password, user.getPasswordHash())) {
-                        return user;
-                    }
-                    break;
-                }
+            User user = findUserByUsername(data, username.trim());
+            if (user != null && SecurityUtil.matches(password, user.getPasswordHash())) {
+                return user;
             }
             throw new SushiException("Identifiants invalides.");
+        }
+    }
+
+    public User register(String username, String password, String confirmPassword) {
+        if (isBlank(username) || isBlank(password) || isBlank(confirmPassword)) {
+            throw new SushiException("Tous les champs d'inscription sont obligatoires.");
+        }
+
+        String normalizedUsername = username.trim();
+        if (!normalizedUsername.matches("^[A-Za-z0-9._-]{3,30}$")) {
+            throw new SushiException("Le nom d'utilisateur doit contenir entre 3 et 30 caracteres (lettres, chiffres, . _ -).");
+        }
+        if (password.length() < 4) {
+            throw new SushiException("Le mot de passe doit contenir au moins 4 caracteres.");
+        }
+        if (!password.equals(confirmPassword)) {
+            throw new SushiException("La confirmation du mot de passe ne correspond pas.");
+        }
+
+        synchronized (lock) {
+            StoreData data = repository.load();
+            if (findUserByUsername(data, normalizedUsername) != null) {
+                throw new SushiException("Ce nom d'utilisateur existe deja.");
+            }
+
+            User user = new User();
+            user.setId(data.getNextUserId());
+            data.setNextUserId(data.getNextUserId() + 1);
+            user.setUsername(normalizedUsername);
+            user.setPasswordHash(SecurityUtil.hashPassword(password));
+            user.setAdmin(false);
+            data.getUsers().add(user);
+
+            repository.save(data);
+            return user;
         }
     }
 
@@ -402,6 +433,18 @@ public class SushiService {
         return null;
     }
 
+    private User findUserByUsername(StoreData data, String username) {
+        if (isBlank(username)) {
+            return null;
+        }
+        for (User user : data.getUsers()) {
+            if (user.getUsername() != null && user.getUsername().equalsIgnoreCase(username.trim())) {
+                return user;
+            }
+        }
+        return null;
+    }
+
     private Recette findRecipe(StoreData data, Integer recipeId) {
         if (recipeId == null) {
             return null;
@@ -464,3 +507,4 @@ public class SushiService {
     ) {
     }
 }
+

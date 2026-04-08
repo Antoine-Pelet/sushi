@@ -60,40 +60,53 @@ public abstract class BaseServlet extends HttpServlet {
     }
 
     protected void redirectToApp(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String returnPage = request.getParameter("returnPage");
-        StringBuilder target = new StringBuilder(request.getContextPath());
-        if ("recipe".equals(returnPage)) {
-            target.append("/recipe");
-        } else if ("workspace".equals(returnPage)) {
-            target.append("/workspace");
-        } else {
-            target.append("/app");
-        }
-        List<String> query = new ArrayList<>();
-        appendQuery(query, "recipeId", request.getParameter("returnRecipeId"));
-        appendQuery(query, "editRecipeId", request.getParameter("returnEditRecipeId"));
+        response.sendRedirect(buildRedirectTarget(
+                request.getContextPath(),
+                request.getParameter("returnPage"),
+                request.getParameter("returnRecipeId"),
+                request.getParameter("returnEditRecipeId"),
+                request.getParameter("returnMode"),
+                request.getParameter("returnSection")
+        ));
+    }
 
-        if ("recipe".equals(returnPage)) {
-            String recipeId = request.getParameter("returnRecipeId");
-            if (recipeId != null && !recipeId.isBlank()) {
-                query.clear();
-                appendQuery(query, "id", recipeId);
+    protected String buildRedirectTarget(String contextPath, String returnPage, String returnRecipeId, String returnEditRecipeId, String returnMode, String returnSection) {
+        String page = normalizeReturnPage(returnPage);
+        StringBuilder target = new StringBuilder(contextPath);
+        switch (page) {
+            case "recipe" -> target.append("/recipe");
+            case "workspace" -> target.append("/workspace");
+            case "cook" -> target.append("/cook");
+            case "cook-steps" -> target.append("/cook-steps");
+            case "auth" -> target.append("/auth");
+            default -> target.append("/app");
+        }
+
+        List<String> query = new ArrayList<>();
+        if ("recipe".equals(page) || "cook".equals(page) || "cook-steps".equals(page)) {
+            appendQuery(query, "id", returnRecipeId);
+        } else if ("workspace".equals(page)) {
+            String workspaceMode = sanitizeMode(returnMode);
+            if (workspaceMode.isBlank()) {
+                workspaceMode = mapWorkspaceModeFromSection(returnSection);
             }
+            appendQuery(query, "mode", workspaceMode);
+            appendQuery(query, "editRecipeId", returnEditRecipeId);
+        } else if (!"auth".equals(page)) {
+            appendQuery(query, "recipeId", returnRecipeId);
+            appendQuery(query, "editRecipeId", returnEditRecipeId);
         }
 
         if (!query.isEmpty()) {
             target.append('?').append(String.join("&", query));
         }
 
-        String section = request.getParameter("returnSection");
-        if (section != null && !section.isBlank()) {
-            String cleanSection = section.trim().replaceAll("[^A-Za-z0-9_-]", "");
-            if (!cleanSection.isBlank()) {
-                target.append('#').append(cleanSection);
-            }
+        String cleanSection = sanitizeSection(returnSection);
+        if (!cleanSection.isBlank() && !"workspace".equals(page)) {
+            target.append('#').append(cleanSection);
         }
 
-        response.sendRedirect(target.toString());
+        return target.toString();
     }
 
     protected int requiredInt(HttpServletRequest request, String parameterName) {
@@ -135,15 +148,54 @@ public abstract class BaseServlet extends HttpServlet {
         return pathInfo.startsWith("/") ? pathInfo : "/" + pathInfo;
     }
 
+    protected String sanitizeSection(String section) {
+        if (section == null || section.isBlank()) {
+            return "";
+        }
+        return section.trim().replaceAll("[^A-Za-z0-9_-]", "");
+    }
+
+    protected String sanitizeMode(String mode) {
+        if (mode == null || mode.isBlank()) {
+            return "";
+        }
+        return mode.trim().replaceAll("[^A-Za-z0-9_-]", "");
+    }
+
+    protected String mapWorkspaceModeFromSection(String section) {
+        String cleanSection = sanitizeSection(section);
+        return switch (cleanSection) {
+            case "auth-panel" -> "account";
+            case "cart-panel" -> "cart";
+            case "admin-board" -> "admin";
+            case "recipe-maker" -> "recipes";
+            case "stock-board" -> "stock";
+            case "order-board" -> "orders";
+            default -> "";
+        };
+    }
+
     protected record Flash(String type, String message) {
     }
 
-    private void appendQuery(List<String> query, String key, String value) {
+    protected void appendQuery(List<String> query, String key, String value) {
         if (value == null || value.isBlank()) {
             return;
         }
 
         query.add(URLEncoder.encode(key, StandardCharsets.UTF_8) + "="
                 + URLEncoder.encode(value.trim(), StandardCharsets.UTF_8));
+    }
+
+    private String normalizeReturnPage(String returnPage) {
+        if (returnPage == null || returnPage.isBlank()) {
+            return "app";
+        }
+
+        String normalized = returnPage.trim();
+        return switch (normalized) {
+            case "recipe", "workspace", "cook", "cook-steps", "auth", "app" -> normalized;
+            default -> "app";
+        };
     }
 }

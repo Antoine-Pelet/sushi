@@ -60,11 +60,11 @@
         <span>Sushef</span>
     </a>
     <div class="top-meta">
-        <a class="cart-link cart-link--light" href="<%= ctx %>/app<%= currentUser != null ? "#cart-panel" : "#auth-panel" %>" aria-label="Panier">
+        <a class="cart-link cart-link--light" href="<%= currentUser != null ? ctx + "/workspace?mode=cart" : ctx + "/auth?returnPage=workspace&returnMode=cart" %>" aria-label="Panier">
             🧺
             <% if (panierCount > 0) { %><span class="cart-badge"><%= panierCount %></span><% } %>
         </a>
-        <a class="account-photo" href="<%= ctx %>/app<%= currentUser != null ? "#auth-panel" : "#auth-panel" %>" aria-label="<%= currentUser != null ? "Compte " + esc(currentUser.getUsername()) : "Compte" %>">
+        <a class="account-photo" href="<%= currentUser != null ? ctx + "/workspace?mode=account" : ctx + "/auth?returnPage=workspace&returnMode=account" %>" aria-label="<%= currentUser != null ? "Compte " + esc(currentUser.getUsername()) : "Compte" %>">
             <span><%= esc(initial(currentUser)) %></span>
         </a>
     </div>
@@ -80,3 +80,4 @@
 </main>
 </body>
 </html>
+

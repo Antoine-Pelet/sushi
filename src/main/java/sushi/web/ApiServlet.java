@@ -49,6 +49,7 @@ public class ApiServlet extends BaseServlet {
             String path = normalizePath(request.getPathInfo());
             switch (path) {
                 case "/session/login" -> handleLogin(request, response);
+                case "/session/register" -> handleRegister(request, response);
                 case "/session/logout" -> handleLogout(request, response);
                 case "/favorites/toggle" -> handleFavoriteToggle(request, response);
                 case "/cart/add" -> handleCartAdd(request, response);
@@ -109,6 +110,20 @@ public class ApiServlet extends BaseServlet {
 
         SushiService.DashboardData dashboard = service(request).getDashboardData(user.getId(), null);
         sendJson(response, HttpServletResponse.SC_OK, JsonUtil.success("Connexion reussie",
+                JsonUtil.user(user, recipesById(dashboard.recettes()))));
+    }
+
+    private void handleRegister(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        User user = service(request).register(
+                request.getParameter("username"),
+                request.getParameter("password"),
+                request.getParameter("confirmPassword")
+        );
+        HttpSession session = request.getSession(true);
+        session.setAttribute("userId", user.getId());
+
+        SushiService.DashboardData dashboard = service(request).getDashboardData(user.getId(), null);
+        sendJson(response, HttpServletResponse.SC_OK, JsonUtil.success("Compte cree",
                 JsonUtil.user(user, recipesById(dashboard.recettes()))));
     }
 
@@ -263,3 +278,4 @@ public class ApiServlet extends BaseServlet {
         response.getWriter().write(body);
     }
 }
+
