@@ -15,6 +15,7 @@ src/main/java/sushi/web/HomeServlet.java
 src/main/java/sushi/web/OrderServlet.java
 src/main/java/sushi/web/AuthServlet.java
 src/main/java/sushi/web/WorkspaceServlet.java
+src/main/java/sushi/web/AuthPageServlet.java
 src/main/java/sushi/web/FavoriteServlet.java
 src/main/java/sushi/web/BaseServlet.java
 src/main/java/sushi/Ingredient.java

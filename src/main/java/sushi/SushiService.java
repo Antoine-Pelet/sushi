@@ -168,6 +168,15 @@ public class SushiService {
         }
     }
 
+    public void clearCart(int userId) {
+        synchronized (lock) {
+            StoreData data = repository.load();
+            User user = requireUser(data, userId);
+            user.getPanier().clear();
+            repository.save(data);
+        }
+    }
+
     public Commande checkout(int userId) {
         synchronized (lock) {
             StoreData data = repository.load();
@@ -507,4 +516,3 @@ public class SushiService {
     ) {
     }
 }
-

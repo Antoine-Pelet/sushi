@@ -46,19 +46,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Espace Sushef</title>
-    <link rel="stylesheet" href="<%= ctx %>/assets/app.css">
+    <link rel="stylesheet" href="<%= ctx %>/assets/app.css?v=account-layout-3">
 </head>
-<body class="app-page">
-<header class="topbar">
-    <a class="brand" href="<%= ctx %>/app"><span>Sushef</span><small>Workspace</small></a>
-    <nav class="nav-links">
-        <a href="<%= ctx %>/app">Catalogue</a>
-        <a class="<%= "account".equals(workspaceMode) ? "is-active" : "" %>" href="<%= currentUser != null ? ctx + "/workspace?mode=account" : ctx + "/auth?returnPage=workspace&returnMode=account" %>">Compte</a>
-        <a class="<%= "cart".equals(workspaceMode) ? "is-active" : "" %>" href="<%= currentUser != null ? ctx + "/workspace?mode=cart" : ctx + "/auth?returnPage=workspace&returnMode=cart" %>">Panier</a>
-        <% if (admin) { %><a class="<%= ("admin".equals(workspaceMode) || "recipes".equals(workspaceMode) || "stock".equals(workspaceMode) || "orders".equals(workspaceMode)) ? "is-active" : "" %>" href="<%= ctx %>/workspace?mode=admin">Admin</a><% } %>
-    </nav>
+<body class="app-page app-page--catalog workspace-page <%= "cart".equals(workspaceMode) ? "workspace-page--cart" : "" %>">
+<header class="topbar topbar--catalog">
+    <a class="brand brand--landing" href="<%= ctx %>/">
+        <span>Sushef</span>
+    </a>
     <div class="top-meta">
-        <a class="cart-link" href="<%= currentUser != null ? ctx + "/workspace?mode=cart" : ctx + "/auth?returnPage=workspace&returnMode=cart" %>">🧺<% if (cartCount > 0) { %><span class="cart-badge"><%= cartCount %></span><% } %></a>
+        <a class="cart-link cart-link--light" href="<%= currentUser != null ? ctx + "/workspace?mode=cart" : ctx + "/auth?returnPage=workspace&returnMode=cart" %>">🧺<% if (cartCount > 0) { %><span class="cart-badge"><%= cartCount %></span><% } %></a>
         <a class="account-photo" href="<%= currentUser != null ? ctx + "/workspace?mode=account" : ctx + "/auth?returnPage=workspace&returnMode=account" %>" aria-label="<%= currentUser != null ? "Compte " + esc(currentUser.getUsername()) : "Compte" %>"><span><%= esc(initials(currentUser)) %></span></a>
     </div>
 </header>
@@ -67,37 +63,36 @@
 <div class="flash flash--<%= esc(flashType == null ? "info" : flashType) %>"><%= esc(flashMessage) %></div>
 <% } %>
 
-<main class="app-shell">
-    <div class="page-back-row page-back-row--app">
-        <a class="back-link" href="<%= ctx %>/app" data-history-back>Retour</a>
-    </div>
-    <section class="screen">
-        <div class="panel panel--workspace">
+<main class="catalog-shell workspace-shell">
+    <section class="catalog-panel workspace-panel">
+        <div class="workspace-panel__inner">
             <% if ("account".equals(workspaceMode)) { %>
-                <div class="section-head"><div><p class="eyebrow">Workspace</p><h2>Mon compte</h2></div><p>Un ecran dedie pour votre session, votre historique et vos raccourcis.</p></div>
+                <div class="catalog-panel__head workspace-panel__head">
+                    <p class="eyebrow">Mon compte</p>
+                </div>
                 <% if (currentUser == null) { %>
-                    <div class="utility-grid">
-                        <article class="utility-card">
+                    <div class="utility-grid account-grid">
+                        <article class="utility-card account-card">
                             <p class="helper">Connectez-vous ou creez un compte pour retrouver vos favoris, votre panier et vos commandes.</p>
                             <div class="auth-actions">
                                 <a class="button button--outline" href="<%= ctx %>/auth?returnPage=workspace&returnMode=account">Se connecter</a>
                                 <a class="button button--ghost" href="<%= ctx %>/auth?mode=register&returnPage=workspace&returnMode=account">Creer un compte</a>
                             </div>
                         </article>
-                        <article class="utility-card">
+                        <article class="utility-card account-card">
                             <p class="helper">Vous pouvez deja parcourir les recettes et revenir ici apres connexion.</p>
                             <div class="auth-actions"><a class="button button--ghost" href="<%= ctx %>/app">Voir le catalogue</a></div>
                         </article>
                     </div>
                 <% } else { %>
-                    <div class="utility-grid">
-                        <article class="utility-card">
+                    <div class="utility-grid account-grid">
+                        <article class="utility-card account-card">
                             <div class="profile-box"><div class="avatar avatar--large"><%= esc(initials(currentUser)) %></div><div><p><strong><%= esc(currentUser.getUsername()) %></strong></p><p><%= admin ? "Administrateur" : "Utilisateur" %></p></div></div>
                             <div class="auth-highlights"><span class="auth-pill">Favoris : <%= favoritesCount %></span><span class="auth-pill">Panier : <%= cartCount %></span><span class="auth-pill">Commandes : <%= userCommandes.size() %></span></div>
                             <p class="helper">Votre espace est maintenant decoupe en pages dediees pour que chaque action ait son propre ecran.</p>
                             <div class="auth-actions"><a class="button button--outline" href="<%= ctx %>/workspace?mode=cart">Voir le panier</a><a class="button button--ghost" href="<%= ctx %>/app">Retour au catalogue</a><% if (admin) { %><a class="button button--ghost" href="<%= ctx %>/workspace?mode=admin">Ouvrir l admin</a><% } %><form method="post" action="<%= ctx %>/auth/logout"><input type="hidden" name="returnPage" value="workspace"><input type="hidden" name="returnMode" value="account"><button type="submit" class="danger-button">Se deconnecter</button></form></div>
                         </article>
-                        <article class="utility-card">
+                        <article class="utility-card account-card">
                             <div class="section-head"><div><p class="eyebrow">Historique</p><h2>Mes commandes</h2></div></div>
                             <% if (userCommandes.isEmpty()) { %>
                                 <p class="helper">Aucune commande pour le moment.</p>
@@ -109,47 +104,78 @@
                                 </div>
                             <% } %>
                         </article>
-                        <article class="utility-card">
-                            <div class="section-head"><div><p class="eyebrow">Raccourcis</p><h2>Navigation</h2></div></div>
-                            <div class="auth-actions"><a class="button button--ghost" href="<%= ctx %>/workspace?mode=account">Compte</a><a class="button button--ghost" href="<%= ctx %>/workspace?mode=cart">Panier</a><a class="button button--ghost" href="<%= ctx %>/auth">Page de connexion</a></div>
-                            <% if (admin) { %><div class="auth-actions"><a class="button button--outline" href="<%= ctx %>/workspace?mode=admin">Tableau de bord admin</a></div><% } %>
-                        </article>
                     </div>
                 <% } %>
 
             <% } else if ("cart".equals(workspaceMode)) { %>
-                <div class="section-head"><div><p class="eyebrow">Workspace</p><h2>Mon panier</h2></div><p>Une page dediee pour ajuster les quantites et commander sans faire defiler toute l application.</p></div>
+                <% double totalPanier = 0D; int lignesPanier = 0; %>
                 <% if (currentUser == null) { %>
-                    <div class="utility-grid">
-                        <article class="utility-card">
-                            <p class="helper">Connectez-vous pour acceder a votre panier et finaliser une commande.</p>
-                            <div class="auth-actions"><a class="button button--outline" href="<%= ctx %>/auth?returnPage=workspace&returnMode=cart">Se connecter</a><a class="button button--ghost" href="<%= ctx %>/auth?mode=register&returnPage=workspace&returnMode=cart">Creer un compte</a></div>
-                        </article>
-                    </div>
-                <% } else { %>
-                    <% double totalPanier = 0D; int lignesPanier = 0; %>
-                    <div class="utility-grid">
-                        <article class="utility-card">
-                            <% if (currentUser.getPanier().isEmpty()) { %>
-                                <p class="helper">Votre panier est vide.</p>
-                                <div class="auth-actions"><a class="button button--outline" href="<%= ctx %>/app">Ajouter une recette</a></div>
-                            <% } else { %>
-                                <div class="cart-stack">
-                                    <% for (PanierItem item : currentUser.getPanier()) { Recette recette = recettesById.get(item.getRecetteId()); if (recette == null) continue; double sousTotal = recette.getPrix() * item.getQuantite(); totalPanier += sousTotal; lignesPanier++; %>
-                                        <div class="cart-item"><div><strong><%= esc(recette.getTitre()) %></strong><p><%= item.getQuantite() %> x <%= money.format(recette.getPrix()) %> €</p></div><div class="cart-actions"><form method="post" action="<%= ctx %>/cart/remove"><input type="hidden" name="recipeId" value="<%= recette.getId() %>"><input type="hidden" name="quantity" value="1"><input type="hidden" name="returnPage" value="workspace"><input type="hidden" name="returnMode" value="cart"><button type="submit" class="icon-pill">-</button></form><form method="post" action="<%= ctx %>/cart/add"><input type="hidden" name="recipeId" value="<%= recette.getId() %>"><input type="hidden" name="quantity" value="1"><input type="hidden" name="returnPage" value="workspace"><input type="hidden" name="returnMode" value="cart"><button type="submit" class="icon-pill">+</button></form></div></div>
-                                    <% } %>
+                <% } else if (currentUser != null) { for (PanierItem item : currentUser.getPanier()) { Recette recette = recettesById.get(item.getRecetteId()); if (recette == null) continue; totalPanier += recette.getPrix() * item.getQuantite(); lignesPanier++; }} %>
+                <div class="catalog-panel__head workspace-panel__head">
+                    <p class="eyebrow">Panier</p>
+                </div>
+                <div class="cart-page cart-page--workspace">
+                    <div class="cart-grid">
+                        <article class="utility-card cart-card cart-card--list">
+                            <% if (currentUser == null) { %>
+                                <div class="cart-empty-state">
+                                    <p class="helper">Connectez-vous pour acceder a votre panier et finaliser une commande.</p>
+                                    <a class="button button--outline button--wide" href="<%= ctx %>/auth?returnPage=workspace&returnMode=cart">Se connecter</a>
+                                    <a class="button button--ghost button--wide" href="<%= ctx %>/auth?mode=register&returnPage=workspace&returnMode=cart">Creer un compte</a>
                                 </div>
-                                <div class="cart-footer"><p>Total <strong><%= money.format(totalPanier) %> €</strong></p><form method="post" action="<%= ctx %>/orders/checkout"><input type="hidden" name="returnPage" value="workspace"><input type="hidden" name="returnMode" value="cart"><button type="submit" class="button button--outline">Commander</button></form></div>
+                            <% } else if (currentUser.getPanier().isEmpty()) { %>
+                                <div class="cart-empty-state">
+                                    <p class="helper">Votre panier est vide.</p>
+                                    <a class="button button--outline button--wide" href="<%= ctx %>/app">Ajouter une recette</a>
+                                </div>
+                            <% } else { %>
+                                <ul class="cart-ingredient-list">
+                                    <% for (PanierItem item : currentUser.getPanier()) { Recette recette = recettesById.get(item.getRecetteId()); if (recette == null) continue; double sousTotal = recette.getPrix() * item.getQuantite(); %>
+                                        <li>
+                                            <div class="cart-ingredient-list__main">
+                                                <span><%= esc(recette.getTitre()) %></span>
+                                                <strong><%= item.getQuantite() %> x <%= money.format(recette.getPrix()) %> €</strong>
+                                            </div>
+                                            <div class="cart-ingredient-list__aside">
+                                                <form method="post" action="<%= ctx %>/cart/remove">
+                                                    <input type="hidden" name="recipeId" value="<%= recette.getId() %>">
+                                                    <input type="hidden" name="quantity" value="<%= item.getQuantite() %>">
+                                                    <input type="hidden" name="returnPage" value="workspace">
+                                                    <input type="hidden" name="returnMode" value="cart">
+                                                    <button type="submit" class="icon-pill cart-line__remove">×</button>
+                                                </form>
+                                            </div>
+                                        </li>
+                                    <% } %>
+                                </ul>
+                                <form method="post" action="<%= ctx %>/cart/clear" class="cart-clear-form">
+                                    <input type="hidden" name="returnPage" value="workspace">
+                                    <input type="hidden" name="returnMode" value="cart">
+                                    <button type="submit" class="button button--ghost button--wide">Vider le panier</button>
+                                </form>
                             <% } %>
                         </article>
-                        <article class="utility-card">
-                            <div class="section-head"><div><p class="eyebrow">Resume</p><h2>Panier</h2></div></div>
-                            <div class="auth-highlights"><span class="auth-pill">Articles : <%= cartCount %></span><span class="auth-pill">Recettes : <%= lignesPanier %></span><span class="auth-pill">Total : <%= money.format(totalPanier) %> €</span></div>
-                            <p class="helper">Depuis cette page, vous pouvez augmenter ou diminuer les quantites, puis valider votre commande.</p>
-                            <div class="auth-actions"><a class="button button--ghost" href="<%= ctx %>/app">Retour au catalogue</a><a class="button button--ghost" href="<%= ctx %>/workspace?mode=account">Mon compte</a></div>
-                        </article>
+
+                        <aside class="utility-card cart-card cart-card--summary">
+                            <div class="cart-summary">
+                                <p class="eyebrow">Total</p>
+                                <h3><%= money.format(totalPanier) %> €</h3>
+                                <div class="auth-highlights">
+                                    <span class="auth-pill">Articles : <%= cartCount %></span>
+                                    <span class="auth-pill">Recettes : <%= lignesPanier %></span>
+                                </div>
+                            </div>
+                            <div class="cart-summary__actions">
+                                <a class="button button--ghost button--wide" href="<%= ctx %>/app">Retour au catalogue</a>
+                                <form method="post" action="<%= ctx %>/orders/checkout" class="cart-summary__form">
+                                    <input type="hidden" name="returnPage" value="workspace">
+                                    <input type="hidden" name="returnMode" value="cart">
+                                    <button type="submit" class="button button--outline button--wide" <%= currentUser == null || currentUser.getPanier().isEmpty() ? "disabled" : "" %>>Passer commande</button>
+                                </form>
+                            </div>
+                        </aside>
                     </div>
-                <% } %>
+                </div>
 
             <% } else if ("admin".equals(workspaceMode)) { %>
                 <div class="section-head"><div><p class="eyebrow">Back Office</p><h2>Tableau de bord</h2></div><p>Chaque fonction d administration s ouvre maintenant sur son propre ecran.</p></div>
