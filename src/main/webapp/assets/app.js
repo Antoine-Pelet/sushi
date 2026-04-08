@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     initIngredientRows();
     initStepPlayers();
+    initHistoryBackButtons();
 });
 
 function initIngredientRows() {
@@ -116,5 +117,35 @@ function initStepPlayers() {
         });
 
         update();
+    });
+}
+
+function initHistoryBackButtons() {
+    document.querySelectorAll("[data-history-back]").forEach((link) => {
+        link.addEventListener("click", (event) => {
+            const href = link.getAttribute("href");
+            const referrer = document.referrer;
+
+            if (!referrer) {
+                return;
+            }
+
+            try {
+                const previousUrl = new URL(referrer, window.location.href);
+                const sameOrigin = previousUrl.origin === window.location.origin;
+                const differentPage = previousUrl.href !== window.location.href;
+
+                if (sameOrigin && differentPage && window.history.length > 1) {
+                    event.preventDefault();
+                    window.history.back();
+                } else if (!href || href === "#") {
+                    event.preventDefault();
+                }
+            } catch (_error) {
+                if (!href || href === "#") {
+                    event.preventDefault();
+                }
+            }
+        });
     });
 }

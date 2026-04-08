@@ -63,6 +63,9 @@
 </header>
 
 <main class="catalog-shell">
+    <div class="page-back-row page-back-row--catalog">
+        <a class="back-link" href="<%= recette != null ? ctx + "/recipe?id=" + recette.getId() : ctx + "/app" %>" data-history-back>Retour</a>
+    </div>
     <section class="catalog-panel cook-panel">
         <% if (recette == null) { %>
         <p class="helper">Aucune recette disponible.</p>

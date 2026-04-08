@@ -1,35 +1,35 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <store>
   <users nextId="3">
-    <user id="1" username="admin" passwordHash="8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918" admin="true">
+    <user admin="true" id="1" passwordHash="8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918" username="admin">
       <favorites/>
       <cart/>
     </user>
-    <user id="2" username="demo" passwordHash="2a97516c354b68848cdbd8f54a226a0a55b21ed138e207ad6c5cbb9c00aa5aea" admin="false">
+    <user admin="false" id="2" passwordHash="2a97516c354b68848cdbd8f54a226a0a55b21ed138e207ad6c5cbb9c00aa5aea" username="demo">
       <favorites>
         <recipeRef id="101"/>
       </favorites>
       <cart>
-        <item recipeId="103" quantity="1"/>
+        <item quantity="1" recipeId="103"/>
       </cart>
     </user>
   </users>
   <products nextId="14">
-    <product id="1" name="Riz a sushi" stock="8000" unit="g" price="0.02"/>
-    <product id="2" name="Vinaigre de riz" stock="2500" unit="ml" price="0.015"/>
-    <product id="3" name="Sucre" stock="3000" unit="g" price="0.004"/>
-    <product id="4" name="Sel" stock="1500" unit="g" price="0.002"/>
-    <product id="5" name="Feuilles de nori" stock="80" unit="feuilles" price="0.35"/>
-    <product id="6" name="Saumon frais" stock="2500" unit="g" price="0.045"/>
-    <product id="7" name="Thon frais" stock="2000" unit="g" price="0.052"/>
-    <product id="8" name="Concombre" stock="30" unit="piece" price="0.9"/>
-    <product id="9" name="Avocat" stock="24" unit="piece" price="1.2"/>
-    <product id="10" name="Wasabi" stock="400" unit="g" price="0.08"/>
-    <product id="11" name="Sauce soja" stock="3000" unit="ml" price="0.012"/>
-    <product id="12" name="Gingembre marine" stock="1000" unit="g" price="0.02"/>
-    <product id="13" name="Graines de sesame" stock="800" unit="g" price="0.018"/>
+    <product id="1" name="Riz a sushi" price="0.02" stock="8000" unit="g"/>
+    <product id="2" name="Vinaigre de riz" price="0.015" stock="2500" unit="ml"/>
+    <product id="3" name="Sucre" price="0.004" stock="3000" unit="g"/>
+    <product id="4" name="Sel" price="0.002" stock="1500" unit="g"/>
+    <product id="5" name="Feuilles de nori" price="0.35" stock="80" unit="feuilles"/>
+    <product id="6" name="Saumon frais" price="0.045" stock="2500" unit="g"/>
+    <product id="7" name="Thon frais" price="0.052" stock="2000" unit="g"/>
+    <product id="8" name="Concombre" price="0.9" stock="30" unit="piece"/>
+    <product id="9" name="Avocat" price="1.2" stock="24" unit="piece"/>
+    <product id="10" name="Wasabi" price="0.08" stock="400" unit="g"/>
+    <product id="11" name="Sauce soja" price="0.012" stock="3000" unit="ml"/>
+    <product id="12" name="Gingembre marine" price="0.02" stock="1000" unit="g"/>
+    <product id="13" name="Graines de sesame" price="0.018" stock="800" unit="g"/>
   </products>
-  <recipes nextId="104">
+  <recipes nextId="105">
     <recipe id="101" price="12.9">
       <title>Maki saumon avocat</title>
       <description>1) Cuire et assaisonner le riz.
@@ -73,6 +73,13 @@
         <ingredient productId="5" quantity="2" unit="feuilles"/>
         <ingredient productId="8" quantity="0.5" unit="piece"/>
         <ingredient productId="13" quantity="10" unit="g"/>
+      </ingredients>
+    </recipe>
+    <recipe id="104" price="12">
+      <title>test</title>
+      <description>test ok</description>
+      <ingredients>
+        <ingredient productId="12" quantity="12" unit="g"/>
       </ingredients>
     </recipe>
   </recipes>

@@ -50,11 +50,11 @@
         <span>Sushef</span>
     </a>
     <div class="top-meta">
-        <a class="cart-link cart-link--light" href="<%= currentUser != null ? ctx + "/workspace#cart-panel" : ctx + "/auth?returnPage=workspace&returnSection=cart-panel" %>" aria-label="Panier">
+        <a class="cart-link cart-link--light" href="<%= currentUser != null ? ctx + "/workspace?mode=cart" : ctx + "/auth?returnPage=workspace&returnMode=cart" %>" aria-label="Panier">
             🧺
             <% if (cartCount > 0) { %><span class="cart-badge"><%= cartCount %></span><% } %>
         </a>
-        <a class="account-photo" href="<%= ctx + "/auth?returnPage=cook-steps&returnRecipeId=" + (recette != null ? recette.getId() : 0) %>" aria-label="<%= currentUser != null ? "Compte " + esc(currentUser.getUsername()) : "Compte" %>">
+        <a class="account-photo" href="<%= currentUser != null ? ctx + "/workspace?mode=account" : ctx + "/auth?returnPage=cook-steps&returnRecipeId=" + (recette != null ? recette.getId() : 0) %>" aria-label="<%= currentUser != null ? "Compte " + esc(currentUser.getUsername()) : "Compte" %>">
             <span><%= esc(initials(currentUser)) %></span>
         </a>
     </div>

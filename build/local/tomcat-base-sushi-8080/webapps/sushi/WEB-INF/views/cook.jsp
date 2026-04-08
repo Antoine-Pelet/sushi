@@ -52,11 +52,11 @@
         <span>Sushef</span>
     </a>
     <div class="top-meta">
-        <a class="cart-link cart-link--light" href="<%= ctx %>/workspace#cart-panel" aria-label="Panier">
+        <a class="cart-link cart-link--light" href="<%= currentUser != null ? ctx + "/workspace?mode=cart" : ctx + "/auth?returnPage=workspace&returnMode=cart" %>" aria-label="Panier">
             🧺
             <% if (cartCount > 0) { %><span class="cart-badge"><%= cartCount %></span><% } %>
         </a>
-        <a class="account-photo" href="<%= ctx %>/workspace#auth-panel" aria-label="<%= currentUser != null ? "Compte " + esc(currentUser.getUsername()) : "Compte" %>">
+        <a class="account-photo" href="<%= currentUser != null ? ctx + "/workspace?mode=account" : ctx + "/auth?returnPage=cook&returnRecipeId=" + (recette != null ? recette.getId() : 0) %>" aria-label="<%= currentUser != null ? "Compte " + esc(currentUser.getUsername()) : "Compte" %>">
             <span><%= esc(initials(currentUser)) %></span>
         </a>
     </div>
@@ -78,7 +78,7 @@
                         <p>Pret pour apprendre a faire <%= esc(recette.getTitre()) %> avec Sushef&nbsp;?</p>
                         <p>Cette recette necessite du riz vinaigre</p>
                         <div class="cook-intro-actions">
-                            <a class="button button--outline" href="<%= ctx %>/workspace?recipeId=<%= recette.getId() %>#steps">Suivre la recette du riz vinaigre</a>
+                            <a class="button button--outline" href="<%= ctx %>/cook?id=<%= recette.getId() %>&start=1">Suivre la recette du riz vinaigre</a>
                             <a class="button button--ghost" href="<%= ctx %>/cook-steps?id=<%= recette.getId() %>">Commencer la recette</a>
                         </div>
                     </div>
@@ -120,3 +120,5 @@
 <script src="<%= ctx %>/assets/app.js"></script>
 </body>
 </html>
+
+

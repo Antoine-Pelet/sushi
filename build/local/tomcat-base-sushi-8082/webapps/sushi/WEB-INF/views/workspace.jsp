@@ -68,6 +68,9 @@
 <% } %>
 
 <main class="app-shell">
+    <div class="page-back-row page-back-row--app">
+        <a class="back-link" href="<%= ctx %>/app" data-history-back>Retour</a>
+    </div>
     <section class="screen">
         <div class="panel panel--workspace">
             <% if ("account".equals(workspaceMode)) { %>

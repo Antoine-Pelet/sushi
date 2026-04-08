@@ -86,6 +86,9 @@
 </header>
 
 <main class="auth-shell">
+    <div class="page-back-row page-back-row--auth">
+        <a class="back-link" href="<%= ctx %>/app" data-history-back>Retour</a>
+    </div>
     <section class="auth-layout">
         <article class="auth-hero">
             <div class="flowers flowers--left"><span></span><span></span><span></span><span></span><span></span></div>
