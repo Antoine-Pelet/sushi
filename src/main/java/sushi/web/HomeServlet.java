@@ -12,6 +12,9 @@ import java.io.IOException;
 public class HomeServlet extends BaseServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        if (redirectAdminToDashboard(request, response)) {
+            return;
+        }
         Integer editedRecipeId = optionalInt(request, "editRecipeId");
         SushiService.DashboardData dashboard = service(request).getDashboardData(currentUserId(request), editedRecipeId);
         Flash flash = consumeFlash(request);

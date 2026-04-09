@@ -34,6 +34,10 @@ public class WorkspaceServlet extends BaseServlet {
         };
 
         boolean admin = currentUser != null && currentUser.isAdmin();
+        if (admin && ("account".equals(mode) || "cart".equals(mode))) {
+            return "admin";
+        }
+
         if (!admin && ("admin".equals(mode) || "recipes".equals(mode) || "stock".equals(mode) || "orders".equals(mode))) {
             return "account";
         }

@@ -44,6 +44,10 @@
         SushiService.DashboardData dashboard = AppServices.getService(application).getDashboardData(userId, null);
         currentUser = dashboard.currentUser();
         panierCount = cartCount(currentUser);
+        if (currentUser != null && currentUser.isAdmin()) {
+            response.sendRedirect(ctx + "/workspace?mode=admin");
+            return;
+        }
     }
 %>
 <!DOCTYPE html>
@@ -80,4 +84,3 @@
 </main>
 </body>
 </html>
-

@@ -21,13 +21,13 @@ public class AuthServlet extends BaseServlet {
 
         try {
             if (request.getServletPath().endsWith("/login")) {
-                handleLogin(request);
-                redirectAfterSuccess(request, response);
+                User user = handleLogin(request);
+                redirectAfterSuccess(request, response, user);
                 return;
             }
             if (request.getServletPath().endsWith("/register")) {
-                handleRegister(request);
-                redirectAfterSuccess(request, response);
+                User user = handleRegister(request);
+                redirectAfterSuccess(request, response, user);
                 return;
             }
             handleLogout(request);
@@ -43,14 +43,15 @@ public class AuthServlet extends BaseServlet {
         response.sendRedirect(request.getContextPath() + "/auth");
     }
 
-    private void handleLogin(HttpServletRequest request) {
+    private User handleLogin(HttpServletRequest request) {
         User user = service(request).login(request.getParameter("username"), request.getParameter("password"));
         HttpSession session = request.getSession(true);
         session.setAttribute("userId", user.getId());
         setFlash(request, "success", "Connexion reussie pour " + user.getUsername() + ".");
+        return user;
     }
 
-    private void handleRegister(HttpServletRequest request) {
+    private User handleRegister(HttpServletRequest request) {
         User user = service(request).register(
                 request.getParameter("username"),
                 request.getParameter("password"),
@@ -59,6 +60,7 @@ public class AuthServlet extends BaseServlet {
         HttpSession session = request.getSession(true);
         session.setAttribute("userId", user.getId());
         setFlash(request, "success", "Compte cree pour " + user.getUsername() + ".");
+        return user;
     }
 
     private void handleLogout(HttpServletRequest request) {
@@ -68,7 +70,12 @@ public class AuthServlet extends BaseServlet {
         }
     }
 
-    private void redirectAfterSuccess(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void redirectAfterSuccess(HttpServletRequest request, HttpServletResponse response, User user) throws IOException {
+        if (user != null && user.isAdmin()) {
+            response.sendRedirect(request.getContextPath() + "/workspace?mode=admin");
+            return;
+        }
+
         String returnPage = request.getParameter("returnPage");
         String returnMode = request.getParameter("returnMode");
         String returnSection = request.getParameter("returnSection");

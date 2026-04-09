@@ -16,6 +16,7 @@ public class CartServlet extends BaseServlet {
             if (userId == null) {
                 throw new SushiException("Connexion requise.");
             }
+            ensureAdminSiteAccessDenied(request);
 
             if (request.getServletPath().endsWith("/add")) {
                 int recipeId = requiredInt(request, "recipeId");

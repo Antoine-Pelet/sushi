@@ -21,6 +21,7 @@ public class FavoriteServlet extends BaseServlet {
             if (userId == null) {
                 throw new SushiException("Connexion requise.");
             }
+            ensureAdminSiteAccessDenied(request);
             service(request).toggleFavorite(userId, requiredInt(request, "recipeId"));
             setFlash(request, "success", "Favoris mis a jour.");
         } catch (IllegalArgumentException | SushiException exception) {

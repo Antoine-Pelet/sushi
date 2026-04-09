@@ -16,6 +16,7 @@ public class OrderServlet extends BaseServlet {
             if (userId == null) {
                 throw new SushiException("Connexion requise.");
             }
+            ensureAdminSiteAccessDenied(request);
             service(request).checkout(userId);
             setFlash(request, "success", "Commande validee et stock mis a jour.");
         } catch (SushiException exception) {

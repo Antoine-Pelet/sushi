@@ -12,6 +12,9 @@ import java.io.IOException;
 public class AuthPageServlet extends BaseServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        if (redirectAdminToDashboard(request, response)) {
+            return;
+        }
         SushiService.DashboardData dashboard = service(request).getDashboardData(currentUserId(request), null);
         Flash flash = consumeFlash(request);
 

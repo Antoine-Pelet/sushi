@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import sushi.SushiService;
+import sushi.User;
 
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -34,6 +35,33 @@ public abstract class BaseServlet extends HttpServlet {
             }
         }
         return null;
+    }
+
+    protected User currentUser(HttpServletRequest request) {
+        Integer userId = currentUserId(request);
+        if (userId == null) {
+            return null;
+        }
+        return service(request).getDashboardData(userId, null).currentUser();
+    }
+
+    protected boolean isAdminUser(HttpServletRequest request) {
+        User user = currentUser(request);
+        return user != null && user.isAdmin();
+    }
+
+    protected boolean redirectAdminToDashboard(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        if (!isAdminUser(request)) {
+            return false;
+        }
+        response.sendRedirect(request.getContextPath() + "/workspace?mode=admin");
+        return true;
+    }
+
+    protected void ensureAdminSiteAccessDenied(HttpServletRequest request) {
+        if (isAdminUser(request)) {
+            throw new IllegalStateException("Acces site non disponible pour un administrateur.");
+        }
     }
 
     protected void setFlash(HttpServletRequest request, String type, String message) {

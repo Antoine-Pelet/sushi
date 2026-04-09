@@ -67,7 +67,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= pageTitle %></title>
-    <link rel="stylesheet" href="<%= ctx %>/assets/app.css">
+    <link rel="stylesheet" href="<%= ctx %>/assets/app.css?v=auth-flowers-2">
 </head>
 <body class="app-page auth-page">
 <header class="topbar topbar--catalog">
@@ -105,7 +105,6 @@
                 <span class="auth-pill">Commandes conservees</span>
             </div>
             <div class="auth-demo">
-                <p class="helper">Comptes de test : <strong>demo/demo</strong> et <strong>admin/admin</strong>.</p>
                 <a class="button button--ghost" href="<%= ctx %>/app">Voir le catalogue</a>
             </div>
             <img class="chef chef--auth" src="<%= ctx %>/assets/img/sushef-right.png" alt="Sushef">
@@ -137,7 +136,6 @@
                     <label>Confirmation<input type="password" name="confirmPassword" placeholder="Retapez le mot de passe" required></label>
                     <button type="submit" class="button button--outline">Creer mon compte</button>
                 </form>
-                <p class="helper">Le compte cree est un compte utilisateur classique, sans droits administrateur.</p>
                 <p class="helper">Deja inscrit ? <a class="auth-inline-link" href="<%= switchHref %>">Se connecter</a></p>
                 <% } else { %>
                 <form method="post" action="<%= ctx %>/auth/login" class="auth-form">

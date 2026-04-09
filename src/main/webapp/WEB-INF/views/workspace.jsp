@@ -179,7 +179,7 @@
 
             <% } else if ("admin".equals(workspaceMode)) { %>
                 <div class="section-head"><div><p class="eyebrow">Back Office</p><h2>Tableau de bord</h2></div><p>Chaque fonction d administration s ouvre maintenant sur son propre ecran.</p></div>
-                <div class="admin-grid"><a class="admin-tile" href="<%= ctx %>/workspace?mode=recipes"><span>＋</span><strong>Recettes</strong></a><a class="admin-tile" href="<%= ctx %>/workspace?mode=stock"><span>▣</span><strong>Stock</strong></a><a class="admin-tile" href="<%= ctx %>/workspace?mode=orders"><span>◎</span><strong>Commandes</strong></a><a class="admin-tile" href="<%= ctx %>/workspace?mode=account"><span>◉</span><strong>Retour au compte</strong></a></div>
+                <div class="admin-grid"><a class="admin-tile" href="<%= ctx %>/workspace?mode=recipes"><span>＋</span><strong>Recettes</strong></a><a class="admin-tile" href="<%= ctx %>/workspace?mode=stock"><span>▣</span><strong>Stock</strong></a><a class="admin-tile" href="<%= ctx %>/workspace?mode=orders"><span>◎</span><strong>Commandes</strong></a><form method="post" action="<%= ctx %>/auth/logout" class="admin-tile admin-tile--form"><input type="hidden" name="returnPage" value="app"><button type="submit" class="admin-tile__button"><span>↗</span><strong>Deconnexion / retour au site</strong></button></form></div>
 
             <% } else if ("recipes".equals(workspaceMode)) { %>
                 <div class="section-head"><div><p class="eyebrow">Recette Maker</p><h2><%= recetteEdition == null ? "Creer une recette" : "Modifier une recette" %></h2></div><div class="auth-actions"><a class="button button--ghost" href="<%= ctx %>/workspace?mode=admin">Retour au menu admin</a></div></div>
