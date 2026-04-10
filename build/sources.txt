@@ -1,4 +1,3 @@
-src/main/java/recette.java
 src/main/java/sushi/JsonUtil.java
 src/main/java/sushi/CommandeItem.java
 src/main/java/sushi/SecurityUtil.java
