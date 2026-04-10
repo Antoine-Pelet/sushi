@@ -91,6 +91,7 @@
     User currentUser = dashboard.currentUser();
     List<Recette> recettes = dashboard.recettes();
     List<Produit> produits = dashboard.produits();
+    List<User> users = dashboard.users();
     List<Commande> userCommandes = dashboard.userCommandes();
     List<Commande> allCommandes = dashboard.allCommandes();
     Recette recetteEdition = dashboard.recetteEdition();
@@ -148,9 +149,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Espace Sushef</title>
-    <link rel="stylesheet" href="<%= ctx %>/assets/app.css?v=responsive-stack-1">
+    <link rel="stylesheet" href="<%= ctx %>/assets/app.css?v=admin-orders-scroll-1">
 </head>
-<body class="app-page app-page--catalog workspace-page <%= "cart".equals(workspaceMode) ? "workspace-page--cart" : "" %> <%= "recipes".equals(workspaceMode) ? "workspace-page--recipes" : "" %> <%= "stock".equals(workspaceMode) ? "workspace-page--stock" : "" %> <%= "admin".equals(workspaceMode) ? "workspace-page--admin" : "" %>">
+<body class="app-page app-page--catalog workspace-page <%= "cart".equals(workspaceMode) ? "workspace-page--cart" : "" %> <%= "recipes".equals(workspaceMode) ? "workspace-page--recipes" : "" %> <%= "stock".equals(workspaceMode) ? "workspace-page--stock" : "" %> <%= "orders".equals(workspaceMode) ? "workspace-page--orders" : "" %> <%= "users".equals(workspaceMode) ? "workspace-page--users" : "" %> <%= "admin".equals(workspaceMode) ? "workspace-page--admin" : "" %>">
 <header class="topbar topbar--catalog">
     <a class="brand brand--landing" href="<%= ctx %>/">
         <span>Sushef</span>
@@ -291,7 +292,34 @@
 
             <% } else if ("admin".equals(workspaceMode)) { %>
                 <div class="section-head"><div><p class="eyebrow">Back Office</p><h2>Tableau de bord</h2></div></div>
-                <div class="admin-grid"><a class="admin-tile" href="<%= ctx %>/workspace?mode=recipes"><span>＋</span><strong>Recettes</strong></a><a class="admin-tile" href="<%= ctx %>/workspace?mode=stock"><span>▣</span><strong>Stock</strong></a><a class="admin-tile" href="<%= ctx %>/workspace?mode=orders"><span>◎</span><strong>Commandes</strong></a><form method="post" action="<%= ctx %>/auth/logout" class="admin-tile admin-tile--form"><input type="hidden" name="returnPage" value="app"><button type="submit" class="admin-tile__button"><span>↗</span><strong>Déconnexion / retour au site</strong></button></form></div>
+                <div class="admin-grid"><a class="admin-tile" href="<%= ctx %>/workspace?mode=recipes"><span>＋</span><strong>Recettes</strong></a><a class="admin-tile" href="<%= ctx %>/workspace?mode=stock"><span>▣</span><strong>Stock</strong></a><a class="admin-tile" href="<%= ctx %>/workspace?mode=orders"><span>◎</span><strong>Commandes</strong></a><a class="admin-tile" href="<%= ctx %>/workspace?mode=users"><span>◉</span><strong>Utilisateurs</strong></a></div>
+                <div class="admin-dashboard-actions"><form method="post" action="<%= ctx %>/auth/logout"><input type="hidden" name="returnPage" value="app"><button type="submit" class="button button--ghost">Déconnexion / retour au site</button></form></div>
+
+            <% } else if ("users".equals(workspaceMode)) { %>
+                <div class="section-head"><div><p class="eyebrow">Utilisateurs</p><h2>Gestion des comptes</h2></div><div class="auth-actions"><a class="button button--ghost" href="<%= ctx %>/workspace?mode=admin">Retour au menu admin</a></div></div>
+                <div class="admin-user-table-wrap">
+                    <table class="admin-user-table">
+                        <thead>
+                            <tr><th>Identifiant</th><th>Mot de passe (hash)</th><th>Rôle</th><th>Action</th></tr>
+                        </thead>
+                        <tbody>
+                            <% for (User user : users) { %>
+                                <tr>
+                                    <td><strong><%= esc(user.getUsername()) %></strong><span>#<%= user.getId() %></span></td>
+                                    <td><code><%= esc(user.getPasswordHash()) %></code></td>
+                                    <td><%= user.isAdmin() ? "Administrateur" : "Utilisateur" %></td>
+                                    <td>
+                                        <% if (currentUser != null && user.getId() == currentUser.getId()) { %>
+                                            <span class="admin-user-table__note">Compte connecté</span>
+                                        <% } else { %>
+                                            <form method="post" action="<%= ctx %>/admin/users/delete"><input type="hidden" name="userId" value="<%= user.getId() %>"><input type="hidden" name="returnPage" value="workspace"><input type="hidden" name="returnMode" value="users"><button type="submit" class="danger-button">Supprimer</button></form>
+                                        <% } %>
+                                    </td>
+                                </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
 
             <% } else if ("recipes".equals(workspaceMode)) { %>
                 <div class="section-head"><div><p class="eyebrow">Recette Maker</p><h2><%= recetteEdition == null ? "Créer une recette" : "Modifier une recette" %></h2></div><div class="auth-actions"><a class="button button--ghost" href="<%= ctx %>/workspace?mode=admin">Retour au menu admin</a></div></div>

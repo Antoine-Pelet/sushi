@@ -52,6 +52,16 @@
             return "";
         }
     }
+
+    private String stepSushefImage(Object step) {
+        if (step == null) return "";
+        try {
+            Object value = step.getClass().getMethod("getImageSushef").invoke(step);
+            return value == null ? "" : value.toString();
+        } catch (Exception ignored) {
+            return "";
+        }
+    }
 %>
 <%
     DashboardData dashboard = (DashboardData) request.getAttribute("dashboard");
@@ -62,6 +72,18 @@
     int cartCount = countCartItems(currentUser);
     Integer startIndexAttr = (Integer) request.getAttribute("startIndex");
     int startIndex = startIndexAttr == null ? 0 : startIndexAttr.intValue();
+    String introSushefImage = recette == null || recette.getImageSushef() == null || recette.getImageSushef().isBlank()
+            ? "/assets/img/sushef-happy.png"
+            : recette.getImageSushef().trim();
+    Recette rizVinaigreRecipe = null;
+    if (dashboard != null) {
+        for (Recette candidate : dashboard.recettes()) {
+            if (candidate.getTitre() != null && candidate.getTitre().equalsIgnoreCase("Riz vinaigré")) {
+                rizVinaigreRecipe = candidate;
+                break;
+            }
+        }
+    }
 %>
 <!DOCTYPE html>
 <html lang="fr">
@@ -69,7 +91,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Réalisation</title>
-    <link rel="stylesheet" href="<%= ctx %>/assets/app.css?v=responsive-stack-1">
+    <link rel="stylesheet" href="<%= ctx %>/assets/app.css?v=final-step-image-1">
 </head>
 <body class="app-page app-page--catalog">
 <header class="topbar topbar--catalog">
@@ -109,15 +131,16 @@
                         <% } %>
                         <div class="cook-intro-actions">
                             <% if (recette.isNecessiteRizVinaigre()) { %>
-                            <a class="button button--outline" href="<%= ctx %>/cook?id=<%= recette.getId() %>&start=1">Suivre la recette du riz vinaigré</a>
+                            <a class="button button--outline" href="<%= ctx %>/cook?id=<%= rizVinaigreRecipe != null ? rizVinaigreRecipe.getId() : recette.getId() %>">Suivre la recette du riz vinaigré</a>
                             <% } %>
                             <a class="button button--ghost" href="<%= ctx %>/cook-steps?id=<%= recette.getId() %>">Commencer la recette</a>
                         </div>
                     </div>
-                    <img class="cook-chef cook-chef--center" src="<%= ctx %>/assets/img/sushef-happy.png" alt="Sushef">
+                    <img class="cook-chef cook-chef--center" src="<%= esc(imageSrc(ctx, introSushefImage)) %>" alt="Sushef">
                 </article>
 
                 <% for (int i = 0; i < recipeSteps.size(); i++) { Object step = recipeSteps.get(i); %>
+                <% String currentSushefImage = stepSushefImage(step); if (currentSushefImage == null || currentSushefImage.isBlank()) currentSushefImage = "/assets/img/sushef-focused.png"; %>
                 <article class="cook-slide cook-slide--step <%= startIndex == (i + 1) ? "is-active" : "" %>" data-step-slide <%= startIndex == (i + 1) ? "" : "hidden" %>>
                     <% if (i > 0) { %><button type="button" class="cook-nav cook-nav--inline cook-nav--inline-left" data-step-prev>‹</button><% } %>
                     <button type="button" class="cook-nav cook-nav--inline cook-nav--inline-right" data-step-next>›</button>
@@ -127,7 +150,7 @@
                         <% String stepLabel = stepText(step); if (stepLabel == null || stepLabel.isBlank()) stepLabel = fallbackStepText(i); %>
                         <p><%= esc(stepLabel) %></p>
                     </div>
-                    <img class="cook-chef cook-chef--right" src="<%= ctx %>/assets/img/sushef-focused.png" alt="Sushef">
+                    <img class="cook-chef cook-chef--right" src="<%= esc(imageSrc(ctx, currentSushefImage)) %>" alt="Sushef">
                 </article>
                 <% } %>
 

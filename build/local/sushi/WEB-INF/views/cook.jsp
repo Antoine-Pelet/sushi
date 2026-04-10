@@ -75,6 +75,15 @@
     String introSushefImage = recette == null || recette.getImageSushef() == null || recette.getImageSushef().isBlank()
             ? "/assets/img/sushef-happy.png"
             : recette.getImageSushef().trim();
+    Recette rizVinaigreRecipe = null;
+    if (dashboard != null) {
+        for (Recette candidate : dashboard.recettes()) {
+            if (candidate.getTitre() != null && candidate.getTitre().equalsIgnoreCase("Riz vinaigré")) {
+                rizVinaigreRecipe = candidate;
+                break;
+            }
+        }
+    }
 %>
 <!DOCTYPE html>
 <html lang="fr">
@@ -82,7 +91,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Réalisation</title>
-    <link rel="stylesheet" href="<%= ctx %>/assets/app.css?v=responsive-stack-1">
+    <link rel="stylesheet" href="<%= ctx %>/assets/app.css?v=final-step-image-1">
 </head>
 <body class="app-page app-page--catalog">
 <header class="topbar topbar--catalog">
@@ -122,7 +131,7 @@
                         <% } %>
                         <div class="cook-intro-actions">
                             <% if (recette.isNecessiteRizVinaigre()) { %>
-                            <a class="button button--outline" href="<%= ctx %>/cook?id=<%= recette.getId() %>&start=1">Suivre la recette du riz vinaigré</a>
+                            <a class="button button--outline" href="<%= ctx %>/cook?id=<%= rizVinaigreRecipe != null ? rizVinaigreRecipe.getId() : recette.getId() %>">Suivre la recette du riz vinaigré</a>
                             <% } %>
                             <a class="button button--ghost" href="<%= ctx %>/cook-steps?id=<%= recette.getId() %>">Commencer la recette</a>
                         </div>

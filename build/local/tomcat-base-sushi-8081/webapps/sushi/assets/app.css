@@ -45,6 +45,14 @@ body.workspace-page--stock {
     overflow-y: auto;
 }
 
+body.workspace-page--orders {
+    overflow-y: auto;
+}
+
+body.workspace-page--users {
+    overflow-y: auto;
+}
+
 body.landing-page {
     min-height: 100vh;
     overflow: hidden;
@@ -832,6 +840,52 @@ body.app-page::before {
     overflow: visible;
 }
 
+.workspace-page--orders .workspace-shell {
+    height: auto;
+    min-height: calc(100vh - 102px);
+    align-items: start;
+    padding-top: 12px;
+    padding-bottom: 40px;
+}
+
+.workspace-page--orders .workspace-panel {
+    height: auto;
+    min-height: min(760px, calc(100vh - 150px));
+}
+
+.workspace-page--orders .workspace-panel__inner {
+    height: auto;
+    min-height: 100%;
+    overflow: visible;
+}
+
+.workspace-page--orders .order-stack {
+    align-content: start;
+}
+
+.workspace-page--orders .order-card--admin {
+    min-height: auto;
+}
+
+.workspace-page--users .workspace-shell {
+    height: auto;
+    min-height: calc(100vh - 102px);
+    align-items: start;
+    padding-top: 12px;
+    padding-bottom: 40px;
+}
+
+.workspace-page--users .workspace-panel {
+    height: auto;
+    min-height: min(760px, calc(100vh - 150px));
+}
+
+.workspace-page--users .workspace-panel__inner {
+    height: auto;
+    min-height: 100%;
+    overflow: visible;
+}
+
 .workspace-page--stock .stock-grid {
     align-items: stretch;
 }
@@ -1552,6 +1606,69 @@ code { display: block; padding: 12px 14px; border-radius: 14px; background: rgba
 
 .workspace-page--admin .admin-tile__button {
     padding: clamp(14px, 2vw, 20px);
+}
+.admin-dashboard-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 22px;
+}
+
+.admin-dashboard-actions form {
+    margin: 0;
+}
+
+.admin-user-table-wrap {
+    overflow-x: auto;
+    border-radius: 24px;
+    background: var(--panel-strong);
+    border: 1px solid rgba(255,255,255,0.06);
+}
+
+.admin-user-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 760px;
+}
+
+.admin-user-table th,
+.admin-user-table td {
+    padding: 16px;
+    text-align: left;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    vertical-align: middle;
+}
+
+.admin-user-table th {
+    color: var(--muted);
+    font-size: 0.78rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+}
+
+.admin-user-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.admin-user-table td:first-child {
+    display: grid;
+    gap: 4px;
+}
+
+.admin-user-table td:first-child span,
+.admin-user-table__note {
+    color: var(--muted);
+    font-size: 0.9rem;
+}
+
+.admin-user-table code {
+    max-width: 420px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.admin-user-table form {
+    margin: 0;
 }
 .builder-chip {
     width: fit-content;
@@ -2489,7 +2606,7 @@ body.workspace-page--cart.app-page--catalog {
         font-size: 13px;
     }
 
-    body.app-page--catalog:not(.workspace-page--cart):not(.workspace-page--stock):not(.workspace-page--recipes):not(.recipe-page) {
+    body.app-page--catalog:not(.workspace-page--cart):not(.workspace-page--stock):not(.workspace-page--orders):not(.workspace-page--recipes):not(.workspace-page--users):not(.recipe-page) {
         overflow: hidden;
     }
 

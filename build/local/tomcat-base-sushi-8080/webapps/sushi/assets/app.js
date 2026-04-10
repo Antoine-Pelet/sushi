@@ -126,6 +126,10 @@ function initStepRows() {
             row.querySelectorAll("textarea, input").forEach((field) => {
                 field.value = "";
             });
+            row.querySelectorAll("select").forEach((field) => {
+                field.selectedIndex = 0;
+                field.dispatchEvent(new Event("change"));
+            });
         });
     };
 

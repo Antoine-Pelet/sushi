@@ -77,7 +77,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Réalisation</title>
-    <link rel="stylesheet" href="<%= ctx %>/assets/app.css?v=responsive-stack-1">
+    <link rel="stylesheet" href="<%= ctx %>/assets/app.css?v=final-step-image-1">
 </head>
 <body class="app-page app-page--catalog">
 <header class="topbar topbar--catalog">
