@@ -95,7 +95,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Espace Sushef</title>
-    <link rel="stylesheet" href="<%= ctx %>/assets/app.css?v=stock-page-3">
+    <link rel="stylesheet" href="<%= ctx %>/assets/app.css?v=responsive-stack-1">
 </head>
 <body class="app-page app-page--catalog workspace-page <%= "cart".equals(workspaceMode) ? "workspace-page--cart" : "" %> <%= "recipes".equals(workspaceMode) ? "workspace-page--recipes" : "" %> <%= "stock".equals(workspaceMode) ? "workspace-page--stock" : "" %>">
 <header class="topbar topbar--catalog">
@@ -303,7 +303,7 @@
     </section>
 </main>
 
-<script src="<%= ctx %>/assets/app.js?v=stock-page-3"></script>
+<script src="<%= ctx %>/assets/app.js?v=responsive-stack-1"></script>
 <template id="ingredient-template">
     <div class="ingredient-row"><select name="ingredientProductId" required><option value="">Produit</option><% for (Produit produit : produits) { %><option value="<%= produit.getId() %>" data-unit="<%= esc(produit.getUnite()) %>"><%= esc(produit.getNom()) %></option><% } %></select><input type="number" step="0.01" min="0" name="ingredientQuantity" placeholder="Quantite" required><input type="text" name="ingredientUnit" placeholder="Unite"><button type="button" class="icon-pill" data-remove-ingredient>×</button></div>
 </template>
