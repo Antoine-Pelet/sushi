@@ -43,32 +43,40 @@
     <product id="16" name="Branches d'épinard" price="1" stock="200" unit="branche"/>
   </products>
   <recipes nextId="107">
-    <recipe difficulty="3" id="101" needsVinegaredRice="true" prepMinutes="28" price="12.9">
+    <recipe difficulty="3" id="101" needsVinegaredRice="true" prepMinutes="20" price="34.45">
       <title>Maki saumon avocat</title>
-      <description>1) Cuire et assaisonner le riz.
-2) Étaler le riz sur la feuille de nori.
-3) Ajouter saumon et avocat, rouler puis découper.</description>
-      <coverImage>/assets/img/recipe-step-finish.png</coverImage>
+      <description>1) Tranchez les filets de saumon en longues bandes
+2) Pelez l’avocat, dénoyautez-le et coupez-le en bâtonnets
+3) Étalez du riz vinaigré sur les trois quarts d’une feuille de nori posée sur un tapis en bambou ou en silicone.&#13;
+ Ajoutez la garniture près d'un bord, en posant une bande de lanières de saumon recouvertes de lamelles d'avocat
+4) Assaisonnez avec 1 c. à café de wasabi, puis roulez le maki à l'aide du tapis en serrant bien. Collez le quart restant de la feuille avec un peu de riz pour bien la faire adhérer au rouleau.
+5) Coupez vos 3 boudins en tronçons de 1,5 à 2 cm de largeur.  Servez vos makis saumon et avocat avec de la sauce soja (salée ou sucrée selon les goûts) pour les tremper dedans.</description>
+      <coverImage>/assets/img/maki.jpeg</coverImage>
       <sushefImage>/assets/img/sushef-happy.png</sushefImage>
       <steps>
-        <step image="/assets/img/recipe-step-prep.png" sushefImage="/assets/img/sushef-focused.png">
-          <text>Cuire et assaisonner le riz.</text>
+        <step image="/assets/img/recette3etape1 - Moyenne.jpeg" sushefImage="/assets/img/sushef-focused.png">
+          <text>Tranchez les filets de saumon en longues bandes</text>
         </step>
-        <step image="/assets/img/recipe-step-prep.png" sushefImage="/assets/img/sushef-focused.png">
-          <text>Étaler le riz sur la feuille de nori.</text>
+        <step image="/assets/img/recette3etape2 - Moyenne.jpeg" sushefImage="/assets/img/sushef-focused.png">
+          <text>Pelez l’avocat, dénoyautez-le et coupez-le en bâtonnets</text>
         </step>
-        <step image="/assets/img/recipe-step-prep.png" sushefImage="/assets/img/sushef-focused.png">
-          <text>Ajouter saumon et avocat, rouler puis découper.</text>
+        <step image="/assets/img/recette3etape3 - Moyenne.jpeg" sushefImage="/assets/img/sushef-happy.png">
+          <text>Étalez du riz vinaigré sur les trois quarts d’une feuille de nori posée sur un tapis en bambou ou en silicone.&#13;
+ Ajoutez la garniture près d'un bord, en posant une bande de lanières de saumon recouvertes de lamelles d'avocat</text>
+        </step>
+        <step image="/assets/img/recette3etape4 - Moyenne.jpeg" sushefImage="/assets/img/sushef-right.png">
+          <text>Assaisonnez avec 1 c. à café de wasabi, puis roulez le maki à l'aide du tapis en serrant bien. Collez le quart restant de la feuille avec un peu de riz pour bien la faire adhérer au rouleau.</text>
+        </step>
+        <step image="/assets/img/recette3etape6 - Moyenne.jpeg" sushefImage="/assets/img/sushef-focused.png">
+          <text>Coupez vos 3 boudins en tronçons de 1,5 à 2 cm de largeur.  Servez vos makis saumon et avocat avec de la sauce soja (salée ou sucrée selon les goûts) pour les tremper dedans.</text>
         </step>
       </steps>
       <ingredients>
-        <ingredient productId="1" quantity="250" unit="g"/>
-        <ingredient productId="2" quantity="30" unit="ml"/>
-        <ingredient productId="3" quantity="10" unit="g"/>
-        <ingredient productId="4" quantity="3" unit="g"/>
-        <ingredient productId="5" quantity="2" unit="feuilles"/>
-        <ingredient productId="6" quantity="120" unit="g"/>
-        <ingredient productId="9" quantity="1" unit="pièce"/>
+        <ingredient productId="5" quantity="3" unit="feuilles"/>
+        <ingredient productId="6" quantity="600" unit="g"/>
+        <ingredient productId="9" quantity="3" unit="pièce"/>
+        <ingredient productId="10" quantity="20" unit="g"/>
+        <ingredient productId="11" quantity="100" unit="ml"/>
       </ingredients>
     </recipe>
     <recipe difficulty="3" id="102" needsVinegaredRice="true" prepMinutes="28" price="14.5">
