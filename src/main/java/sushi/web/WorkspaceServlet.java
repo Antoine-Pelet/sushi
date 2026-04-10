@@ -29,7 +29,7 @@ public class WorkspaceServlet extends BaseServlet {
     private String normalizeMode(String rawMode, User currentUser) {
         String mode = rawMode == null || rawMode.isBlank() ? "account" : rawMode.trim();
         mode = switch (mode) {
-            case "account", "cart", "admin", "recipes", "stock", "orders" -> mode;
+            case "account", "cart", "admin", "recipes", "stock", "orders", "users" -> mode;
             default -> "account";
         };
 
@@ -38,7 +38,7 @@ public class WorkspaceServlet extends BaseServlet {
             return "admin";
         }
 
-        if (!admin && ("admin".equals(mode) || "recipes".equals(mode) || "stock".equals(mode) || "orders".equals(mode))) {
+        if (!admin && ("admin".equals(mode) || "recipes".equals(mode) || "stock".equals(mode) || "orders".equals(mode) || "users".equals(mode))) {
             return "account";
         }
 

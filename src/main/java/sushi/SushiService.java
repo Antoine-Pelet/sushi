@@ -46,6 +46,7 @@ public class SushiService {
             return new DashboardData(
                     data.getRecettes(),
                     data.getProduits(),
+                    data.getUsers(),
                     currentUser,
                     userOrders,
                     allOrders,
@@ -362,6 +363,20 @@ public class SushiService {
         }
     }
 
+    public void deleteUser(int adminUserId, int userIdToDelete) {
+        synchronized (lock) {
+            StoreData data = repository.load();
+            requireAdmin(data, adminUserId);
+            User user = requireUser(data, userIdToDelete);
+            if (user.getId() == adminUserId) {
+                throw new SushiException("Vous ne pouvez pas supprimer le compte administrateur connecté.");
+            }
+
+            data.getUsers().remove(user);
+            repository.save(data);
+        }
+    }
+
     public Produit saveProduct(int userId, Integer productId, String name, double stock, String unit, double price) {
         synchronized (lock) {
             StoreData data = repository.load();
@@ -548,6 +563,7 @@ public class SushiService {
     }
 
     private void sortData(StoreData data) {
+        data.getUsers().sort(Comparator.comparingInt(User::getId));
         data.getProduits().sort(Comparator.comparing(Produit::getNom, String.CASE_INSENSITIVE_ORDER));
         data.getRecettes().sort(Comparator.comparingInt(Recette::getId));
         data.getCommandes().sort(Comparator.comparing(Commande::getDateCreation).reversed());
@@ -570,6 +586,7 @@ public class SushiService {
     public record DashboardData(
             List<Recette> recettes,
             List<Produit> produits,
+            List<User> users,
             User currentUser,
             List<Commande> userCommandes,
             List<Commande> allCommandes,
