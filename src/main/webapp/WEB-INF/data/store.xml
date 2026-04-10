@@ -38,7 +38,7 @@
     <product id="11" name="Sauce soja" price="0.012" stock="2980" unit="ml"/>
     <product id="12" name="Gingembre mariné" price="0.02" stock="1000" unit="g"/>
     <product id="13" name="Graines de sésame" price="0.018" stock="790" unit="g"/>
-    <product id="14" name="mayonnaise" price="0.2" stock="1000" unit="g"/>
+    <product id="14" name="Mayonnaise" price="0.2" stock="1000" unit="g"/>
     <product id="15" name="oeufs" price="0.15" stock="200" unit="pièces"/>
     <product id="16" name="Branches d'épinard" price="1" stock="200" unit="branche"/>
   </products>
@@ -141,18 +141,33 @@
         <ingredient productId="8" quantity="1" unit="pièce"/>
       </ingredients>
     </recipe>
-    <recipe difficulty="1" id="106" needsVinegaredRice="true" prepMinutes="20" price="1.8">
-      <title>toto</title>
-      <description>1) cuireeeee</description>
-      <coverImage>/assets/img/recipe-step-finish.png</coverImage>
-      <sushefImage>/assets/img/sushef-happy.png</sushefImage>
+    <recipe difficulty="1" id="106" needsVinegaredRice="false" prepMinutes="50" price="11.17">
+      <title>Riz vinaigré</title>
+      <description>1) Lavez le riz jusqu’à ce que l'eau qui s'en écoule soit claire, puis égouttez-le
+2) Versez-le dans une casserole, puis recouvrez d’eau à 110% par rapport au poids du riz. Couvrez, portez à ébullition sur feu moyen et laissez mijoter pendant 12 min. Coupez ensuite le feu, puis patientez 10 min
+3) Pendant ce temps, mélangez le vinaigre de riz avec le sucre et le sel jusqu'à dissolution complète du sucre
+4) Versez le riz dans un grand plat à gratin. Incorporez le mélange vinaigre-sucre-sel, puis mélangez pendant quelques instants. Laissez tiédir jusqu'à température ambiante</description>
+      <coverImage>/assets/img/riz_vinaigré.jpg</coverImage>
+      <sushefImage>/assets/img/sushef-constellation.png</sushefImage>
       <steps>
-        <step image="/assets/img/recipe-step-prep.png" sushefImage="/assets/img/sushef-focused.png">
-          <text>cuireeeee</text>
+        <step image="/assets/img/recette4etape1 - Moyenne.jpeg" sushefImage="/assets/img/sushef-calm.png">
+          <text>Lavez le riz jusqu’à ce que l'eau qui s'en écoule soit claire, puis égouttez-le</text>
+        </step>
+        <step image="/assets/img/recette4etape2 - Moyenne.jpeg" sushefImage="/assets/img/sushef-happy.png">
+          <text>Versez-le dans une casserole, puis recouvrez d’eau à 110% par rapport au poids du riz. Couvrez, portez à ébullition sur feu moyen et laissez mijoter pendant 12 min. Coupez ensuite le feu, puis patientez 10 min</text>
+        </step>
+        <step image="/assets/img/recette4etape3 - Moyenne.jpeg" sushefImage="/assets/img/sushef-focused.png">
+          <text>Pendant ce temps, mélangez le vinaigre de riz avec le sucre et le sel jusqu'à dissolution complète du sucre</text>
+        </step>
+        <step image="/assets/img/recette4etape4 - Moyenne.jpeg" sushefImage="/assets/img/sushef-score.png">
+          <text>Versez le riz dans un grand plat à gratin. Incorporez le mélange vinaigre-sucre-sel, puis mélangez pendant quelques instants. Laissez tiédir jusqu'à température ambiante</text>
         </step>
       </steps>
       <ingredients>
-        <ingredient productId="8" quantity="2" unit="pièce"/>
+        <ingredient productId="4" quantity="10" unit="g"/>
+        <ingredient productId="3" quantity="25" unit="g"/>
+        <ingredient productId="2" quantity="70" unit="ml"/>
+        <ingredient productId="1" quantity="500" unit="g"/>
       </ingredients>
     </recipe>
   </recipes>
