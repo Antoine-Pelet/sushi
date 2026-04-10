@@ -34,6 +34,10 @@ body.app-page--catalog {
     overflow: hidden;
 }
 
+body.workspace-page--recipes {
+    overflow-y: auto;
+}
+
 body.landing-page {
     min-height: 100vh;
     overflow: hidden;
@@ -783,6 +787,25 @@ body.app-page::before {
     overflow: visible;
 }
 
+.workspace-shell--recipes {
+    height: auto;
+    min-height: calc(100vh - 102px);
+    align-items: start;
+    padding-top: 12px;
+    padding-bottom: 28px;
+}
+
+.workspace-panel--recipes {
+    height: auto;
+    min-height: min(980px, calc(100vh - 150px));
+}
+
+.workspace-panel__inner--recipes {
+    height: auto;
+    min-height: 100%;
+    overflow: visible;
+}
+
 .workspace-panel__head .eyebrow {
     font-size: 1rem;
     letter-spacing: 0.18em;
@@ -1044,11 +1067,82 @@ input, textarea, select {
     color: #fff;
     padding: 13px 15px;
 }
+input[type="checkbox"] {
+    width: auto;
+}
+.checkbox-field {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.14);
+    background: rgba(255,255,255,0.06);
+}
+.checkbox-field input {
+    inline-size: 20px;
+    block-size: 20px;
+    accent-color: var(--accent);
+}
+.checkbox-field span {
+    color: #fff;
+    font-weight: 700;
+}
+select {
+    appearance: none;
+    -webkit-appearance: none;
+    background-image:
+        linear-gradient(45deg, transparent 50%, rgba(255,255,255,0.82) 50%),
+        linear-gradient(135deg, rgba(255,255,255,0.82) 50%, transparent 50%);
+    background-position:
+        calc(100% - 24px) calc(50% - 2px),
+        calc(100% - 18px) calc(50% - 2px);
+    background-size: 6px 6px, 6px 6px;
+    background-repeat: no-repeat;
+    padding-right: 44px;
+}
 textarea { min-height: 160px; resize: vertical; }
 code { display: block; padding: 12px 14px; border-radius: 14px; background: rgba(255,255,255,0.05); }
 .profile-box { align-items: center; margin-bottom: 16px; }
 .cart-stack, .order-stack, .admin-recipe-list, .stock-grid { display: grid; gap: 14px; }
 .ingredient-row { display: grid; grid-template-columns: minmax(0, 1.6fr) 120px 120px auto; gap: 12px; align-items: end; }
+.step-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(220px, 0.8fr) auto;
+    gap: 12px;
+    align-items: end;
+    padding: 14px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+}
+#step-rows {
+    display: grid;
+    gap: 12px;
+}
+.step-row textarea {
+    min-height: 84px;
+}
+.maker-image-field {
+    gap: 10px;
+}
+.maker-image-picker {
+    display: grid;
+    grid-template-columns: 112px minmax(0, 1fr);
+    gap: 12px;
+    align-items: center;
+}
+.maker-image-picker--step {
+    grid-template-columns: 92px minmax(0, 1fr);
+}
+.maker-image-preview {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.14);
+    background: rgba(255,255,255,0.06);
+}
 .admin-recipe-item { display: flex; justify-content: space-between; align-items: center; gap: 18px; }
 .step-indicator { display: inline-flex; align-items: center; justify-content: center; min-width: 96px; padding: 8px 16px; border-radius: 999px; background: rgba(255,255,255,0.08); }
 .cart-item, .order-card, .admin-recipe-item { padding: 16px; }
@@ -1293,6 +1387,14 @@ code { display: block; padding: 12px 14px; border-radius: 14px; background: rgba
     .recipe-quadrant--actions { grid-column: auto; grid-row: auto; align-items: stretch; padding-top: 0; }
     .workspace-shell { height: calc(100vh - 82px); padding: 12px 14px 20px; }
     .workspace-panel { padding: 20px; }
+    .workspace-shell--recipes {
+        height: auto;
+        min-height: calc(100vh - 82px);
+        padding-bottom: 20px;
+    }
+    .workspace-panel--recipes {
+        min-height: auto;
+    }
     .cart-grid { grid-template-columns: 1fr; }
     .recipe-detail-visual { min-height: 220px; }
     .cook-slide { min-height: 540px; padding: 26px 22px; }
@@ -1319,6 +1421,7 @@ code { display: block; padding: 12px 14px; border-radius: 14px; background: rgba
     .cart-ingredient-list__aside { width: 100%; justify-content: space-between; }
     .ingredients-list li { flex-direction: column; }
     .ingredient-row { grid-template-columns: 1fr; }
+    .step-row { grid-template-columns: 1fr; }
     .admin-recipe-item { flex-direction: column; align-items: stretch; }
     .button--wide { width: 100%; }
     .landing-copy h1 { font-size: clamp(2.6rem, 11vw, 4.1rem); white-space: normal; width: min(100%, 320px); }

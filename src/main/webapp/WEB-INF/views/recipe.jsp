@@ -20,12 +20,22 @@
 
     private int prepMinutes(Recette recette) {
         if (recette == null) return 0;
+        if (recette.getTempsPreparationMinutes() > 0) return recette.getTempsPreparationMinutes();
         return Math.max(20, recette.getIngredients().size() * 4);
     }
 
     private int difficultyScore(Recette recette) {
         if (recette == null) return 1;
-        return Math.max(1, Math.min(5, (int) Math.ceil(recette.getIngredients().size() / 2.0)));
+        int score = recette.getDifficulte();
+        if (score < 1 || score > 3) return 1;
+        return score;
+    }
+
+    private String difficultyFlowers(Recette recette) {
+        int score = difficultyScore(recette);
+        StringBuilder flowers = new StringBuilder();
+        for (int i = 0; i < score; i++) flowers.append("✿");
+        return flowers.toString();
     }
 
     private String ingredientLine(Ingredient ingredient) {
@@ -35,6 +45,13 @@
         String unit = ingredient.getUnite() == null ? "" : ingredient.getUnite().trim();
         String product = ingredient.getProduit().getNom() == null ? "" : ingredient.getProduit().getNom().trim();
         return (quantity + (unit.isBlank() ? " " : " " + unit + " ") + product).trim();
+    }
+
+    private String imageSrc(String ctx, String image) {
+        if (image == null || image.isBlank()) return ctx + "/assets/img/recipe-step-finish.png";
+        String value = image.trim();
+        if (value.startsWith("http://") || value.startsWith("https://") || value.startsWith("data:")) return value;
+        return value.startsWith("/") ? ctx + value : ctx + "/" + value;
     }
 %>
 <%
@@ -85,7 +102,7 @@
                     <button type="submit" class="favorite-button favorite-button--detail"><%= favorite ? "♥" : "♡" %></button>
                 </form>
                 <% } %>
-                <img class="recipe-detail-visual recipe-showcase__photo" src="<%= ctx %>/assets/img/recipe-step-finish.png" alt="Presentation de <%= esc(recette.getTitre()) %>">
+                <img class="recipe-detail-visual recipe-showcase__photo" src="<%= esc(imageSrc(ctx, recette.getImageCouverture())) %>" alt="Presentation de <%= esc(recette.getTitre()) %>">
             </div>
 
             <div class="recipe-quadrant recipe-quadrant--summary">
@@ -103,7 +120,7 @@
                     </li>
                     <li>
                         <span class="recipe-showcase__metric-icon recipe-showcase__metric-icon--petal">✿</span>
-                        <strong>Difficulte <%= difficultyScore(recette) %></strong>
+                        <strong><%= difficultyFlowers(recette) %> <%= difficultyScore(recette) == 1 ? "Facile" : difficultyScore(recette) == 2 ? "Moyen" : "Difficile" %></strong>
                     </li>
                     <li>
                         <span class="recipe-showcase__basket-icon" aria-hidden="true">

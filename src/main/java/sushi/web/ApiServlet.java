@@ -190,9 +190,12 @@ public class ApiServlet extends BaseServlet {
         }
 
         List<SushiService.IngredientForm> ingredients = new ArrayList<>();
+        List<SushiService.StepForm> steps = new ArrayList<>();
         String[] productIds = request.getParameterValues("ingredientProductId");
         String[] quantities = request.getParameterValues("ingredientQuantity");
         String[] units = request.getParameterValues("ingredientUnit");
+        String[] stepTexts = request.getParameterValues("stepText");
+        String[] stepImages = request.getParameterValues("stepImage");
 
         if (productIds != null) {
             for (int i = 0; i < productIds.length; i++) {
@@ -210,13 +213,28 @@ public class ApiServlet extends BaseServlet {
             }
         }
 
+        if (stepTexts != null) {
+            for (int i = 0; i < stepTexts.length; i++) {
+                String text = stepTexts[i];
+                String image = stepImages != null && stepImages.length > i ? stepImages[i] : null;
+                if (text == null || text.isBlank()) {
+                    continue;
+                }
+                steps.add(new SushiService.StepForm(text, image));
+            }
+        }
+
         Recette recette = service(request).saveRecipe(
                 userId,
                 optionalInt(request, "recipeId"),
                 request.getParameter("title"),
-                request.getParameter("description"),
+                request.getParameter("coverImage"),
                 requiredDouble(request, "price"),
-                ingredients
+                requiredInt(request, "prepMinutes"),
+                requiredInt(request, "difficulty"),
+                request.getParameter("needsVinegaredRice") != null,
+                ingredients,
+                steps
         );
 
         SushiService.DashboardData dashboard = service(request).getDashboardData(userId, null);
@@ -278,4 +296,3 @@ public class ApiServlet extends BaseServlet {
         response.getWriter().write(body);
     }
 }
-

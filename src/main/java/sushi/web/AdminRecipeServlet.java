@@ -3,6 +3,7 @@ package sushi.web;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import sushi.Recette;
 import sushi.SushiException;
 import sushi.SushiService;
 
@@ -23,8 +24,17 @@ public class AdminRecipeServlet extends BaseServlet {
             }
 
             if (request.getServletPath().endsWith("/save")) {
-                handleSave(request, userId);
+                Recette recette = handleSave(request, userId);
                 setFlash(request, "success", "Recette enregistree.");
+                response.sendRedirect(buildRedirectTarget(
+                        request.getContextPath(),
+                        request.getParameter("returnPage"),
+                        request.getParameter("returnRecipeId"),
+                        Integer.toString(recette.getId()),
+                        request.getParameter("returnMode"),
+                        request.getParameter("returnSection")
+                ));
+                return;
             } else {
                 service(request).deleteRecipe(userId, requiredInt(request, "recipeId"));
                 setFlash(request, "success", "Recette supprimee.");
@@ -36,13 +46,16 @@ public class AdminRecipeServlet extends BaseServlet {
         redirectToApp(request, response);
     }
 
-    private void handleSave(HttpServletRequest request, int userId) {
+    private Recette handleSave(HttpServletRequest request, int userId) {
         Integer recipeId = optionalInt(request, "recipeId");
         String[] productIds = request.getParameterValues("ingredientProductId");
         String[] quantities = request.getParameterValues("ingredientQuantity");
         String[] units = request.getParameterValues("ingredientUnit");
+        String[] stepTexts = request.getParameterValues("stepText");
+        String[] stepImages = request.getParameterValues("stepImage");
 
         List<SushiService.IngredientForm> ingredients = new ArrayList<>();
+        List<SushiService.StepForm> steps = new ArrayList<>();
         if (productIds != null) {
             for (int i = 0; i < productIds.length; i++) {
                 String productId = productIds[i];
@@ -61,13 +74,28 @@ public class AdminRecipeServlet extends BaseServlet {
             }
         }
 
-        service(request).saveRecipe(
+        if (stepTexts != null) {
+            for (int i = 0; i < stepTexts.length; i++) {
+                String text = stepTexts[i];
+                String image = stepImages != null && stepImages.length > i ? stepImages[i] : null;
+                if (text == null || text.isBlank()) {
+                    continue;
+                }
+                steps.add(new SushiService.StepForm(text, image));
+            }
+        }
+
+        return service(request).saveRecipe(
                 userId,
                 recipeId,
                 request.getParameter("title"),
-                request.getParameter("description"),
+                request.getParameter("coverImage"),
                 requiredDouble(request, "price"),
-                ingredients
+                requiredInt(request, "prepMinutes"),
+                requiredInt(request, "difficulty"),
+                request.getParameter("needsVinegaredRice") != null,
+                ingredients,
+                steps
         );
     }
 }

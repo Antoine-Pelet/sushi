@@ -17,6 +17,54 @@
         if (user == null || user.getUsername() == null || user.getUsername().isBlank()) return "G";
         return user.getUsername().substring(0, 1).toUpperCase(Locale.ROOT);
     }
+
+    private String stepText(Object step) {
+        if (step == null) return "";
+        try {
+            Object value = step.getClass().getMethod("getTexte").invoke(step);
+            return value == null ? "" : value.toString();
+        } catch (Exception ignored) {
+            return "";
+        }
+    }
+
+    private String stepImage(Object step) {
+        if (step == null) return "";
+        try {
+            Object value = step.getClass().getMethod("getImage").invoke(step);
+            return value == null ? "" : value.toString();
+        } catch (Exception ignored) {
+            return "";
+        }
+    }
+
+    private List<?> recipeSteps(Object recette) {
+        if (recette == null) return Collections.emptyList();
+        try {
+            Object value = recette.getClass().getMethod("getEtapes").invoke(recette);
+            if (value instanceof List<?>) {
+                return (List<?>) value;
+            }
+        } catch (Exception ignored) {
+        }
+        return Collections.emptyList();
+    }
+
+    private boolean sameImage(String current, String expected) {
+        return current != null && current.trim().equals(expected);
+    }
+
+    private boolean knownRecipeImage(String current) {
+        return sameImage(current, "/assets/img/recipe-step-prep.png")
+                || sameImage(current, "/assets/img/recipe-step-finish.png")
+                || sameImage(current, "/assets/img/fond.png");
+    }
+
+    private String imageSrc(String ctx, String image, String fallback) {
+        String value = image == null || image.isBlank() ? fallback : image.trim();
+        if (value.startsWith("http://") || value.startsWith("https://") || value.startsWith("data:")) return value;
+        return value.startsWith("/") ? ctx + value : ctx + "/" + value;
+    }
 %>
 <%
     DashboardData dashboard = (DashboardData) request.getAttribute("dashboard");
@@ -38,6 +86,7 @@
     Map<Integer, Recette> recettesById = new HashMap<>();
     for (Recette recette : recettes) recettesById.put(recette.getId(), recette);
     List<Ingredient> ingredientsEdition = recetteEdition == null ? Collections.emptyList() : recetteEdition.getIngredients();
+    List<?> recipeStepsEdition = recipeSteps(recetteEdition);
     if (workspaceMode == null || workspaceMode.isBlank()) workspaceMode = "account";
 %>
 <!DOCTYPE html>
@@ -46,9 +95,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Espace Sushef</title>
-    <link rel="stylesheet" href="<%= ctx %>/assets/app.css?v=account-layout-3">
+    <link rel="stylesheet" href="<%= ctx %>/assets/app.css?v=recipe-rice-1">
 </head>
-<body class="app-page app-page--catalog workspace-page <%= "cart".equals(workspaceMode) ? "workspace-page--cart" : "" %>">
+<body class="app-page app-page--catalog workspace-page <%= "cart".equals(workspaceMode) ? "workspace-page--cart" : "" %> <%= "recipes".equals(workspaceMode) ? "workspace-page--recipes" : "" %>">
 <header class="topbar topbar--catalog">
     <a class="brand brand--landing" href="<%= ctx %>/">
         <span>Sushef</span>
@@ -63,9 +112,9 @@
 <div class="flash flash--<%= esc(flashType == null ? "info" : flashType) %>"><%= esc(flashMessage) %></div>
 <% } %>
 
-<main class="catalog-shell workspace-shell">
-    <section class="catalog-panel workspace-panel">
-        <div class="workspace-panel__inner">
+<main class="catalog-shell workspace-shell <%= "recipes".equals(workspaceMode) ? "workspace-shell--recipes" : "" %>">
+    <section class="catalog-panel workspace-panel <%= "recipes".equals(workspaceMode) ? "workspace-panel--recipes" : "" %>">
+        <div class="workspace-panel__inner <%= "recipes".equals(workspaceMode) ? "workspace-panel__inner--recipes" : "" %>">
             <% if ("account".equals(workspaceMode)) { %>
                 <div class="catalog-panel__head workspace-panel__head">
                     <p class="eyebrow">Mon compte</p>
@@ -190,8 +239,30 @@
                         <input type="hidden" name="returnMode" value="recipes">
                         <div class="builder-chip"><%= recetteEdition == null ? "Nouvelle recette" : "Edition" %></div>
                         <label>Titre<input type="text" name="title" value="<%= recetteEdition == null ? "" : esc(recetteEdition.getTitre()) %>" required></label>
-                        <div class="form-row"><label>Prix<input type="number" step="0.01" min="0" name="price" value="<%= recetteEdition == null ? "" : money.format(recetteEdition.getPrix()).replace(',', '.') %>" required></label><label>Mode<input type="text" value="Recette" disabled></label></div>
-                        <label>Description / etapes<textarea name="description" rows="7" required><%= recetteEdition == null ? "" : esc(recetteEdition.getDescriptionEtapes()) %></textarea></label>
+                        <% String coverImage = recetteEdition == null || recetteEdition.getImageCouverture() == null || recetteEdition.getImageCouverture().isBlank() ? "/assets/img/recipe-step-finish.png" : recetteEdition.getImageCouverture(); %>
+                        <label class="maker-image-field">Image de couverture
+                            <span class="maker-image-picker">
+                                <img class="maker-image-preview" data-image-preview src="<%= esc(imageSrc(ctx, coverImage, "/assets/img/recipe-step-finish.png")) %>" alt="Apercu couverture">
+                                <select name="coverImage" data-image-choice required>
+                                    <option value="/assets/img/recipe-step-finish.png" <%= sameImage(coverImage, "/assets/img/recipe-step-finish.png") ? "selected" : "" %>>Presentation</option>
+                                    <option value="/assets/img/recipe-step-prep.png" <%= sameImage(coverImage, "/assets/img/recipe-step-prep.png") ? "selected" : "" %>>Preparation</option>
+                                    <option value="/assets/img/fond.png" <%= sameImage(coverImage, "/assets/img/fond.png") ? "selected" : "" %>>Fond Sushef</option>
+                                    <% if (!coverImage.isBlank() && !knownRecipeImage(coverImage)) { %><option value="<%= esc(coverImage) %>" selected>Image actuelle</option><% } %>
+                                </select>
+                            </span>
+                        </label>
+                        <div class="form-row"><label>Prix<input type="number" step="0.01" min="0" name="price" value="<%= recetteEdition == null ? "" : money.format(recetteEdition.getPrix()).replace(',', '.') %>" required></label><label>Temps de preparation<input type="number" min="1" name="prepMinutes" value="<%= recetteEdition == null || recetteEdition.getTempsPreparationMinutes() <= 0 ? "" : recetteEdition.getTempsPreparationMinutes() %>" required></label></div>
+                        <div class="form-row"><label>Difficulte<select name="difficulty" required><option value="1" <%= recetteEdition != null && recetteEdition.getDifficulte() == 1 ? "selected" : "" %>>Facile</option><option value="2" <%= recetteEdition != null && recetteEdition.getDifficulte() == 2 ? "selected" : "" %>>Moyen</option><option value="3" <%= recetteEdition != null && recetteEdition.getDifficulte() == 3 ? "selected" : "" %>>Difficile</option></select></label></div>
+                        <label class="checkbox-field"><input type="checkbox" name="needsVinegaredRice" value="true" <%= recetteEdition == null || recetteEdition.isNecessiteRizVinaigre() ? "checked" : "" %>><span>Cette recette necessite du riz vinaigre</span></label>
+                        <div class="section-head"><div><p class="eyebrow">Etapes</p><h2>Realisation</h2></div><button type="button" class="button button--ghost" data-add-step>Ajouter une etape</button></div>
+                        <div id="step-rows">
+                            <% if (recetteEdition == null || recipeStepsEdition.isEmpty()) { %>
+                                <div class="step-row"><label>Texte<textarea name="stepText" rows="3" placeholder="Cuire et assaisonner le riz." required></textarea></label><label class="maker-image-field">Image<span class="maker-image-picker maker-image-picker--step"><img class="maker-image-preview" data-image-preview src="<%= ctx %>/assets/img/recipe-step-prep.png" alt="Apercu etape"><select name="stepImage" data-image-choice><option value="/assets/img/recipe-step-prep.png" selected>Preparation</option><option value="/assets/img/recipe-step-finish.png">Presentation</option><option value="/assets/img/fond.png">Fond Sushef</option></select></span></label><button type="button" class="icon-pill" data-remove-step>×</button></div>
+                            <% } else { for (Object etape : recipeStepsEdition) { %>
+                                <% String currentStepImage = stepImage(etape); if (currentStepImage == null || currentStepImage.isBlank()) currentStepImage = "/assets/img/recipe-step-prep.png"; %>
+                                <div class="step-row"><label>Texte<textarea name="stepText" rows="3" placeholder="Decrivez cette etape." required><%= esc(stepText(etape)) %></textarea></label><label class="maker-image-field">Image<span class="maker-image-picker maker-image-picker--step"><img class="maker-image-preview" data-image-preview src="<%= esc(imageSrc(ctx, currentStepImage, "/assets/img/recipe-step-prep.png")) %>" alt="Apercu etape"><select name="stepImage" data-image-choice><option value="/assets/img/recipe-step-prep.png" <%= sameImage(currentStepImage, "/assets/img/recipe-step-prep.png") ? "selected" : "" %>>Preparation</option><option value="/assets/img/recipe-step-finish.png" <%= sameImage(currentStepImage, "/assets/img/recipe-step-finish.png") ? "selected" : "" %>>Presentation</option><option value="/assets/img/fond.png" <%= sameImage(currentStepImage, "/assets/img/fond.png") ? "selected" : "" %>>Fond Sushef</option><% if (!currentStepImage.isBlank() && !knownRecipeImage(currentStepImage)) { %><option value="<%= esc(currentStepImage) %>" selected>Image actuelle</option><% } %></select></span></label><button type="button" class="icon-pill" data-remove-step>×</button></div>
+                            <% }} %>
+                        </div>
                         <div class="section-head"><div><p class="eyebrow">Ingredients</p><h2>Composition</h2></div><button type="button" class="button button--ghost" data-add-ingredient>Ajouter une ligne</button></div>
                         <div id="ingredient-rows">
                             <% if (ingredientsEdition.isEmpty()) { %>
@@ -233,9 +304,12 @@
     </section>
 </main>
 
-<script src="<%= ctx %>/assets/app.js"></script>
+<script src="<%= ctx %>/assets/app.js?v=recipe-rice-1"></script>
 <template id="ingredient-template">
     <div class="ingredient-row"><select name="ingredientProductId" required><option value="">Produit</option><% for (Produit produit : produits) { %><option value="<%= produit.getId() %>" data-unit="<%= esc(produit.getUnite()) %>"><%= esc(produit.getNom()) %></option><% } %></select><input type="number" step="0.01" min="0" name="ingredientQuantity" placeholder="Quantite" required><input type="text" name="ingredientUnit" placeholder="Unite"><button type="button" class="icon-pill" data-remove-ingredient>×</button></div>
+</template>
+<template id="step-template">
+    <div class="step-row"><label>Texte<textarea name="stepText" rows="3" placeholder="Decrivez cette etape." required></textarea></label><label class="maker-image-field">Image<span class="maker-image-picker maker-image-picker--step"><img class="maker-image-preview" data-image-preview src="<%= ctx %>/assets/img/recipe-step-prep.png" alt="Apercu etape"><select name="stepImage" data-image-choice><option value="/assets/img/recipe-step-prep.png" selected>Preparation</option><option value="/assets/img/recipe-step-finish.png">Presentation</option><option value="/assets/img/fond.png">Fond Sushef</option></select></span></label><button type="button" class="icon-pill" data-remove-step>×</button></div>
 </template>
 </body>
 </html>

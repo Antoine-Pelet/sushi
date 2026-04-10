@@ -207,8 +207,13 @@ public class XmlStoreRepository {
             Recette recette = new Recette();
             recette.setId(attrInt(recipeElement, "id", 0));
             recette.setPrix(attrDouble(recipeElement, "price", 0D));
+            recette.setTempsPreparationMinutes(attrInt(recipeElement, "prepMinutes", 0));
+            recette.setDifficulte(attrInt(recipeElement, "difficulty", 0));
+            recette.setNecessiteRizVinaigre(attrBoolean(recipeElement, "needsVinegaredRice", true));
             recette.setTitre(textOf(firstChild(recipeElement, "title")));
             recette.setDescriptionEtapes(textOf(firstChild(recipeElement, "description")));
+            recette.setImageCouverture(textOf(firstChild(recipeElement, "coverImage")));
+            recette.setEtapes(parseSteps(recipeElement));
 
             List<Ingredient> ingredients = new ArrayList<>();
             Element ingredientsElement = firstChild(recipeElement, "ingredients");
@@ -231,6 +236,18 @@ public class XmlStoreRepository {
                     ingredient.setUnite(ingredientElement.getAttribute("unit"));
                     ingredients.add(ingredient);
                 }
+            }
+            if (recette.getEtapes().isEmpty()) {
+                recette.setEtapes(buildLegacySteps(recette.getDescriptionEtapes()));
+            }
+            if (recette.getTempsPreparationMinutes() <= 0) {
+                recette.setTempsPreparationMinutes(Math.max(18, ingredients.size() * 4));
+            }
+            if (recette.getDifficulte() < 1 || recette.getDifficulte() > 3) {
+                recette.setDifficulte(Math.max(1, Math.min(3, (int) Math.ceil(ingredients.size() / 3.0))));
+            }
+            if (safe(recette.getImageCouverture()).isBlank()) {
+                recette.setImageCouverture("/assets/img/recipe-step-finish.png");
             }
             recette.setIngredients(ingredients);
             recipes.add(recette);
@@ -335,10 +352,15 @@ public class XmlStoreRepository {
             Element recipeElement = document.createElement("recipe");
             recipeElement.setAttribute("id", Integer.toString(recette.getId()));
             recipeElement.setAttribute("price", number(recette.getPrix()));
+            recipeElement.setAttribute("prepMinutes", Integer.toString(recette.getTempsPreparationMinutes()));
+            recipeElement.setAttribute("difficulty", Integer.toString(recette.getDifficulte()));
+            recipeElement.setAttribute("needsVinegaredRice", Boolean.toString(recette.isNecessiteRizVinaigre()));
             recipesElement.appendChild(recipeElement);
 
             appendText(document, recipeElement, "title", recette.getTitre());
             appendText(document, recipeElement, "description", recette.getDescriptionEtapes());
+            appendText(document, recipeElement, "coverImage", recette.getImageCouverture());
+            writeSteps(document, recipeElement, recette);
 
             Element ingredientsElement = document.createElement("ingredients");
             recipeElement.appendChild(ingredientsElement);
@@ -386,6 +408,70 @@ public class XmlStoreRepository {
         parent.appendChild(element);
     }
 
+    private List<EtapeRecette> parseSteps(Element recipeElement) {
+        List<EtapeRecette> steps = new ArrayList<>();
+        Element stepsElement = firstChild(recipeElement, "steps");
+        if (stepsElement == null) {
+            return steps;
+        }
+
+        NodeList nodes = stepsElement.getElementsByTagName("step");
+        for (int i = 0; i < nodes.getLength(); i++) {
+            if (!(nodes.item(i) instanceof Element stepElement)) {
+                continue;
+            }
+            EtapeRecette step = new EtapeRecette();
+            step.setImage(safe(stepElement.getAttribute("image")).trim());
+            step.setTexte(textOf(firstChild(stepElement, "text")));
+            if (!safe(step.getTexte()).isBlank()) {
+                steps.add(step);
+            }
+        }
+        return steps;
+    }
+
+    private List<EtapeRecette> buildLegacySteps(String description) {
+        List<EtapeRecette> steps = new ArrayList<>();
+        if (description == null || description.isBlank()) {
+            return steps;
+        }
+
+        for (String rawLine : description.split("\\r?\\n")) {
+            String line = safe(rawLine).trim();
+            if (line.isEmpty()) {
+                continue;
+            }
+            EtapeRecette step = new EtapeRecette();
+            step.setTexte(line.replaceFirst("^\\d+\\)\\s*", ""));
+            step.setImage("/assets/img/recipe-step-prep.png");
+            steps.add(step);
+        }
+
+        if (steps.isEmpty()) {
+            EtapeRecette step = new EtapeRecette();
+            step.setTexte(description.trim());
+            step.setImage("/assets/img/recipe-step-prep.png");
+            steps.add(step);
+        }
+
+        return steps;
+    }
+
+    private void writeSteps(Document document, Element recipeElement, Recette recette) {
+        Element stepsElement = document.createElement("steps");
+        recipeElement.appendChild(stepsElement);
+
+        for (EtapeRecette etape : recette.getEtapes()) {
+            if (etape == null || safe(etape.getTexte()).isBlank()) {
+                continue;
+            }
+            Element stepElement = document.createElement("step");
+            stepElement.setAttribute("image", safe(etape.getImage()));
+            stepsElement.appendChild(stepElement);
+            appendText(document, stepElement, "text", etape.getTexte());
+        }
+    }
+
     private Element firstChild(Element parent, String tagName) {
         if (parent == null) {
             return null;
@@ -424,6 +510,13 @@ public class XmlStoreRepository {
         } catch (NumberFormatException exception) {
             return defaultValue;
         }
+    }
+
+    private boolean attrBoolean(Element element, String name, boolean defaultValue) {
+        if (element == null || !element.hasAttribute(name)) {
+            return defaultValue;
+        }
+        return Boolean.parseBoolean(element.getAttribute(name));
     }
 
     private String safe(String value) {
@@ -474,7 +567,11 @@ public class XmlStoreRepository {
                 101,
                 "Maki saumon avocat",
                 "1) Cuire et assaisonner le riz.\n2) Etaler le riz sur la feuille de nori.\n3) Ajouter saumon et avocat, rouler puis decouper.",
+                "/assets/img/recipe-step-finish.png",
                 12.90,
+                35,
+                2,
+                true,
                 ingredient(produitsById.get(1), 250, "g"),
                 ingredient(produitsById.get(2), 30, "ml"),
                 ingredient(produitsById.get(3), 10, "g"),
@@ -487,7 +584,11 @@ public class XmlStoreRepository {
                 102,
                 "Nigiri thon",
                 "1) Former des boudins de riz.\n2) Deposer le thon sur chaque piece.\n3) Servir avec wasabi et sauce soja.",
+                "/assets/img/recipe-step-finish.png",
                 14.50,
+                28,
+                2,
+                true,
                 ingredient(produitsById.get(1), 200, "g"),
                 ingredient(produitsById.get(2), 25, "ml"),
                 ingredient(produitsById.get(3), 8, "g"),
@@ -500,7 +601,11 @@ public class XmlStoreRepository {
                 103,
                 "California concombre sesame",
                 "1) Etaler le riz sur le nori puis retourner.\n2) Garnir avec concombre et rouler.\n3) Parsemer de sesame, decouper et servir.",
+                "/assets/img/recipe-step-finish.png",
                 9.50,
+                22,
+                1,
+                true,
                 ingredient(produitsById.get(1), 250, "g"),
                 ingredient(produitsById.get(2), 30, "ml"),
                 ingredient(produitsById.get(3), 10, "g"),
@@ -533,17 +638,22 @@ public class XmlStoreRepository {
         return data;
     }
 
-    private Recette createRecipe(int id, String title, String description, double price, Ingredient... ingredients) {
+    private Recette createRecipe(int id, String title, String description, String coverImage, double price, int prepMinutes, int difficulty, boolean needsVinegaredRice, Ingredient... ingredients) {
         Recette recette = new Recette();
         recette.setId(id);
         recette.setTitre(title);
         recette.setDescriptionEtapes(description);
+        recette.setImageCouverture(coverImage);
         recette.setPrix(price);
+        recette.setTempsPreparationMinutes(prepMinutes);
+        recette.setDifficulte(difficulty);
+        recette.setNecessiteRizVinaigre(needsVinegaredRice);
         List<Ingredient> list = new ArrayList<>();
         for (Ingredient ingredient : ingredients) {
             list.add(ingredient);
         }
         recette.setIngredients(list);
+        recette.setEtapes(buildLegacySteps(description));
         return recette;
     }
 

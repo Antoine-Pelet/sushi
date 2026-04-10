@@ -247,19 +247,28 @@ public class SushiService {
         }
     }
 
-    public Recette saveRecipe(int userId, Integer recipeId, String title, String description, double price, List<IngredientForm> ingredientForms) {
+    public Recette saveRecipe(int userId, Integer recipeId, String title, String coverImage, double price, int prepMinutes, int difficulty, boolean needsVinegaredRice, List<IngredientForm> ingredientForms, List<StepForm> stepForms) {
         synchronized (lock) {
             StoreData data = repository.load();
             requireAdmin(data, userId);
 
-            if (isBlank(title) || isBlank(description)) {
-                throw new SushiException("Titre et description sont obligatoires.");
+            if (isBlank(title)) {
+                throw new SushiException("Le titre est obligatoire.");
             }
             if (price < 0D) {
                 throw new SushiException("Le prix ne peut pas etre negatif.");
             }
+            if (prepMinutes <= 0) {
+                throw new SushiException("Le temps de preparation doit etre superieur a zero.");
+            }
+            if (difficulty < 1 || difficulty > 3) {
+                throw new SushiException("La difficulte doit etre comprise entre 1 et 3.");
+            }
             if (ingredientForms == null || ingredientForms.isEmpty()) {
                 throw new SushiException("La recette doit contenir au moins un ingredient.");
+            }
+            if (stepForms == null || stepForms.isEmpty()) {
+                throw new SushiException("La recette doit contenir au moins une etape.");
             }
 
             Map<Integer, Produit> productsById = buildProductMap(data);
@@ -279,6 +288,20 @@ public class SushiService {
                 ingredients.add(ingredient);
             }
 
+            List<EtapeRecette> etapes = new ArrayList<>();
+            for (StepForm form : stepForms) {
+                if (isBlank(form.text())) {
+                    continue;
+                }
+                EtapeRecette etape = new EtapeRecette();
+                etape.setTexte(form.text().trim());
+                etape.setImage(isBlank(form.image()) ? "/assets/img/recipe-step-prep.png" : form.image().trim());
+                etapes.add(etape);
+            }
+            if (etapes.isEmpty()) {
+                throw new SushiException("Chaque recette doit contenir au moins une etape avec du texte.");
+            }
+
             Recette recette = recipeId == null ? null : findRecipe(data, recipeId);
             if (recette == null) {
                 recette = new Recette();
@@ -288,13 +311,33 @@ public class SushiService {
             }
 
             recette.setTitre(title.trim());
-            recette.setDescriptionEtapes(description.trim());
+            recette.setDescriptionEtapes(buildLegacyDescription(etapes));
+            recette.setImageCouverture(isBlank(coverImage) ? "/assets/img/recipe-step-finish.png" : coverImage.trim());
             recette.setPrix(price);
+            recette.setTempsPreparationMinutes(prepMinutes);
+            recette.setDifficulte(difficulty);
+            recette.setNecessiteRizVinaigre(needsVinegaredRice);
             recette.setIngredients(ingredients);
+            recette.setEtapes(etapes);
 
             repository.save(data);
             return recette;
         }
+    }
+
+    private String buildLegacyDescription(List<EtapeRecette> etapes) {
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < etapes.size(); i++) {
+            EtapeRecette etape = etapes.get(i);
+            if (etape == null || isBlank(etape.getTexte())) {
+                continue;
+            }
+            if (builder.length() > 0) {
+                builder.append('\n');
+            }
+            builder.append(i + 1).append(") ").append(etape.getTexte().trim());
+        }
+        return builder.toString();
     }
 
     public void deleteRecipe(int userId, int recipeId) {
@@ -502,6 +545,9 @@ public class SushiService {
     }
 
     public record IngredientForm(int productId, double quantity, String unit) {
+    }
+
+    public record StepForm(String text, String image) {
     }
 
     public record DashboardData(

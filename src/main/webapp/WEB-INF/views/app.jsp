@@ -20,20 +20,22 @@
 
     private int prepMinutes(Recette recette) {
         if (recette == null) return 0;
+        if (recette.getTempsPreparationMinutes() > 0) return recette.getTempsPreparationMinutes();
         return Math.max(18, recette.getIngredients().size() * 4);
     }
 
     private String difficultyLabel(Recette recette) {
         if (recette == null) return "Facile";
-        int score = Math.max(1, Math.min(5, (int) Math.ceil(recette.getIngredients().size() / 2.0)));
-        if (score <= 2) return "Facile";
-        if (score == 3) return "Intermediaire";
-        return "Expert";
+        int score = recette.getDifficulte();
+        if (score <= 1) return "Facile";
+        if (score == 2) return "Moyen";
+        return "Difficile";
     }
 
     private String difficultyFlowers(Recette recette) {
         if (recette == null) return "✿";
-        int score = Math.max(1, Math.min(3, (int) Math.ceil(recette.getIngredients().size() / 3.0)));
+        int score = recette.getDifficulte();
+        if (score < 1 || score > 3) score = 1;
         StringBuilder flowers = new StringBuilder();
         for (int i = 0; i < score; i++) flowers.append("✿");
         return flowers.toString();
@@ -45,6 +47,13 @@
         if (mod == 1) return "recipe-visual--center";
         return "recipe-visual--right";
     }
+
+    private String imageSrc(String ctx, String image) {
+        if (image == null || image.isBlank()) return ctx + "/assets/img/recipe-step-finish.png";
+        String value = image.trim();
+        if (value.startsWith("http://") || value.startsWith("https://") || value.startsWith("data:")) return value;
+        return value.startsWith("/") ? ctx + value : ctx + "/" + value;
+    }
 %>
 <%
     DashboardData dashboard = (DashboardData) request.getAttribute("dashboard");
@@ -52,13 +61,6 @@
     List<Recette> recettes = dashboard.recettes();
     String ctx = request.getContextPath();
     int cartCount = countCartItems(currentUser);
-    List<Recette> displayRecettes = new ArrayList<Recette>();
-
-    if (!recettes.isEmpty()) {
-        for (int i = 0; i < 9; i++) {
-            displayRecettes.add(recettes.get(i % recettes.size()));
-        }
-    }
 %>
 <!DOCTYPE html>
 <html lang="fr">
@@ -91,16 +93,16 @@
         </div>
 
         <div class="catalog-scroll">
-            <% if (displayRecettes.isEmpty()) { %>
+            <% if (recettes.isEmpty()) { %>
             <p class="helper">Aucune recette disponible pour le moment.</p>
             <% } else { %>
             <div class="catalog-grid">
-                <% for (int i = 0; i < displayRecettes.size(); i++) {
-                    Recette recette = displayRecettes.get(i);
+                <% for (int i = 0; i < recettes.size(); i++) {
+                    Recette recette = recettes.get(i);
                 %>
                 <article class="catalog-card">
                     <div class="catalog-card__media">
-                        <a class="recipe-visual catalog-card__visual <%= visualClass(i) %>" href="<%= ctx %>/recipe?id=<%= recette.getId() %>"></a>
+                        <a class="recipe-visual catalog-card__visual <%= visualClass(i) %>" href="<%= ctx %>/recipe?id=<%= recette.getId() %>" style="background-image: linear-gradient(rgba(18, 18, 18, 0.06), rgba(18, 18, 18, 0.26)), url('<%= esc(imageSrc(ctx, recette.getImageCouverture())) %>');"></a>
                     </div>
                     <div class="catalog-card__body">
                         <h2><a href="<%= ctx %>/recipe?id=<%= recette.getId() %>"><%= esc(recette.getTitre()) %></a></h2>
@@ -119,4 +121,3 @@
 </main>
 </body>
 </html>
-

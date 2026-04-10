@@ -51,11 +51,24 @@ public final class JsonUtil {
                     + "}");
         }
 
+        StringJoiner steps = new StringJoiner(",", "[", "]");
+        for (EtapeRecette etape : recette.getEtapes()) {
+            steps.add("{"
+                    + "\"text\":" + quote(etape.getTexte())
+                    + ",\"image\":" + quote(etape.getImage())
+                    + "}");
+        }
+
         return "{"
                 + "\"id\":" + recette.getId()
                 + ",\"title\":" + quote(recette.getTitre())
                 + ",\"description\":" + quote(recette.getDescriptionEtapes())
+                + ",\"coverImage\":" + quote(recette.getImageCouverture())
+                + ",\"steps\":" + steps
                 + ",\"price\":" + number(recette.getPrix())
+                + ",\"prepMinutes\":" + recette.getTempsPreparationMinutes()
+                + ",\"difficulty\":" + recette.getDifficulte()
+                + ",\"needsVinegaredRice\":" + recette.isNecessiteRizVinaigre()
                 + ",\"available\":" + available
                 + ",\"favorite\":" + favorite
                 + ",\"ingredients\":" + ingredients

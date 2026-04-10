@@ -5,10 +5,10 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import sushi.Recette;
+import sushi.EtapeRecette;
 import sushi.SushiService;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet("/cook")
@@ -39,7 +39,7 @@ public class CookServlet extends BaseServlet {
 
         request.setAttribute("dashboard", dashboard);
         request.setAttribute("selectedRecipe", selectedRecipe);
-        request.setAttribute("recipeSteps", splitSteps(selectedRecipe == null ? null : selectedRecipe.getDescriptionEtapes()));
+        request.setAttribute("recipeSteps", selectedRecipe == null ? List.of() : selectedRecipe.getEtapes());
         request.setAttribute("startIndex", Math.max(0, startIndex));
         if (flash != null) {
             request.setAttribute("flashType", flash.type());
@@ -54,25 +54,5 @@ public class CookServlet extends BaseServlet {
 
     protected String viewPath() {
         return "/WEB-INF/views/cook.jsp";
-    }
-
-    private List<String> splitSteps(String text) {
-        List<String> steps = new ArrayList<>();
-        if (text == null || text.isBlank()) {
-            return steps;
-        }
-
-        for (String rawLine : text.split("\\r?\\n")) {
-            String line = rawLine.trim();
-            if (line.isEmpty()) {
-                continue;
-            }
-            steps.add(line.replaceFirst("^\\d+\\)\\s*", ""));
-        }
-
-        if (steps.isEmpty()) {
-            steps.add(text.trim());
-        }
-        return steps;
     }
 }
