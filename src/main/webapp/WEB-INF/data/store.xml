@@ -79,31 +79,18 @@
         <ingredient productId="11" quantity="100" unit="ml"/>
       </ingredients>
     </recipe>
-    <recipe difficulty="3" id="102" needsVinegaredRice="true" prepMinutes="28" price="14.5">
+    <recipe difficulty="1" id="102" needsVinegaredRice="true" prepMinutes="20" price="8.04">
       <title>Nigiri thon</title>
-      <description>1) Former des boudins de riz.
-2) Déposer le thon sur chaque pièce.
-3) Servir avec wasabi et sauce soja.</description>
-      <coverImage>/assets/img/recipe-step-finish.png</coverImage>
+      <description>1) Avec le riz, faites une boule et donnez-lui la forme d’un sushi en vous humidifiant les mains au préalable. Posez par-dessus une lamelle de thon</description>
+      <coverImage>/assets/img/menu-nigiri-thon-scaled - Moyenne.jpeg</coverImage>
       <sushefImage>/assets/img/sushef-happy.png</sushefImage>
       <steps>
-        <step image="/assets/img/recipe-step-prep.png" sushefImage="/assets/img/sushef-focused.png">
-          <text>Former des boudins de riz.</text>
-        </step>
-        <step image="/assets/img/recipe-step-prep.png" sushefImage="/assets/img/sushef-focused.png">
-          <text>Déposer le thon sur chaque pièce.</text>
-        </step>
-        <step image="/assets/img/recipe-step-prep.png" sushefImage="/assets/img/sushef-focused.png">
-          <text>Servir avec wasabi et sauce soja.</text>
+        <step image="/assets/img/recette2etape5 - Moyenne.jpeg" sushefImage="/assets/img/sushef-focused.png">
+          <text>Avec le riz, faites une boule et donnez-lui la forme d’un sushi en vous humidifiant les mains au préalable. Posez par-dessus une lamelle de thon</text>
         </step>
       </steps>
       <ingredients>
-        <ingredient productId="1" quantity="200" unit="g"/>
-        <ingredient productId="2" quantity="25" unit="ml"/>
-        <ingredient productId="3" quantity="8" unit="g"/>
-        <ingredient productId="4" quantity="2" unit="g"/>
         <ingredient productId="7" quantity="150" unit="g"/>
-        <ingredient productId="10" quantity="5" unit="g"/>
         <ingredient productId="11" quantity="20" unit="ml"/>
       </ingredients>
     </recipe>
