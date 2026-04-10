@@ -906,6 +906,51 @@ body.app-page::before {
     align-content: start;
 }
 
+.account-grid--guest {
+    width: min(760px, 100%);
+    height: auto;
+    min-height: 0;
+    max-height: none;
+    grid-auto-rows: auto;
+    align-items: center;
+    align-content: center;
+    justify-self: center;
+}
+
+.account-card--guest {
+    min-height: 220px;
+    height: auto;
+    padding: 26px;
+    align-content: center;
+    gap: 18px;
+}
+
+.favorite-mini-list {
+    display: grid;
+    gap: 10px;
+    margin: 10px 0 4px;
+}
+
+.favorite-mini-list ul {
+    list-style: none;
+    display: grid;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+}
+
+.favorite-mini-list li {
+    padding: 10px 12px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.favorite-mini-list a {
+    color: #fff;
+    font-weight: 800;
+}
+
 .cart-page--workspace {
     height: auto;
     min-height: 720px;

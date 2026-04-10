@@ -47,9 +47,6 @@ public class AuthServlet extends BaseServlet {
         User user = service(request).login(request.getParameter("username"), request.getParameter("password"));
         HttpSession session = request.getSession(true);
         session.setAttribute("userId", user.getId());
-        if (!user.isAdmin()) {
-            setFlash(request, "success", "Connexion réussie pour " + user.getUsername());
-        }
         return user;
     }
 

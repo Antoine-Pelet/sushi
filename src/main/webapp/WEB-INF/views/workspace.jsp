@@ -120,15 +120,15 @@
                     <p class="eyebrow">Mon compte</p>
                 </div>
                 <% if (currentUser == null) { %>
-                    <div class="utility-grid account-grid">
-                        <article class="utility-card account-card">
+                    <div class="utility-grid account-grid account-grid--guest">
+                        <article class="utility-card account-card account-card--guest">
                             <p class="helper">Connectez-vous ou créez un compte pour retrouver vos favoris, votre panier et vos commandes</p>
                             <div class="auth-actions">
                                 <a class="button button--outline" href="<%= ctx %>/auth?returnPage=workspace&returnMode=account">Se connecter</a>
                                 <a class="button button--ghost" href="<%= ctx %>/auth?mode=register&returnPage=workspace&returnMode=account">Créer un compte</a>
                             </div>
                         </article>
-                        <article class="utility-card account-card">
+                        <article class="utility-card account-card account-card--guest">
                             <p class="helper">Vous pouvez déjà parcourir les recettes et revenir ici après connexion</p>
                             <div class="auth-actions"><a class="button button--ghost" href="<%= ctx %>/app">Voir le catalogue</a></div>
                         </article>
@@ -138,6 +138,18 @@
                         <article class="utility-card account-card">
                             <div class="profile-box"><div class="avatar avatar--large"><%= esc(initials(currentUser)) %></div><div><p><strong><%= esc(currentUser.getUsername()) %></strong></p><p><%= admin ? "Administrateur" : "Utilisateur" %></p></div></div>
                             <div class="auth-highlights"><span class="auth-pill">Favoris : <%= favoritesCount %></span><span class="auth-pill">Panier : <%= cartCount %></span><span class="auth-pill">Commandes : <%= userCommandes.size() %></span></div>
+                            <div class="favorite-mini-list">
+                                <p class="eyebrow">Favoris sauvegardés</p>
+                                <% if (favoritesCount == 0) { %>
+                                    <p class="helper">Aucune recette favorite pour le moment</p>
+                                <% } else { %>
+                                    <ul>
+                                        <% for (Integer favoriteId : currentUser.getFavoris()) { Recette favorite = recettesById.get(favoriteId); if (favorite != null) { %>
+                                            <li><a href="<%= ctx %>/recipe?id=<%= favorite.getId() %>"><%= esc(favorite.getTitre()) %></a></li>
+                                        <% }} %>
+                                    </ul>
+                                <% } %>
+                            </div>
                             <p class="helper">Votre espace est maintenant découpé en pages dédiées pour que chaque action ait son propre écran</p>
                             <div class="auth-actions"><a class="button button--outline" href="<%= ctx %>/workspace?mode=cart">Voir le panier</a><a class="button button--ghost" href="<%= ctx %>/app">Retour au catalogue</a><% if (admin) { %><a class="button button--ghost" href="<%= ctx %>/workspace?mode=admin">Ouvrir l'admin</a><% } %><form method="post" action="<%= ctx %>/auth/logout"><input type="hidden" name="returnPage" value="workspace"><input type="hidden" name="returnMode" value="account"><button type="submit" class="danger-button">Se déconnecter</button></form></div>
                         </article>
