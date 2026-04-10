@@ -94,32 +94,36 @@
         <ingredient productId="11" quantity="20" unit="ml"/>
       </ingredients>
     </recipe>
-    <recipe difficulty="3" id="103" needsVinegaredRice="true" prepMinutes="28" price="9.5">
+    <recipe difficulty="3" id="103" needsVinegaredRice="true" prepMinutes="30" price="10.295">
       <title>California concombre sésame</title>
-      <description>1) Étaler le riz sur le nori puis retourner.
-2) Garnir avec concombre et rouler.
-3) Parsemer de sésame, découper et servir.</description>
-      <coverImage>/assets/img/recipe-step-finish.png</coverImage>
+      <description>1) Émincer en fines et longues lamelles le concombre et l'avocat.
+2) Etaler 1 cm de riz sur chacune des feuilles de nori.
+3) Saupoudrer de graines de sésame.
+4) Retourner la feuille de nori (pour que le riz se retrouve à l'extérieur du rouleau) et étaler un peu wasabi.</description>
+      <coverImage>/assets/img/sushi_californien.jpg</coverImage>
       <sushefImage>/assets/img/sushef-happy.png</sushefImage>
       <steps>
-        <step image="/assets/img/recipe-step-prep.png" sushefImage="/assets/img/sushef-focused.png">
-          <text>Étaler le riz sur le nori puis retourner.</text>
+        <step image="/assets/img/recette1etape4 - Moyenne.jpeg" sushefImage="/assets/img/sushef-focused.png">
+          <text>Émincer en fines et longues lamelles le concombre et l'avocat.</text>
         </step>
-        <step image="/assets/img/recipe-step-prep.png" sushefImage="/assets/img/sushef-focused.png">
-          <text>Garnir avec concombre et rouler.</text>
+        <step image="/assets/img/recette1etape5 - Moyenne.jpeg" sushefImage="/assets/img/sushef-focused.png">
+          <text>Etaler 1 cm de riz sur chacune des feuilles de nori.</text>
         </step>
-        <step image="/assets/img/recipe-step-prep.png" sushefImage="/assets/img/sushef-focused.png">
-          <text>Parsemer de sésame, découper et servir.</text>
+        <step image="/assets/img/recette1etape6 - Moyenne.jpeg" sushefImage="/assets/img/sushef-constellation.png">
+          <text>Saupoudrer de graines de sésame.</text>
+        </step>
+        <step image="/assets/img/recette1etape7 - Moyenne.jpeg" sushefImage="/assets/img/sushef-right.png">
+          <text>Retourner la feuille de nori (pour que le riz se retrouve à l'extérieur du rouleau) et étaler un peu wasabi.</text>
         </step>
       </steps>
       <ingredients>
-        <ingredient productId="1" quantity="250" unit="g"/>
-        <ingredient productId="2" quantity="30" unit="ml"/>
-        <ingredient productId="3" quantity="10" unit="g"/>
-        <ingredient productId="4" quantity="3" unit="g"/>
         <ingredient productId="5" quantity="2" unit="feuilles"/>
-        <ingredient productId="8" quantity="0.5" unit="pièce"/>
+        <ingredient productId="8" quantity="0.25" unit="pièce"/>
         <ingredient productId="13" quantity="10" unit="g"/>
+        <ingredient productId="10" quantity="20" unit="g"/>
+        <ingredient productId="11" quantity="20" unit="ml"/>
+        <ingredient productId="9" quantity="0.5" unit="pièce"/>
+        <ingredient productId="6" quantity="150" unit="g"/>
       </ingredients>
     </recipe>
     <recipe difficulty="1" id="105" needsVinegaredRice="true" prepMinutes="20" price="0.9">
