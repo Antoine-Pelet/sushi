@@ -693,9 +693,12 @@ body.app-page::before {
 
 .cook-photo--final {
     width: min(100%, 560px);
+    height: min(44vh, 340px);
+    aspect-ratio: 16 / 10;
     justify-self: start;
     align-self: start;
     margin: 0;
+    object-fit: cover;
 }
 
 .cook-step-text {
@@ -1719,6 +1722,7 @@ code { display: block; padding: 12px 14px; border-radius: 14px; background: rgba
     .cook-player { grid-template-columns: 48px minmax(0, 1fr) 48px; }
     .cook-nav { font-size: 3.4rem; }
     .cook-photo { width: min(100%, 420px); }
+    .cook-photo--final { height: min(38vh, 280px); }
     .cook-final-copy { position: static; justify-items: center; text-align: center; margin-top: 18px; }
     .cook-photo--final { justify-self: center; }
     .cook-chef--right, .cook-chef--score { width: 120px; right: 18px; }
@@ -1761,6 +1765,7 @@ code { display: block; padding: 12px 14px; border-radius: 14px; background: rgba
     .cook-blossom--right { right: 4px; top: 16px; }
     .cook-blossom--left { left: 0; top: 8px; }
     .cook-slide--final .cook-final-copy { max-width: none; }
+    .cook-photo--final { height: 220px; }
     .cart-page--workspace { height: auto; min-height: auto; max-height: none; }
     .cart-grid { grid-template-columns: 1fr; height: auto; }
     .cart-card { min-height: 320px; }
