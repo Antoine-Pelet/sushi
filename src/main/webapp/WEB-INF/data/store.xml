@@ -24,7 +24,7 @@
       <cart/>
     </user>
   </users>
-  <products nextId="20">
+  <products nextId="21">
     <product id="1" name="Riz" price="0.02" stock="7300" unit="g"/>
     <product id="2" name="Vinaigre de riz" price="0.015" stock="2415" unit="ml"/>
     <product id="3" name="Sucre" price="0.004" stock="2972" unit="g"/>
@@ -39,13 +39,14 @@
     <product id="12" name="Gingembre mariné" price="0.02" stock="1000" unit="g"/>
     <product id="13" name="Graines de sésame" price="0.018" stock="790" unit="g"/>
     <product id="14" name="Mayonnaise" price="0.2" stock="1000" unit="g"/>
-    <product id="15" name="oeuf" price="0.15" stock="200" unit="pièce"/>
+    <product id="15" name="Oeuf" price="0.15" stock="200" unit="pièce"/>
     <product id="16" name="Branches d'épinard" price="1" stock="200" unit="branche"/>
     <product id="17" name="Bâtonnets de crabe" price="0.5" stock="200" unit="pièce"/>
     <product id="18" name="Crevette" price="1.5" stock="600" unit="pièce"/>
     <product id="19" name="Boite de thon" price="1" stock="100" unit="pièce"/>
+    <product id="20" name="Fromage" price="0.1" stock="1000" unit="g"/>
   </products>
-  <recipes nextId="110">
+  <recipes nextId="111">
     <recipe difficulty="3" id="101" needsVinegaredRice="true" prepMinutes="20" price="34.45">
       <title>Maki saumon avocat</title>
       <description>1) Tranchez les filets de saumon en longues bandes
@@ -127,20 +128,6 @@
         <ingredient productId="11" quantity="20" unit="ml"/>
         <ingredient productId="9" quantity="0.5" unit="pièce"/>
         <ingredient productId="6" quantity="150" unit="g"/>
-      </ingredients>
-    </recipe>
-    <recipe difficulty="1" id="105" needsVinegaredRice="true" prepMinutes="20" price="0.9">
-      <title>test</title>
-      <description>1) cuire</description>
-      <coverImage>/assets/img/recipe-step-finish.png</coverImage>
-      <sushefImage>/assets/img/sushef-happy.png</sushefImage>
-      <steps>
-        <step image="/assets/img/recipe-step-prep.png" sushefImage="/assets/img/sushef-focused.png">
-          <text>cuire</text>
-        </step>
-      </steps>
-      <ingredients>
-        <ingredient productId="8" quantity="1" unit="pièce"/>
       </ingredients>
     </recipe>
     <recipe difficulty="1" id="106" needsVinegaredRice="false" prepMinutes="50" price="11.17">
@@ -240,6 +227,38 @@ Servir avec de la sauce soja et du wasabi</text>
         <ingredient productId="11" quantity="30" unit="ml"/>
         <ingredient productId="2" quantity="80" unit="ml"/>
         <ingredient productId="19" quantity="1" unit="pièce"/>
+      </ingredients>
+    </recipe>
+    <recipe difficulty="3" id="110" needsVinegaredRice="true" prepMinutes="40" price="22.130000000000003">
+      <title>Maki Saumon et Fromage</title>
+      <description>1) Avec un couteau pointu, découpez les feuilles de nori en deux en les pliant en leur milieu. Découpez le saumon en fines lanières. Déroulez votre natte de bambou et déposez une demi feuille de nori.&#13;
+Trempez vos doigts dans un bol d'eau vinaigré et étalez du riz à sushi à la surface de la feuille en laissant un peu d'espace sur la moitié supérieure. Déposez un trait de fromage frais sur toute la largeur au centre du riz.&#13;
+ Ajoutez les lanières de saumon de façon à former une ligne.
+2) Roulez la natte en partant du bas et en serrant bien pour former le maki.&#13;
+ Retirez doucement la natte pour faire apparaître le rouleau.&#13;
+ Avec un couteau bien aiguisé et sec, coupez votre rouleau en 2. Rapprochez les deux moitiés côte à côte et découpez en 3 pour former 6 makis.&#13;
+ Renouvelez les opérations avec les autres moitiés de feuilles pour former 24 makis.</description>
+      <coverImage>/assets/img/makifromage.jpeg</coverImage>
+      <sushefImage>/assets/img/sushef-calm.png</sushefImage>
+      <steps>
+        <step image="/assets/img/recette9etape1.png" sushefImage="/assets/img/sushef-focused.png">
+          <text>Avec un couteau pointu, découpez les feuilles de nori en deux en les pliant en leur milieu. Découpez le saumon en fines lanières. Déroulez votre natte de bambou et déposez une demi feuille de nori.&#13;
+Trempez vos doigts dans un bol d'eau vinaigré et étalez du riz à sushi à la surface de la feuille en laissant un peu d'espace sur la moitié supérieure. Déposez un trait de fromage frais sur toute la largeur au centre du riz.&#13;
+ Ajoutez les lanières de saumon de façon à former une ligne.</text>
+        </step>
+        <step image="/assets/img/recette9etape2.png" sushefImage="/assets/img/sushef-right.png">
+          <text>Roulez la natte en partant du bas et en serrant bien pour former le maki.&#13;
+ Retirez doucement la natte pour faire apparaître le rouleau.&#13;
+ Avec un couteau bien aiguisé et sec, coupez votre rouleau en 2. Rapprochez les deux moitiés côte à côte et découpez en 3 pour former 6 makis.&#13;
+ Renouvelez les opérations avec les autres moitiés de feuilles pour former 24 makis.</text>
+        </step>
+      </steps>
+      <ingredients>
+        <ingredient productId="20" quantity="100" unit="g"/>
+        <ingredient productId="6" quantity="200" unit="g"/>
+        <ingredient productId="5" quantity="3" unit="feuilles"/>
+        <ingredient productId="10" quantity="20" unit="g"/>
+        <ingredient productId="11" quantity="40" unit="ml"/>
       </ingredients>
     </recipe>
   </recipes>
