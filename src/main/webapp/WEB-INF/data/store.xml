@@ -159,8 +159,8 @@
         <ingredient productId="1" quantity="500" unit="g"/>
       </ingredients>
     </recipe>
-    <recipe difficulty="3" id="108" needsVinegaredRice="true" prepMinutes="30" price="25.23">
-      <title>Temaki légumes, bâtonnets de crabe et saumon</title>
+    <recipe difficulty="3" id="108" needsVinegaredRice="true" prepMinutes="30" price="23.630000000000003">
+      <title>Temaki légumes</title>
       <description>1) Découpez les feuilles de nori en deux ou en quatre.&#13;
 Préparer une omelette. Faites la bien épaisse et non baveuse. Faite la cuire des 2 cotés. Une fois bien cuite, découpez des lamelles égales d'omelette.&#13;
 Découpez le concombre, le thon et le saumon en lamelle puis réservez
@@ -184,7 +184,6 @@ Roulez la feuille de nori en cône en prenant soin que le bord le plus fin soit 
         <ingredient productId="15" quantity="4" unit="pièces"/>
         <ingredient productId="17" quantity="4" unit="pièces"/>
         <ingredient productId="5" quantity="2" unit="feuilles"/>
-        <ingredient productId="10" quantity="20" unit="g"/>
         <ingredient productId="11" quantity="40" unit="ml"/>
         <ingredient productId="6" quantity="200" unit="g"/>
         <ingredient productId="7" quantity="200" unit="g"/>
