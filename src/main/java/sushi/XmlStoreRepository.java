@@ -59,7 +59,6 @@ public class XmlStoreRepository {
 
             Element usersElement = firstChild(root, "users");
             data.setNextUserId(attrInt(usersElement, "nextId", 1));
-            data.setUsers(parseUsers(usersElement));
 
             Element productsElement = firstChild(root, "products");
             data.setNextProduitId(attrInt(productsElement, "nextId", 1));
@@ -73,6 +72,7 @@ public class XmlStoreRepository {
             Element recipesElement = firstChild(root, "recipes");
             data.setNextRecetteId(attrInt(recipesElement, "nextId", 1));
             data.setRecettes(parseRecipes(recipesElement, productsById));
+            data.setUsers(parseUsers(usersElement, buildRecipeLookup(data.getRecettes())));
 
             Element ordersElement = firstChild(root, "orders");
             data.setNextCommandeId(attrInt(ordersElement, "nextId", 1));
@@ -117,7 +117,7 @@ public class XmlStoreRepository {
         }
     }
 
-    private List<User> parseUsers(Element usersElement) {
+    private List<User> parseUsers(Element usersElement, Map<Integer, Recette> recipesById) {
         List<User> users = new ArrayList<>();
         if (usersElement == null) {
             return users;
@@ -154,10 +154,31 @@ public class XmlStoreRepository {
                 NodeList items = cartElement.getElementsByTagName("item");
                 for (int i = 0; i < items.getLength(); i++) {
                     if (items.item(i) instanceof Element itemElement) {
-                        panier.add(new PanierItem(
-                                attrInt(itemElement, "recipeId", 0),
-                                attrInt(itemElement, "quantity", 0)
-                        ));
+                        int productId = attrInt(itemElement, "productId", 0);
+                        if (productId > 0) {
+                            panier.add(new PanierItem(
+                                    productId,
+                                    attrDouble(itemElement, "quantity", 0D),
+                                    itemElement.getAttribute("unit")
+                            ));
+                            continue;
+                        }
+
+                        Recette legacyRecipe = recipesById.get(attrInt(itemElement, "recipeId", 0));
+                        double recipeQuantity = attrDouble(itemElement, "quantity", 1D);
+                        if (legacyRecipe == null) {
+                            continue;
+                        }
+                        for (Ingredient ingredient : legacyRecipe.getIngredients()) {
+                            if (ingredient.getProduit() == null) {
+                                continue;
+                            }
+                            panier.add(new PanierItem(
+                                    ingredient.getProduit().getId(),
+                                    ingredient.getQuantite() * recipeQuantity,
+                                    ingredient.getUnite()
+                            ));
+                        }
                     }
                 }
             }
@@ -319,8 +340,9 @@ public class XmlStoreRepository {
             Element cartElement = document.createElement("cart");
             for (PanierItem item : user.getPanier()) {
                 Element itemElement = document.createElement("item");
-                itemElement.setAttribute("recipeId", Integer.toString(item.getRecetteId()));
-                itemElement.setAttribute("quantity", Integer.toString(item.getQuantite()));
+                itemElement.setAttribute("productId", Integer.toString(item.getProduitId()));
+                itemElement.setAttribute("quantity", number(item.getQuantite()));
+                itemElement.setAttribute("unit", safe(item.getUnite()));
                 cartElement.appendChild(itemElement);
             }
             userElement.appendChild(cartElement);
@@ -486,6 +508,14 @@ public class XmlStoreRepository {
         return null;
     }
 
+    private Map<Integer, Recette> buildRecipeLookup(List<Recette> recettes) {
+        Map<Integer, Recette> recipesById = new HashMap<>();
+        for (Recette recette : recettes) {
+            recipesById.put(recette.getId(), recette);
+        }
+        return recipesById;
+    }
+
     private String textOf(Element element) {
         return element == null ? "" : safe(element.getTextContent()).trim();
     }
@@ -630,7 +660,7 @@ public class XmlStoreRepository {
         demo.setPasswordHash(SecurityUtil.hashPassword("demo"));
         demo.setAdmin(false);
         demo.getFavoris().add(101);
-        demo.getPanier().add(new PanierItem(103, 1));
+        demo.getPanier().add(new PanierItem(1, 250, "g"));
         users.add(demo);
         data.setUsers(users);
 

@@ -90,7 +90,6 @@ public class AdminRecipeServlet extends BaseServlet {
                 recipeId,
                 request.getParameter("title"),
                 request.getParameter("coverImage"),
-                requiredDouble(request, "price"),
                 requiredInt(request, "prepMinutes"),
                 requiredInt(request, "difficulty"),
                 request.getParameter("needsVinegaredRice") != null,

@@ -8,9 +8,7 @@
 
     private int countCartItems(User user) {
         if (user == null) return 0;
-        int total = 0;
-        for (PanierItem item : user.getPanier()) total += item.getQuantite();
-        return total;
+        return user.getPanier().size();
     }
 
     private String initials(User user) {
@@ -45,6 +43,12 @@
         String unit = ingredient.getUnite() == null ? "" : ingredient.getUnite().trim();
         String product = ingredient.getProduit().getNom() == null ? "" : ingredient.getProduit().getNom().trim();
         return (quantity + (unit.isBlank() ? " " : " " + unit + " ") + product).trim();
+    }
+
+    private String ingredientPrice(Ingredient ingredient) {
+        if (ingredient == null || ingredient.getProduit() == null) return "";
+        DecimalFormat money = new DecimalFormat("0.00");
+        return money.format(ingredient.getQuantite() * ingredient.getProduit().getPrixUnitaire()) + " €";
     }
 
     private String imageSrc(String ctx, String image) {
@@ -138,7 +142,7 @@
             <div class="recipe-quadrant recipe-quadrant--ingredients">
                 <ul class="recipe-ingredient-list">
                     <% for (Ingredient ingredient : recette.getIngredients()) { %>
-                    <li><span><%= esc(ingredientLine(ingredient)) %></span></li>
+                    <li><span><%= esc(ingredientLine(ingredient)) %></span><strong><%= esc(ingredientPrice(ingredient)) %></strong></li>
                     <% } %>
                 </ul>
             </div>

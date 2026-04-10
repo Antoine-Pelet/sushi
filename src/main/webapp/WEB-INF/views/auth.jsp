@@ -8,9 +8,7 @@
 
     private int countCartItems(User user) {
         if (user == null) return 0;
-        int total = 0;
-        for (PanierItem item : user.getPanier()) total += item.getQuantite();
-        return total;
+        return user.getPanier().size();
     }
 
     private String initials(User user) {

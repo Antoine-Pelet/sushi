@@ -38,6 +38,10 @@ body.workspace-page--recipes {
     overflow-y: auto;
 }
 
+body.workspace-page--stock {
+    overflow-y: auto;
+}
+
 body.landing-page {
     min-height: 100vh;
     overflow: hidden;
@@ -806,6 +810,70 @@ body.app-page::before {
     overflow: visible;
 }
 
+.workspace-page--stock .workspace-shell {
+    height: auto;
+    min-height: calc(100vh - 102px);
+    align-items: start;
+    padding-top: 12px;
+    padding-bottom: 40px;
+}
+
+.workspace-page--stock .workspace-panel {
+    height: auto;
+    min-height: min(980px, calc(100vh - 150px));
+}
+
+.workspace-page--stock .workspace-panel__inner {
+    height: auto;
+    min-height: 100%;
+    overflow: visible;
+}
+
+.workspace-page--stock .stock-grid {
+    align-items: stretch;
+}
+
+.workspace-page--stock .stock-create-form {
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.workspace-page--stock .stock-create-form label,
+.workspace-page--stock .stock-card label {
+    gap: 5px;
+    font-size: 0.76rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.workspace-page--stock .stock-create-form input,
+.workspace-page--stock .stock-card input {
+    min-height: 42px;
+    padding: 9px 12px;
+    border-radius: 13px;
+    font-size: 0.94rem;
+}
+
+.workspace-page--stock .stock-card {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+    padding: 18px;
+    align-items: end;
+}
+
+.workspace-page--stock .stock-card button {
+    grid-column: 1 / -1;
+    min-height: 44px;
+    justify-self: stretch;
+    padding: 10px 18px;
+}
+
+.workspace-page--stock .stock-create-form .button {
+    min-height: 42px;
+    padding-block: 9px;
+}
+
 .workspace-panel__head .eyebrow {
     font-size: 1rem;
     letter-spacing: 0.18em;
@@ -836,16 +904,17 @@ body.app-page::before {
 }
 
 .cart-page--workspace {
-    height: 78%;
-    min-height: 520px;
-    max-height: 78%;
+    height: auto;
+    min-height: 720px;
+    max-height: none;
     align-self: center;
     margin-block: auto;
 }
 
 .cart-grid {
     width: 100%;
-    height: 100%;
+    height: auto;
+    min-height: 680px;
     display: grid;
     grid-template-columns: minmax(0, 1.7fr) minmax(290px, 0.9fr);
     grid-template-rows: minmax(0, 1fr);
@@ -855,15 +924,17 @@ body.app-page::before {
 
 .cart-card {
     min-height: 0;
-    height: 100%;
+    height: auto;
     padding: 32px;
     display: grid;
     align-content: start;
 }
 
 .cart-card--list {
-    grid-template-rows: minmax(0, 1fr) auto;
+    grid-template-rows: auto auto;
     gap: 20px;
+    overflow: hidden;
+    align-content: stretch;
 }
 
 .cart-card--summary {
@@ -873,6 +944,29 @@ body.app-page::before {
 
 .workspace-page:not(.workspace-page--cart) .section-head {
     margin-bottom: 18px;
+}
+
+body.workspace-page--cart.app-page--catalog {
+    overflow-y: auto;
+}
+
+.workspace-page--cart .catalog-shell {
+    height: auto;
+    min-height: calc(100vh - 102px);
+    align-items: start;
+    padding-top: 12px;
+    padding-bottom: 32px;
+}
+
+.workspace-page--cart .catalog-panel {
+    height: auto;
+    min-height: min(1040px, calc(100vh - 120px));
+}
+
+.workspace-page--cart .workspace-panel__inner {
+    height: auto;
+    min-height: 100%;
+    overflow: visible;
 }
 
     .workspace-page:not(.workspace-page--cart) .utility-grid {
@@ -1244,9 +1338,26 @@ code { display: block; padding: 12px 14px; border-radius: 14px; background: rgba
     display: grid;
     gap: 0;
     align-content: start;
-    max-height: 100%;
-    overflow-y: auto;
+    min-height: 0;
+    height: auto;
+    max-height: none;
+    overflow-y: visible;
     padding-right: 8px;
+}
+
+.cart-page--workspace .cart-card--list {
+    display: grid;
+    grid-template-rows: auto auto;
+    align-content: stretch;
+    min-height: 0;
+    overflow: visible;
+}
+
+.cart-page--workspace .cart-card--list > .cart-ingredient-list {
+    min-height: 0;
+    height: auto;
+    max-height: none;
+    overflow-y: visible;
 }
 
 .cart-ingredient-list::-webkit-scrollbar {
@@ -2053,4 +2164,52 @@ body.recipe-page.app-page--catalog {
         width: calc(100% - 28px);
         padding-inline: 0;
     }
+}
+
+/* Cart is intentionally scrollable: ingredient lists can be longer than the fixed workspace frame. */
+body.workspace-page--cart.app-page--catalog {
+    overflow-y: auto !important;
+}
+
+.workspace-page--cart .catalog-shell {
+    height: auto !important;
+    min-height: calc(100vh - 102px) !important;
+    align-items: start !important;
+    padding-top: 18px !important;
+    padding-bottom: 40px !important;
+}
+
+.workspace-page--cart .catalog-panel,
+.workspace-page--cart .workspace-panel__inner,
+.workspace-page--cart .cart-page--workspace,
+.workspace-page--cart .cart-grid,
+.workspace-page--cart .cart-card {
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+}
+
+.workspace-page--cart .catalog-panel {
+    min-height: 1040px !important;
+}
+
+.workspace-page--cart .cart-page--workspace {
+    min-height: 780px !important;
+}
+
+.workspace-page--cart .cart-grid {
+    min-height: 720px !important;
+}
+
+.workspace-page--cart .cart-card {
+    min-height: 720px !important;
+}
+
+.workspace-page--cart .cart-card--list {
+    align-content: start !important;
+}
+
+.workspace-page--cart .cart-ingredient-list {
+    overflow: visible !important;
+    max-height: none !important;
 }

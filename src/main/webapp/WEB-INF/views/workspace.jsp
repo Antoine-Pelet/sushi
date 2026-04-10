@@ -8,9 +8,7 @@
 
     private int countCartItems(User user) {
         if (user == null) return 0;
-        int total = 0;
-        for (PanierItem item : user.getPanier()) total += item.getQuantite();
-        return total;
+        return user.getPanier().size();
     }
 
     private String initials(User user) {
@@ -85,6 +83,8 @@
     int favoritesCount = currentUser == null ? 0 : currentUser.getFavoris().size();
     Map<Integer, Recette> recettesById = new HashMap<>();
     for (Recette recette : recettes) recettesById.put(recette.getId(), recette);
+    Map<Integer, Produit> produitsById = new HashMap<>();
+    for (Produit produit : produits) produitsById.put(produit.getId(), produit);
     List<Ingredient> ingredientsEdition = recetteEdition == null ? Collections.emptyList() : recetteEdition.getIngredients();
     List<?> recipeStepsEdition = recipeSteps(recetteEdition);
     if (workspaceMode == null || workspaceMode.isBlank()) workspaceMode = "account";
@@ -95,9 +95,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Espace Sushef</title>
-    <link rel="stylesheet" href="<%= ctx %>/assets/app.css?v=recipe-rice-1">
+    <link rel="stylesheet" href="<%= ctx %>/assets/app.css?v=stock-page-3">
 </head>
-<body class="app-page app-page--catalog workspace-page <%= "cart".equals(workspaceMode) ? "workspace-page--cart" : "" %> <%= "recipes".equals(workspaceMode) ? "workspace-page--recipes" : "" %>">
+<body class="app-page app-page--catalog workspace-page <%= "cart".equals(workspaceMode) ? "workspace-page--cart" : "" %> <%= "recipes".equals(workspaceMode) ? "workspace-page--recipes" : "" %> <%= "stock".equals(workspaceMode) ? "workspace-page--stock" : "" %>">
 <header class="topbar topbar--catalog">
     <a class="brand brand--landing" href="<%= ctx %>/">
         <span>Sushef</span>
@@ -159,7 +159,7 @@
             <% } else if ("cart".equals(workspaceMode)) { %>
                 <% double totalPanier = 0D; int lignesPanier = 0; %>
                 <% if (currentUser == null) { %>
-                <% } else if (currentUser != null) { for (PanierItem item : currentUser.getPanier()) { Recette recette = recettesById.get(item.getRecetteId()); if (recette == null) continue; totalPanier += recette.getPrix() * item.getQuantite(); lignesPanier++; }} %>
+                <% } else if (currentUser != null) { for (PanierItem item : currentUser.getPanier()) { Produit produit = produitsById.get(item.getProduitId()); if (produit == null) continue; totalPanier += produit.getPrixUnitaire() * item.getQuantite(); lignesPanier++; }} %>
                 <div class="catalog-panel__head workspace-panel__head">
                     <p class="eyebrow">Panier</p>
                 </div>
@@ -179,16 +179,15 @@
                                 </div>
                             <% } else { %>
                                 <ul class="cart-ingredient-list">
-                                    <% for (PanierItem item : currentUser.getPanier()) { Recette recette = recettesById.get(item.getRecetteId()); if (recette == null) continue; double sousTotal = recette.getPrix() * item.getQuantite(); %>
+                                    <% for (PanierItem item : currentUser.getPanier()) { Produit produit = produitsById.get(item.getProduitId()); if (produit == null) continue; double sousTotal = produit.getPrixUnitaire() * item.getQuantite(); %>
                                         <li>
                                             <div class="cart-ingredient-list__main">
-                                                <span><%= esc(recette.getTitre()) %></span>
-                                                <strong><%= item.getQuantite() %> x <%= money.format(recette.getPrix()) %> €</strong>
+                                                <span><%= qty.format(item.getQuantite()) %> <%= esc(item.getUnite()) %> <%= esc(produit.getNom()) %></span>
+                                                <strong><%= money.format(sousTotal) %> €</strong>
                                             </div>
                                             <div class="cart-ingredient-list__aside">
                                                 <form method="post" action="<%= ctx %>/cart/remove">
-                                                    <input type="hidden" name="recipeId" value="<%= recette.getId() %>">
-                                                    <input type="hidden" name="quantity" value="<%= item.getQuantite() %>">
+                                                    <input type="hidden" name="productId" value="<%= produit.getId() %>">
                                                     <input type="hidden" name="returnPage" value="workspace">
                                                     <input type="hidden" name="returnMode" value="cart">
                                                     <button type="submit" class="icon-pill cart-line__remove">×</button>
@@ -211,7 +210,7 @@
                                 <h3><%= money.format(totalPanier) %> €</h3>
                                 <div class="auth-highlights">
                                     <span class="auth-pill">Articles : <%= cartCount %></span>
-                                    <span class="auth-pill">Recettes : <%= lignesPanier %></span>
+                                    <span class="auth-pill">Ingredients : <%= lignesPanier %></span>
                                 </div>
                             </div>
                             <div class="cart-summary__actions">
@@ -251,7 +250,7 @@
                                 </select>
                             </span>
                         </label>
-                        <div class="form-row"><label>Prix<input type="number" step="0.01" min="0" name="price" value="<%= recetteEdition == null ? "" : money.format(recetteEdition.getPrix()).replace(',', '.') %>" required></label><label>Temps de preparation<input type="number" min="1" name="prepMinutes" value="<%= recetteEdition == null || recetteEdition.getTempsPreparationMinutes() <= 0 ? "" : recetteEdition.getTempsPreparationMinutes() %>" required></label></div>
+                        <div class="form-row"><label>Temps de preparation<input type="number" min="1" name="prepMinutes" value="<%= recetteEdition == null || recetteEdition.getTempsPreparationMinutes() <= 0 ? "" : recetteEdition.getTempsPreparationMinutes() %>" required></label></div>
                         <div class="form-row"><label>Difficulte<select name="difficulty" required><option value="1" <%= recetteEdition != null && recetteEdition.getDifficulte() == 1 ? "selected" : "" %>>Facile</option><option value="2" <%= recetteEdition != null && recetteEdition.getDifficulte() == 2 ? "selected" : "" %>>Moyen</option><option value="3" <%= recetteEdition != null && recetteEdition.getDifficulte() == 3 ? "selected" : "" %>>Difficile</option></select></label></div>
                         <label class="checkbox-field"><input type="checkbox" name="needsVinegaredRice" value="true" <%= recetteEdition == null || recetteEdition.isNecessiteRizVinaigre() ? "checked" : "" %>><span>Cette recette necessite du riz vinaigre</span></label>
                         <div class="section-head"><div><p class="eyebrow">Etapes</p><h2>Realisation</h2></div><button type="button" class="button button--ghost" data-add-step>Ajouter une etape</button></div>
@@ -277,7 +276,7 @@
                         <div class="section-head"><div><p class="eyebrow">Gestion</p><h2>Recettes existantes</h2></div></div>
                         <div class="admin-recipe-list">
                             <% for (Recette recette : recettes) { %>
-                                <article class="admin-recipe-item"><div><strong><%= esc(recette.getTitre()) %></strong><p>#<%= recette.getId() %> · <%= money.format(recette.getPrix()) %> €</p></div><div class="admin-recipe-actions"><a class="button button--ghost" href="<%= ctx %>/workspace?mode=recipes&editRecipeId=<%= recette.getId() %>">Modifier</a><form method="post" action="<%= ctx %>/admin/recipes/delete"><input type="hidden" name="recipeId" value="<%= recette.getId() %>"><input type="hidden" name="returnPage" value="workspace"><input type="hidden" name="returnMode" value="recipes"><button type="submit" class="danger-button">Supprimer</button></form></div></article>
+                                <article class="admin-recipe-item"><div><strong><%= esc(recette.getTitre()) %></strong><p>#<%= recette.getId() %> · <%= recette.getIngredients().size() %> ingredients</p></div><div class="admin-recipe-actions"><a class="button button--ghost" href="<%= ctx %>/workspace?mode=recipes&editRecipeId=<%= recette.getId() %>">Modifier</a><form method="post" action="<%= ctx %>/admin/recipes/delete"><input type="hidden" name="recipeId" value="<%= recette.getId() %>"><input type="hidden" name="returnPage" value="workspace"><input type="hidden" name="returnMode" value="recipes"><button type="submit" class="danger-button">Supprimer</button></form></div></article>
                             <% } %>
                         </div>
                     </aside>
@@ -304,7 +303,7 @@
     </section>
 </main>
 
-<script src="<%= ctx %>/assets/app.js?v=recipe-rice-1"></script>
+<script src="<%= ctx %>/assets/app.js?v=stock-page-3"></script>
 <template id="ingredient-template">
     <div class="ingredient-row"><select name="ingredientProductId" required><option value="">Produit</option><% for (Produit produit : produits) { %><option value="<%= produit.getId() %>" data-unit="<%= esc(produit.getUnite()) %>"><%= esc(produit.getNom()) %></option><% } %></select><input type="number" step="0.01" min="0" name="ingredientQuantity" placeholder="Quantite" required><input type="text" name="ingredientUnit" placeholder="Unite"><button type="button" class="icon-pill" data-remove-ingredient>×</button></div>
 </template>

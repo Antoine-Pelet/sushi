@@ -131,38 +131,53 @@ public class SushiService {
             User user = requireUser(data, userId);
             Recette recette = requireRecipe(data, recipeId);
 
-            int available = getAvailability(recette, buildProductMap(data));
-            PanierItem item = findCartItem(user, recipeId);
-            int existingQuantity = item == null ? 0 : item.getQuantite();
-
-            if (existingQuantity + quantity > available) {
-                throw new SushiException("Stock insuffisant pour ajouter cette recette au panier.");
+            Map<Integer, Produit> productsById = buildProductMap(data);
+            Map<Integer, Double> quantitiesAfterAdd = new HashMap<>();
+            for (PanierItem item : user.getPanier()) {
+                quantitiesAfterAdd.merge(item.getProduitId(), item.getQuantite(), Double::sum);
+            }
+            for (Ingredient ingredient : recette.getIngredients()) {
+                if (ingredient.getProduit() == null) {
+                    continue;
+                }
+                Produit produit = productsById.get(ingredient.getProduit().getId());
+                if (produit == null) {
+                    throw new SushiException("Une recette reference un produit inexistant.");
+                }
+                double nextQuantity = quantitiesAfterAdd.getOrDefault(produit.getId(), 0D) + ingredient.getQuantite() * quantity;
+                if (nextQuantity > produit.getStock() + 0.0001D) {
+                    throw new SushiException("Stock insuffisant pour ajouter cette recette au panier.");
+                }
+                quantitiesAfterAdd.put(produit.getId(), nextQuantity);
             }
 
-            if (item == null) {
-                user.getPanier().add(new PanierItem(recipeId, quantity));
-            } else {
-                item.setQuantite(existingQuantity + quantity);
+            for (Ingredient ingredient : recette.getIngredients()) {
+                if (ingredient.getProduit() == null) {
+                    continue;
+                }
+                PanierItem item = findCartItem(user, ingredient.getProduit().getId(), ingredient.getUnite());
+                double quantityToAdd = ingredient.getQuantite() * quantity;
+                if (item == null) {
+                    user.getPanier().add(new PanierItem(ingredient.getProduit().getId(), quantityToAdd, ingredient.getUnite()));
+                } else {
+                    item.setQuantite(item.getQuantite() + quantityToAdd);
+                }
             }
 
             repository.save(data);
         }
     }
 
-    public void removeFromCart(int userId, int recipeId, int quantity) {
+    public void removeFromCart(int userId, int productId) {
         synchronized (lock) {
             StoreData data = repository.load();
             User user = requireUser(data, userId);
-            PanierItem item = findCartItem(user, recipeId);
+            PanierItem item = findCartItem(user, productId);
             if (item == null) {
-                throw new SushiException("Cette recette n'est pas dans le panier.");
+                throw new SushiException("Cet ingredient n'est pas dans le panier.");
             }
 
-            if (quantity <= 0 || quantity >= item.getQuantite()) {
-                user.getPanier().remove(item);
-            } else {
-                item.setQuantite(item.getQuantite() - quantity);
-            }
+            user.getPanier().remove(item);
 
             repository.save(data);
         }
@@ -186,7 +201,6 @@ public class SushiService {
             }
 
             Map<Integer, Produit> productsById = buildProductMap(data);
-            Map<Integer, Recette> recipesById = buildRecipeMap(data);
             Map<Integer, Double> remainingStock = new HashMap<>();
             for (Produit produit : data.getProduits()) {
                 remainingStock.put(produit.getId(), produit.getStock());
@@ -203,32 +217,24 @@ public class SushiService {
             List<CommandeItem> items = new ArrayList<>();
 
             for (PanierItem panierItem : user.getPanier()) {
-                Recette recette = recipesById.get(panierItem.getRecetteId());
-                if (recette == null) {
-                    throw new SushiException("Une recette du panier n'existe plus.");
+                Produit produit = productsById.get(panierItem.getProduitId());
+                if (produit == null) {
+                    throw new SushiException("Un ingredient du panier n'existe plus.");
                 }
 
-                for (Ingredient ingredient : recette.getIngredients()) {
-                    Produit produit = productsById.get(ingredient.getProduit().getId());
-                    if (produit == null) {
-                        throw new SushiException("Une recette reference un produit inexistant.");
-                    }
-
-                    double needed = ingredient.getQuantite() * panierItem.getQuantite();
-                    double nextStock = remainingStock.get(produit.getId()) - needed;
-                    if (nextStock < -0.0001D) {
-                        throw new SushiException("Stock insuffisant pour finaliser la commande.");
-                    }
-                    remainingStock.put(produit.getId(), nextStock);
+                double nextStock = remainingStock.get(produit.getId()) - panierItem.getQuantite();
+                if (nextStock < -0.0001D) {
+                    throw new SushiException("Stock insuffisant pour finaliser la commande.");
                 }
+                remainingStock.put(produit.getId(), nextStock);
 
                 CommandeItem item = new CommandeItem();
-                item.setRecetteId(recette.getId());
-                item.setRecetteTitre(recette.getTitre());
-                item.setQuantite(panierItem.getQuantite());
-                item.setPrixUnitaire(recette.getPrix());
+                item.setRecetteId(produit.getId());
+                item.setRecetteTitre(produit.getNom());
+                item.setQuantite((int) Math.ceil(panierItem.getQuantite()));
+                item.setPrixUnitaire(produit.getPrixUnitaire());
                 items.add(item);
-                total += recette.getPrix() * panierItem.getQuantite();
+                total += produit.getPrixUnitaire() * panierItem.getQuantite();
             }
 
             for (Produit produit : data.getProduits()) {
@@ -247,16 +253,13 @@ public class SushiService {
         }
     }
 
-    public Recette saveRecipe(int userId, Integer recipeId, String title, String coverImage, double price, int prepMinutes, int difficulty, boolean needsVinegaredRice, List<IngredientForm> ingredientForms, List<StepForm> stepForms) {
+    public Recette saveRecipe(int userId, Integer recipeId, String title, String coverImage, int prepMinutes, int difficulty, boolean needsVinegaredRice, List<IngredientForm> ingredientForms, List<StepForm> stepForms) {
         synchronized (lock) {
             StoreData data = repository.load();
             requireAdmin(data, userId);
 
             if (isBlank(title)) {
                 throw new SushiException("Le titre est obligatoire.");
-            }
-            if (price < 0D) {
-                throw new SushiException("Le prix ne peut pas etre negatif.");
             }
             if (prepMinutes <= 0) {
                 throw new SushiException("Le temps de preparation doit etre superieur a zero.");
@@ -273,6 +276,7 @@ public class SushiService {
 
             Map<Integer, Produit> productsById = buildProductMap(data);
             List<Ingredient> ingredients = new ArrayList<>();
+            double calculatedPrice = 0D;
             for (IngredientForm form : ingredientForms) {
                 Produit produit = productsById.get(form.productId());
                 if (produit == null) {
@@ -286,6 +290,7 @@ public class SushiService {
                 ingredient.setQuantite(form.quantity());
                 ingredient.setUnite(isBlank(form.unit()) ? produit.getUnite() : form.unit().trim());
                 ingredients.add(ingredient);
+                calculatedPrice += form.quantity() * produit.getPrixUnitaire();
             }
 
             List<EtapeRecette> etapes = new ArrayList<>();
@@ -313,7 +318,7 @@ public class SushiService {
             recette.setTitre(title.trim());
             recette.setDescriptionEtapes(buildLegacyDescription(etapes));
             recette.setImageCouverture(isBlank(coverImage) ? "/assets/img/recipe-step-finish.png" : coverImage.trim());
-            recette.setPrix(price);
+            recette.setPrix(calculatedPrice);
             recette.setTempsPreparationMinutes(prepMinutes);
             recette.setDifficulte(difficulty);
             recette.setNecessiteRizVinaigre(needsVinegaredRice);
@@ -349,7 +354,6 @@ public class SushiService {
 
             for (User user : data.getUsers()) {
                 user.getFavoris().removeIf(currentId -> currentId == recipeId);
-                user.getPanier().removeIf(item -> item.getRecetteId() == recipeId);
             }
 
             repository.save(data);
@@ -521,9 +525,20 @@ public class SushiService {
         return null;
     }
 
-    private PanierItem findCartItem(User user, int recipeId) {
+    private PanierItem findCartItem(User user, int productId) {
         for (PanierItem item : user.getPanier()) {
-            if (item.getRecetteId() == recipeId) {
+            if (item.getProduitId() == productId) {
+                return item;
+            }
+        }
+        return null;
+    }
+
+    private PanierItem findCartItem(User user, int productId, String unit) {
+        String normalizedUnit = isBlank(unit) ? "" : unit.trim();
+        for (PanierItem item : user.getPanier()) {
+            String itemUnit = isBlank(item.getUnite()) ? "" : item.getUnite().trim();
+            if (item.getProduitId() == productId && itemUnit.equals(normalizedUnit)) {
                 return item;
             }
         }
@@ -535,7 +550,7 @@ public class SushiService {
         data.getRecettes().sort(Comparator.comparingInt(Recette::getId));
         data.getCommandes().sort(Comparator.comparing(Commande::getDateCreation).reversed());
         for (User user : data.getUsers()) {
-            user.getPanier().sort(Comparator.comparingInt(PanierItem::getRecetteId));
+            user.getPanier().sort(Comparator.comparingInt(PanierItem::getProduitId));
             user.getFavoris().sort(Integer::compareTo);
         }
     }

@@ -10,24 +10,30 @@
         <recipeRef id="101"/>
       </favorites>
       <cart>
-        <item quantity="1" recipeId="103"/>
+        <item productId="1" quantity="250" unit="g"/>
+        <item productId="2" quantity="30" unit="ml"/>
+        <item productId="3" quantity="10" unit="g"/>
+        <item productId="4" quantity="3" unit="g"/>
+        <item productId="5" quantity="2" unit="feuilles"/>
+        <item productId="8" quantity="0.5" unit="piece"/>
+        <item productId="13" quantity="10" unit="g"/>
       </cart>
     </user>
   </users>
   <products nextId="14">
-    <product id="1" name="Riz a sushi" price="0.02" stock="8000" unit="g"/>
-    <product id="2" name="Vinaigre de riz" price="0.015" stock="2500" unit="ml"/>
-    <product id="3" name="Sucre" price="0.004" stock="3000" unit="g"/>
-    <product id="4" name="Sel" price="0.002" stock="1500" unit="g"/>
-    <product id="5" name="Feuilles de nori" price="0.35" stock="80" unit="feuilles"/>
-    <product id="6" name="Saumon frais" price="0.045" stock="2500" unit="g"/>
-    <product id="7" name="Thon frais" price="0.052" stock="2000" unit="g"/>
-    <product id="8" name="Concombre" price="0.9" stock="30" unit="piece"/>
-    <product id="9" name="Avocat" price="1.2" stock="24" unit="piece"/>
-    <product id="10" name="Wasabi" price="0.08" stock="400" unit="g"/>
-    <product id="11" name="Sauce soja" price="0.012" stock="3000" unit="ml"/>
+    <product id="1" name="Riz" price="0.02" stock="7300" unit="g"/>
+    <product id="2" name="Vinaigre de riz" price="0.015" stock="2415" unit="ml"/>
+    <product id="3" name="Sucre" price="0.004" stock="2972" unit="g"/>
+    <product id="4" name="Sel" price="0.002" stock="1492" unit="g"/>
+    <product id="5" name="Feuilles de nori" price="0.35" stock="75" unit="feuilles"/>
+    <product id="6" name="Saumon frais" price="0.045" stock="2380" unit="g"/>
+    <product id="7" name="Thon frais" price="0.052" stock="1850" unit="g"/>
+    <product id="8" name="Concombre" price="0.9" stock="29.5" unit="piece"/>
+    <product id="9" name="Avocat" price="1.2" stock="23" unit="piece"/>
+    <product id="10" name="Wasabi" price="0.08" stock="395" unit="g"/>
+    <product id="11" name="Sauce soja" price="0.012" stock="2980" unit="ml"/>
     <product id="12" name="Gingembre marine" price="0.02" stock="1000" unit="g"/>
-    <product id="13" name="Graines de sesame" price="0.018" stock="800" unit="g"/>
+    <product id="13" name="Graines de sesame" price="0.018" stock="790" unit="g"/>
   </products>
   <recipes nextId="105">
     <recipe difficulty="3" id="101" needsVinegaredRice="true" prepMinutes="28" price="12.9">
@@ -125,5 +131,20 @@
       </ingredients>
     </recipe>
   </recipes>
-  <orders nextId="1"/>
+  <orders nextId="2">
+    <order createdAt="2026-04-10T12:02:33.640857+02:00" id="1" total="32.823" userId="2" username="demo">
+      <item quantity="700" recipeId="1" recipeTitle="Riz a sushi" unitPrice="0.02"/>
+      <item quantity="85" recipeId="2" recipeTitle="Vinaigre de riz" unitPrice="0.015"/>
+      <item quantity="28" recipeId="3" recipeTitle="Sucre" unitPrice="0.004"/>
+      <item quantity="8" recipeId="4" recipeTitle="Sel" unitPrice="0.002"/>
+      <item quantity="5" recipeId="5" recipeTitle="Feuilles de nori" unitPrice="0.35"/>
+      <item quantity="120" recipeId="6" recipeTitle="Saumon frais" unitPrice="0.045"/>
+      <item quantity="1" recipeId="9" recipeTitle="Avocat" unitPrice="1.2"/>
+      <item quantity="150" recipeId="7" recipeTitle="Thon frais" unitPrice="0.052"/>
+      <item quantity="5" recipeId="10" recipeTitle="Wasabi" unitPrice="0.08"/>
+      <item quantity="20" recipeId="11" recipeTitle="Sauce soja" unitPrice="0.012"/>
+      <item quantity="1" recipeId="8" recipeTitle="Concombre" unitPrice="0.9"/>
+      <item quantity="10" recipeId="13" recipeTitle="Graines de sesame" unitPrice="0.018"/>
+    </order>
+  </orders>
 </store>

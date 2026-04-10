@@ -27,9 +27,8 @@ public class CartServlet extends BaseServlet {
                 service(request).clearCart(userId);
                 setFlash(request, "success", "Panier vide.");
             } else {
-                int recipeId = requiredInt(request, "recipeId");
-                int quantity = optionalInt(request, "quantity", 1);
-                service(request).removeFromCart(userId, recipeId, quantity);
+                int productId = requiredInt(request, "productId");
+                service(request).removeFromCart(userId, productId);
                 setFlash(request, "success", "Panier mis a jour.");
             }
         } catch (IllegalArgumentException | SushiException exception) {

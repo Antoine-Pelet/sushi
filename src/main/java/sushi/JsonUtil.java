@@ -96,12 +96,10 @@ public final class JsonUtil {
 
         StringJoiner cart = new StringJoiner(",", "[", "]");
         for (PanierItem item : user.getPanier()) {
-            Recette recette = recipesById.get(item.getRecetteId());
             cart.add("{"
-                    + "\"recipeId\":" + item.getRecetteId()
-                    + ",\"title\":" + quote(recette == null ? "" : recette.getTitre())
+                    + "\"productId\":" + item.getProduitId()
                     + ",\"quantity\":" + item.getQuantite()
-                    + ",\"unitPrice\":" + number(recette == null ? 0D : recette.getPrix())
+                    + ",\"unit\":" + quote(item.getUnite())
                     + "}");
         }
 

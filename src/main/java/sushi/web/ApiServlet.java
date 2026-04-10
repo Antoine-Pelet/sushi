@@ -165,7 +165,7 @@ public class ApiServlet extends BaseServlet {
             throw new SushiException("Connexion requise.");
         }
 
-        service(request).removeFromCart(userId, requiredInt(request, "recipeId"), optionalInt(request, "quantity", 1));
+        service(request).removeFromCart(userId, requiredInt(request, "productId"));
         SushiService.DashboardData dashboard = service(request).getDashboardData(userId, null);
         sendJson(response, HttpServletResponse.SC_OK, JsonUtil.success("Panier mis a jour",
                 JsonUtil.user(dashboard.currentUser(), recipesById(dashboard.recettes()))));
@@ -229,7 +229,6 @@ public class ApiServlet extends BaseServlet {
                 optionalInt(request, "recipeId"),
                 request.getParameter("title"),
                 request.getParameter("coverImage"),
-                requiredDouble(request, "price"),
                 requiredInt(request, "prepMinutes"),
                 requiredInt(request, "difficulty"),
                 request.getParameter("needsVinegaredRice") != null,

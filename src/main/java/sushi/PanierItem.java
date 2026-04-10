@@ -1,29 +1,39 @@
 package sushi;
 
 public class PanierItem {
-    private int recetteId;
-    private int quantite;
+    private int produitId;
+    private double quantite;
+    private String unite;
 
     public PanierItem() {}
 
-    public PanierItem(int recetteId, int quantite) {
-        this.recetteId = recetteId;
+    public PanierItem(int produitId, double quantite, String unite) {
+        this.produitId = produitId;
         this.quantite = quantite;
+        this.unite = unite;
     }
 
-    public int getRecetteId() {
-        return recetteId;
+    public int getProduitId() {
+        return produitId;
     }
 
-    public void setRecetteId(int recetteId) {
-        this.recetteId = recetteId;
+    public void setProduitId(int produitId) {
+        this.produitId = produitId;
     }
 
-    public int getQuantite() {
+    public double getQuantite() {
         return quantite;
     }
 
-    public void setQuantite(int quantite) {
+    public void setQuantite(double quantite) {
         this.quantite = quantite;
+    }
+
+    public String getUnite() {
+        return unite;
+    }
+
+    public void setUnite(String unite) {
+        this.unite = unite;
     }
 }
