@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <store>
-  <users nextId="3">
+  <users nextId="4">
     <user admin="true" id="1" passwordHash="8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918" username="admin">
       <favorites/>
       <cart/>
@@ -19,6 +19,10 @@
         <item productId="13" quantity="10" unit="g"/>
       </cart>
     </user>
+    <user admin="false" id="3" passwordHash="31f7a65e315586ac198bd798b6629ce4903d0899476d5741a9f32e2e521b6a66" username="chef_achille">
+      <favorites/>
+      <cart/>
+    </user>
   </users>
   <products nextId="14">
     <product id="1" name="Riz" price="0.02" stock="7300" unit="g"/>
@@ -35,21 +39,22 @@
     <product id="12" name="Gingembre mariné" price="0.02" stock="1000" unit="g"/>
     <product id="13" name="Graines de sésame" price="0.018" stock="790" unit="g"/>
   </products>
-  <recipes nextId="105">
+  <recipes nextId="109">
     <recipe difficulty="3" id="101" needsVinegaredRice="true" prepMinutes="28" price="12.9">
       <title>Maki saumon avocat</title>
       <description>1) Cuire et assaisonner le riz.
 2) Étaler le riz sur la feuille de nori.
 3) Ajouter saumon et avocat, rouler puis découper.</description>
       <coverImage>/assets/img/recipe-step-finish.png</coverImage>
+      <sushefImage>/assets/img/sushef-happy.png</sushefImage>
       <steps>
-        <step image="/assets/img/recipe-step-prep.png">
+        <step image="/assets/img/recipe-step-prep.png" sushefImage="/assets/img/sushef-focused.png">
           <text>Cuire et assaisonner le riz.</text>
         </step>
-        <step image="/assets/img/recipe-step-prep.png">
+        <step image="/assets/img/recipe-step-prep.png" sushefImage="/assets/img/sushef-focused.png">
           <text>Étaler le riz sur la feuille de nori.</text>
         </step>
-        <step image="/assets/img/recipe-step-prep.png">
+        <step image="/assets/img/recipe-step-prep.png" sushefImage="/assets/img/sushef-focused.png">
           <text>Ajouter saumon et avocat, rouler puis découper.</text>
         </step>
       </steps>
@@ -69,14 +74,15 @@
 2) Déposer le thon sur chaque pièce.
 3) Servir avec wasabi et sauce soja.</description>
       <coverImage>/assets/img/recipe-step-finish.png</coverImage>
+      <sushefImage>/assets/img/sushef-happy.png</sushefImage>
       <steps>
-        <step image="/assets/img/recipe-step-prep.png">
+        <step image="/assets/img/recipe-step-prep.png" sushefImage="/assets/img/sushef-focused.png">
           <text>Former des boudins de riz.</text>
         </step>
-        <step image="/assets/img/recipe-step-prep.png">
+        <step image="/assets/img/recipe-step-prep.png" sushefImage="/assets/img/sushef-focused.png">
           <text>Déposer le thon sur chaque pièce.</text>
         </step>
-        <step image="/assets/img/recipe-step-prep.png">
+        <step image="/assets/img/recipe-step-prep.png" sushefImage="/assets/img/sushef-focused.png">
           <text>Servir avec wasabi et sauce soja.</text>
         </step>
       </steps>
@@ -96,14 +102,15 @@
 2) Garnir avec concombre et rouler.
 3) Parsemer de sésame, découper et servir.</description>
       <coverImage>/assets/img/recipe-step-finish.png</coverImage>
+      <sushefImage>/assets/img/sushef-happy.png</sushefImage>
       <steps>
-        <step image="/assets/img/recipe-step-prep.png">
+        <step image="/assets/img/recipe-step-prep.png" sushefImage="/assets/img/sushef-focused.png">
           <text>Étaler le riz sur le nori puis retourner.</text>
         </step>
-        <step image="/assets/img/recipe-step-prep.png">
+        <step image="/assets/img/recipe-step-prep.png" sushefImage="/assets/img/sushef-focused.png">
           <text>Garnir avec concombre et rouler.</text>
         </step>
-        <step image="/assets/img/recipe-step-prep.png">
+        <step image="/assets/img/recipe-step-prep.png" sushefImage="/assets/img/sushef-focused.png">
           <text>Parsemer de sésame, découper et servir.</text>
         </step>
       </steps>
@@ -117,17 +124,18 @@
         <ingredient productId="13" quantity="10" unit="g"/>
       </ingredients>
     </recipe>
-    <recipe difficulty="1" id="104" needsVinegaredRice="false" prepMinutes="20" price="13">
-      <title>toto</title>
-      <description>1) pipou</description>
-      <coverImage>/assets/img/recipe-step-finish.png</coverImage>
+    <recipe difficulty="1" id="108" needsVinegaredRice="true" prepMinutes="50" price="4">
+      <title>Riz vinaigré</title>
+      <description>1) Riz : lavez bien le riz et égouttez-le. Faites-le tremper dans une casserole d'eau pendant 30 min.</description>
+      <coverImage>/assets/img/riz.jpeg</coverImage>
+      <sushefImage>/assets/img/sushef-happy.png</sushefImage>
       <steps>
-        <step image="/assets/img/recipe-step-prep.png">
-          <text>pipou</text>
+        <step image="/assets/img/recipe-step-prep.png" sushefImage="/assets/img/sushef-focused.png">
+          <text>Riz : lavez bien le riz et égouttez-le. Faites-le tremper dans une casserole d'eau pendant 30 min.</text>
         </step>
       </steps>
       <ingredients>
-        <ingredient productId="5" quantity="1" unit="feuilles"/>
+        <ingredient productId="1" quantity="200" unit="g"/>
       </ingredients>
     </recipe>
   </recipes>
