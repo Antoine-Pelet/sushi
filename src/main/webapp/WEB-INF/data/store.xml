@@ -24,7 +24,7 @@
       <cart/>
     </user>
   </users>
-  <products nextId="14">
+  <products nextId="17">
     <product id="1" name="Riz" price="0.02" stock="7300" unit="g"/>
     <product id="2" name="Vinaigre de riz" price="0.015" stock="2415" unit="ml"/>
     <product id="3" name="Sucre" price="0.004" stock="2972" unit="g"/>
@@ -38,6 +38,9 @@
     <product id="11" name="Sauce soja" price="0.012" stock="2980" unit="ml"/>
     <product id="12" name="Gingembre mariné" price="0.02" stock="1000" unit="g"/>
     <product id="13" name="Graines de sésame" price="0.018" stock="790" unit="g"/>
+    <product id="14" name="mayonnaise" price="0.2" stock="1000" unit="g"/>
+    <product id="15" name="oeufs" price="0.15" stock="200" unit="pièces"/>
+    <product id="16" name="Branches d'épinard" price="1" stock="200" unit="branche"/>
   </products>
   <recipes nextId="107">
     <recipe difficulty="3" id="101" needsVinegaredRice="true" prepMinutes="28" price="12.9">
