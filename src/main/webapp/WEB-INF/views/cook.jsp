@@ -77,6 +77,7 @@
             : recette.getImageSushef().trim();
     Recette rizVinaigreRecipe = null;
     if (dashboard != null) {
+        // Keep the rice link stable even if the recipe id changes in store.xml.
         for (Recette candidate : dashboard.recettes()) {
             if (candidate.getTitre() != null && candidate.getTitre().equalsIgnoreCase("Riz vinaigré")) {
                 rizVinaigreRecipe = candidate;

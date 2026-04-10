@@ -38,6 +38,7 @@ public final class AppServices {
             return initializePersistentStore(Paths.get(configuredPath), context);
         }
 
+        // In local development, keep reads and writes on the single XML file committed with the project.
         Path sourceStorePath = Paths.get(System.getProperty("user.dir"), SOURCE_STORE_PATH);
         if (Files.exists(sourceStorePath)) {
             return sourceStorePath;
