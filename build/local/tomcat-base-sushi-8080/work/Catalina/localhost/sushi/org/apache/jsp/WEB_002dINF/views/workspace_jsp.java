@@ -387,7 +387,6 @@ public final class workspace_jsp extends org.apache.jasper.runtime.HttpJspBase
  } 
       out.write("\r\n");
       out.write("                            </div>\r\n");
-      out.write("                            <p class=\"helper\">Votre espace est maintenant découpé en pages dédiées pour que chaque action ait son propre écran</p>\r\n");
       out.write("                            <div class=\"auth-actions\"><a class=\"button button--outline\" href=\"");
       out.print( ctx );
       out.write("/workspace?mode=cart\">Voir le panier</a><a class=\"button button--ghost\" href=\"");

@@ -12,6 +12,7 @@ src/main/java/sushi/web/CookServlet.java
 src/main/java/sushi/web/CookStepsServlet.java
 src/main/java/sushi/web/HomeServlet.java
 src/main/java/sushi/web/OrderServlet.java
+src/main/java/sushi/web/AdminUserServlet.java
 src/main/java/sushi/web/AuthServlet.java
 src/main/java/sushi/web/WorkspaceServlet.java
 src/main/java/sushi/web/AuthPageServlet.java

@@ -94,7 +94,6 @@
                         <article class="utility-card">
                             <div class="profile-box"><div class="avatar avatar--large"><%= esc(initials(currentUser)) %></div><div><p><strong><%= esc(currentUser.getUsername()) %></strong></p><p><%= admin ? "Administrateur" : "Utilisateur" %></p></div></div>
                             <div class="auth-highlights"><span class="auth-pill">Favoris : <%= favoritesCount %></span><span class="auth-pill">Panier : <%= cartCount %></span><span class="auth-pill">Commandes : <%= userCommandes.size() %></span></div>
-                            <p class="helper">Votre espace est maintenant decoupe en pages dediees pour que chaque action ait son propre ecran.</p>
                             <div class="auth-actions"><a class="button button--outline" href="<%= ctx %>/workspace?mode=cart">Voir le panier</a><a class="button button--ghost" href="<%= ctx %>/app">Retour au catalogue</a><% if (admin) { %><a class="button button--ghost" href="<%= ctx %>/workspace?mode=admin">Ouvrir l admin</a><% } %><form method="post" action="<%= ctx %>/auth/logout"><input type="hidden" name="returnPage" value="workspace"><input type="hidden" name="returnMode" value="account"><button type="submit" class="danger-button">Se deconnecter</button></form></div>
                         </article>
                         <article class="utility-card">

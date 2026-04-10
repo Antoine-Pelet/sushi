@@ -204,7 +204,6 @@
                                     </ul>
                                 <% } %>
                             </div>
-                            <p class="helper">Votre espace est maintenant découpé en pages dédiées pour que chaque action ait son propre écran</p>
                             <div class="auth-actions"><a class="button button--outline" href="<%= ctx %>/workspace?mode=cart">Voir le panier</a><a class="button button--ghost" href="<%= ctx %>/app">Retour au catalogue</a><% if (admin) { %><a class="button button--ghost" href="<%= ctx %>/workspace?mode=admin">Ouvrir l'admin</a><% } %><form method="post" action="<%= ctx %>/auth/logout"><input type="hidden" name="returnPage" value="workspace"><input type="hidden" name="returnMode" value="account"><button type="submit" class="danger-button">Se déconnecter</button></form></div>
                         </article>
                         <article class="utility-card account-card">
