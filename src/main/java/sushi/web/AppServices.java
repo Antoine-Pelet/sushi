@@ -29,23 +29,19 @@ public final class AppServices {
     }
 
     private static Path resolveStorePath(ServletContext context) {
-        String configuredPath = firstPresent(
-                context.getInitParameter("sushi.store.path"),
-                System.getProperty("sushef.store.path"),
-                System.getenv("SUSHEF_STORE_PATH")
-        );
-        if (configuredPath != null) {
-            return initializePersistentStore(Paths.get(configuredPath), context);
-        }
-
-        String userHome = System.getProperty("user.home");
-        if (userHome != null && !userHome.isBlank()) {
-            return initializePersistentStore(Paths.get(userHome, "Documents", "sushi", "data", "store.xml"), context);
-        }
-
-        File tempDir = (File) context.getAttribute(ServletContext.TEMPDIR);
-        return tempDir.toPath().resolve("sushi-store.xml");
+    String configuredPath = firstPresent(
+            context.getInitParameter("sushi.store.path"),
+            System.getProperty("sushef.store.path"),
+            System.getenv("SUSHEF_STORE_PATH")
+    );
+    if (configuredPath != null) {
+        return initializePersistentStore(Paths.get(configuredPath), context);
     }
+
+    // Toujours utiliser le store.xml du projet
+    String seedPath = context.getRealPath("/WEB-INF/data/store.xml");
+    return Paths.get(seedPath);
+}
 
     private static Path initializePersistentStore(Path persistentPath, ServletContext context) {
         try {
