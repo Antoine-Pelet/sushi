@@ -202,6 +202,7 @@ Require-Command "jar"
 $projectRoot = Split-Path -Parent $PSScriptRoot
 $context = Normalize-ContextName $ContextName
 $webappSource = Join-Path $projectRoot "src\main\webapp"
+$storeSource = Join-Path $webappSource "WEB-INF\data\store.xml"
 $javaSourceRoot = Join-Path $projectRoot "src\main\java"
 $buildRoot = Join-Path $projectRoot "build\local"
 $stagingDir = Join-Path $buildRoot $context
@@ -254,6 +255,10 @@ if (-not (Test-Path $ServletApiJar)) {
 
 if (-not (Test-Path $webappSource)) {
     throw "Dossier webapp introuvable: $webappSource"
+}
+
+if (-not (Test-Path $storeSource)) {
+    throw "Fichier de donnees introuvable: $storeSource"
 }
 
 if (-not (Test-Path $javaSourceRoot)) {
@@ -320,11 +325,6 @@ if (-not $BuildOnly) {
     }
 
     $deployDir = Join-Path $webappsDir $context
-    $backupStorePath = Join-Path $buildRoot "_store-backup.xml"
-
-    if ((-not $ResetData) -and (Test-Path (Join-Path $deployDir "WEB-INF\data\store.xml"))) {
-        Copy-Item -LiteralPath (Join-Path $deployDir "WEB-INF\data\store.xml") -Destination $backupStorePath -Force
-    }
 
     if (Test-Path $deployDir) {
         Remove-Item -LiteralPath $deployDir -Recurse -Force
@@ -332,17 +332,15 @@ if (-not $BuildOnly) {
 
     Copy-Item -LiteralPath $stagingDir -Destination $deployDir -Recurse -Force
 
-    if ((-not $ResetData) -and (Test-Path $backupStorePath)) {
-        Copy-Item -LiteralPath $backupStorePath -Destination (Join-Path $deployDir "WEB-INF\data\store.xml") -Force
-        Remove-Item -LiteralPath $backupStorePath -Force
-    }
-
     if ($LaunchTomcat) {
         if (-not (Test-Path $startupScript)) {
             throw "Script de demarrage introuvable: $startupScript"
         }
         $env:CATALINA_HOME = $resolvedTomcatPath
         $env:CATALINA_BASE = $catalinaBaseDir
+        $resolvedStoreSource = (Resolve-Path $storeSource).Path
+        $storeOption = "-Dsushef.store.path=`"$resolvedStoreSource`""
+        $env:JAVA_OPTS = (($env:JAVA_OPTS, $storeOption) | Where-Object { -not [string]::IsNullOrWhiteSpace($_) }) -join " "
         & $startupScript
     }
 }
@@ -362,5 +360,4 @@ if (-not $BuildOnly) {
 Write-Host "URL          : $deployedUrl"
 Write-Host ""
 Write-Host "Comptes de test : demo/demo et admin/admin"
-
 

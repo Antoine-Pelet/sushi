@@ -39,21 +39,22 @@
     <product id="12" name="Gingembre mariné" price="0.02" stock="1000" unit="g"/>
     <product id="13" name="Graines de sésame" price="0.018" stock="790" unit="g"/>
   </products>
-  <recipes nextId="106">
+  <recipes nextId="107">
     <recipe difficulty="3" id="101" needsVinegaredRice="true" prepMinutes="28" price="12.9">
       <title>Maki saumon avocat</title>
       <description>1) Cuire et assaisonner le riz.
 2) Étaler le riz sur la feuille de nori.
 3) Ajouter saumon et avocat, rouler puis découper.</description>
       <coverImage>/assets/img/recipe-step-finish.png</coverImage>
+      <sushefImage>/assets/img/sushef-happy.png</sushefImage>
       <steps>
-        <step image="/assets/img/recipe-step-prep.png">
+        <step image="/assets/img/recipe-step-prep.png" sushefImage="/assets/img/sushef-focused.png">
           <text>Cuire et assaisonner le riz.</text>
         </step>
-        <step image="/assets/img/recipe-step-prep.png">
+        <step image="/assets/img/recipe-step-prep.png" sushefImage="/assets/img/sushef-focused.png">
           <text>Étaler le riz sur la feuille de nori.</text>
         </step>
-        <step image="/assets/img/recipe-step-prep.png">
+        <step image="/assets/img/recipe-step-prep.png" sushefImage="/assets/img/sushef-focused.png">
           <text>Ajouter saumon et avocat, rouler puis découper.</text>
         </step>
       </steps>
@@ -67,21 +68,21 @@
         <ingredient productId="9" quantity="1" unit="pièce"/>
       </ingredients>
     </recipe>
-    
     <recipe difficulty="3" id="102" needsVinegaredRice="true" prepMinutes="28" price="14.5">
       <title>Nigiri thon</title>
       <description>1) Former des boudins de riz.
 2) Déposer le thon sur chaque pièce.
 3) Servir avec wasabi et sauce soja.</description>
       <coverImage>/assets/img/recipe-step-finish.png</coverImage>
+      <sushefImage>/assets/img/sushef-happy.png</sushefImage>
       <steps>
-        <step image="/assets/img/recipe-step-prep.png">
+        <step image="/assets/img/recipe-step-prep.png" sushefImage="/assets/img/sushef-focused.png">
           <text>Former des boudins de riz.</text>
         </step>
-        <step image="/assets/img/recipe-step-prep.png">
+        <step image="/assets/img/recipe-step-prep.png" sushefImage="/assets/img/sushef-focused.png">
           <text>Déposer le thon sur chaque pièce.</text>
         </step>
-        <step image="/assets/img/recipe-step-prep.png">
+        <step image="/assets/img/recipe-step-prep.png" sushefImage="/assets/img/sushef-focused.png">
           <text>Servir avec wasabi et sauce soja.</text>
         </step>
       </steps>
@@ -101,14 +102,15 @@
 2) Garnir avec concombre et rouler.
 3) Parsemer de sésame, découper et servir.</description>
       <coverImage>/assets/img/recipe-step-finish.png</coverImage>
+      <sushefImage>/assets/img/sushef-happy.png</sushefImage>
       <steps>
-        <step image="/assets/img/recipe-step-prep.png">
+        <step image="/assets/img/recipe-step-prep.png" sushefImage="/assets/img/sushef-focused.png">
           <text>Étaler le riz sur le nori puis retourner.</text>
         </step>
-        <step image="/assets/img/recipe-step-prep.png">
+        <step image="/assets/img/recipe-step-prep.png" sushefImage="/assets/img/sushef-focused.png">
           <text>Garnir avec concombre et rouler.</text>
         </step>
-        <step image="/assets/img/recipe-step-prep.png">
+        <step image="/assets/img/recipe-step-prep.png" sushefImage="/assets/img/sushef-focused.png">
           <text>Parsemer de sésame, découper et servir.</text>
         </step>
       </steps>
@@ -126,13 +128,28 @@
       <title>test</title>
       <description>1) cuire</description>
       <coverImage>/assets/img/recipe-step-finish.png</coverImage>
+      <sushefImage>/assets/img/sushef-happy.png</sushefImage>
       <steps>
-        <step image="/assets/img/recipe-step-prep.png">
+        <step image="/assets/img/recipe-step-prep.png" sushefImage="/assets/img/sushef-focused.png">
           <text>cuire</text>
         </step>
       </steps>
       <ingredients>
         <ingredient productId="8" quantity="1" unit="pièce"/>
+      </ingredients>
+    </recipe>
+    <recipe difficulty="1" id="106" needsVinegaredRice="true" prepMinutes="20" price="1.8">
+      <title>toto</title>
+      <description>1) cuireeeee</description>
+      <coverImage>/assets/img/recipe-step-finish.png</coverImage>
+      <sushefImage>/assets/img/sushef-happy.png</sushefImage>
+      <steps>
+        <step image="/assets/img/recipe-step-prep.png" sushefImage="/assets/img/sushef-focused.png">
+          <text>cuireeeee</text>
+        </step>
+      </steps>
+      <ingredients>
+        <ingredient productId="8" quantity="2" unit="pièce"/>
       </ingredients>
     </recipe>
   </recipes>

@@ -3,13 +3,13 @@ package sushi.web;
 import jakarta.servlet.ServletContext;
 import sushi.SushiService;
 
-import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public final class AppServices {
     private static final String SERVICE_KEY = AppServices.class.getName() + ".service";
+    private static final String SOURCE_STORE_PATH = "src/main/webapp/WEB-INF/data/store.xml";
 
     private AppServices() {
     }
@@ -29,19 +29,26 @@ public final class AppServices {
     }
 
     private static Path resolveStorePath(ServletContext context) {
-    String configuredPath = firstPresent(
-            context.getInitParameter("sushi.store.path"),
-            System.getProperty("sushef.store.path"),
-            System.getenv("SUSHEF_STORE_PATH")
-    );
-    if (configuredPath != null) {
-        return initializePersistentStore(Paths.get(configuredPath), context);
-    }
+        String configuredPath = firstPresent(
+                context.getInitParameter("sushi.store.path"),
+                System.getProperty("sushef.store.path"),
+                System.getenv("SUSHEF_STORE_PATH")
+        );
+        if (configuredPath != null) {
+            return initializePersistentStore(Paths.get(configuredPath), context);
+        }
 
-    // Toujours utiliser le store.xml du projet
-    String seedPath = context.getRealPath("/WEB-INF/data/store.xml");
-    return Paths.get(seedPath);
-}
+        Path sourceStorePath = Paths.get(System.getProperty("user.dir"), SOURCE_STORE_PATH);
+        if (Files.exists(sourceStorePath)) {
+            return sourceStorePath;
+        }
+
+        String deployedStorePath = context.getRealPath("/WEB-INF/data/store.xml");
+        if (deployedStorePath == null) {
+            throw new IllegalStateException("Impossible de trouver le fichier de stockage Sushef");
+        }
+        return Paths.get(deployedStorePath);
+    }
 
     private static Path initializePersistentStore(Path persistentPath, ServletContext context) {
         try {

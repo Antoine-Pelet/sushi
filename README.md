@@ -68,12 +68,11 @@ Si `8080` est deja occupe, le script demarre automatiquement une instance Tomcat
 - assemble une webapp exploitee dans `build\local\sushi`
 - genere aussi `build\local\sushi.war`
 - deploie l'application dans `webapps\sushi` du Tomcat cible
-- conserve les donnees existantes entre deux redeploiements
+- utilise le stockage XML du projet: `src/main/webapp/WEB-INF/data/store.xml`
 
 ### Options utiles
 
 - `-BuildOnly` : construit l'application sans la copier dans Tomcat
-- `-ResetData` : reinitialise `store.xml` avec les donnees du projet
 - `-ContextName ROOT` : deploie l'application en racine Tomcat
 - `-PortOffset 1` : force Tomcat 10.1 a utiliser `8081`, `8006`, `8444`
 
@@ -103,4 +102,3 @@ http://localhost:8080/app
 - `POST /api/admin/products/save`
 
 Les requetes `POST` utilisent des parametres de formulaire classiques (`application/x-www-form-urlencoded`), ce qui evite toute dependance JSON supplementaire cote serveur.
-
