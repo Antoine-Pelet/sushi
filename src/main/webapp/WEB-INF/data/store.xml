@@ -24,7 +24,7 @@
       <cart/>
     </user>
   </users>
-  <products nextId="17">
+  <products nextId="19">
     <product id="1" name="Riz" price="0.02" stock="7300" unit="g"/>
     <product id="2" name="Vinaigre de riz" price="0.015" stock="2415" unit="ml"/>
     <product id="3" name="Sucre" price="0.004" stock="2972" unit="g"/>
@@ -41,8 +41,10 @@
     <product id="14" name="Mayonnaise" price="0.2" stock="1000" unit="g"/>
     <product id="15" name="oeufs" price="0.15" stock="200" unit="pièces"/>
     <product id="16" name="Branches d'épinard" price="1" stock="200" unit="branche"/>
+    <product id="17" name="Bâtonnets de crabe" price="0.5" stock="200" unit="pièces"/>
+    <product id="18" name="Crevettes" price="1.5" stock="600" unit="pièces"/>
   </products>
-  <recipes nextId="107">
+  <recipes nextId="109">
     <recipe difficulty="3" id="101" needsVinegaredRice="true" prepMinutes="20" price="34.45">
       <title>Maki saumon avocat</title>
       <description>1) Tranchez les filets de saumon en longues bandes
@@ -167,6 +169,37 @@
         <ingredient productId="3" quantity="25" unit="g"/>
         <ingredient productId="2" quantity="70" unit="ml"/>
         <ingredient productId="1" quantity="500" unit="g"/>
+      </ingredients>
+    </recipe>
+    <recipe difficulty="3" id="108" needsVinegaredRice="true" prepMinutes="30" price="25.23">
+      <title>Temaki légumes, bâtonnets de crabe et saumon</title>
+      <description>1) Découpez les feuilles de nori en deux ou en quatre.&#13;
+Préparer une omelette. Faites la bien épaisse et non baveuse. Faite la cuire des 2 cotés. Une fois bien cuite, découpez des lamelles égales d'omelette.&#13;
+Découpez le concombre, le thon et le saumon en lamelle puis réservez
+2) Sur un coin de la feuille de nori, étalez un peu de riz, un filet de wasabi et ajoutez les ingrédients de votre choix.&#13;
+Roulez la feuille de nori en cône en prenant soin que le bord le plus fin soit celui où le riz a été positionné</description>
+      <coverImage>/assets/img/temaki.jpg</coverImage>
+      <sushefImage>/assets/img/sushef-calm.png</sushefImage>
+      <steps>
+        <step image="/assets/img/recette7etape1 - Moyenne.jpeg" sushefImage="/assets/img/sushef-focused.png">
+          <text>Découpez les feuilles de nori en deux ou en quatre.&#13;
+Préparer une omelette. Faites la bien épaisse et non baveuse. Faite la cuire des 2 cotés. Une fois bien cuite, découpez des lamelles égales d'omelette.&#13;
+Découpez le concombre, le thon et le saumon en lamelle puis réservez</text>
+        </step>
+        <step image="/assets/img/recette7etape2 - Moyenne.jpeg" sushefImage="/assets/img/sushef-constellation.png">
+          <text>Sur un coin de la feuille de nori, étalez un peu de riz, un filet de wasabi et ajoutez les ingrédients de votre choix.&#13;
+Roulez la feuille de nori en cône en prenant soin que le bord le plus fin soit celui où le riz a été positionné</text>
+        </step>
+      </steps>
+      <ingredients>
+        <ingredient productId="8" quantity="0.5" unit="pièce"/>
+        <ingredient productId="15" quantity="4" unit="pièces"/>
+        <ingredient productId="17" quantity="4" unit="pièces"/>
+        <ingredient productId="5" quantity="2" unit="feuilles"/>
+        <ingredient productId="10" quantity="20" unit="g"/>
+        <ingredient productId="11" quantity="40" unit="ml"/>
+        <ingredient productId="6" quantity="200" unit="g"/>
+        <ingredient productId="7" quantity="200" unit="g"/>
       </ingredients>
     </recipe>
   </recipes>
