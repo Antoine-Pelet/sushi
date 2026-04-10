@@ -39,7 +39,7 @@
     <product id="12" name="Gingembre mariné" price="0.02" stock="1000" unit="g"/>
     <product id="13" name="Graines de sésame" price="0.018" stock="790" unit="g"/>
   </products>
-  <recipes nextId="105">
+  <recipes nextId="106">
     <recipe difficulty="3" id="101" needsVinegaredRice="true" prepMinutes="28" price="12.9">
       <title>Maki saumon avocat</title>
       <description>1) Cuire et assaisonner le riz.
@@ -119,6 +119,19 @@
         <ingredient productId="5" quantity="2" unit="feuilles"/>
         <ingredient productId="8" quantity="0.5" unit="pièce"/>
         <ingredient productId="13" quantity="10" unit="g"/>
+      </ingredients>
+    </recipe>
+    <recipe difficulty="1" id="105" needsVinegaredRice="true" prepMinutes="20" price="0.9">
+      <title>test</title>
+      <description>1) cuire</description>
+      <coverImage>/assets/img/recipe-step-finish.png</coverImage>
+      <steps>
+        <step image="/assets/img/recipe-step-prep.png">
+          <text>cuire</text>
+        </step>
+      </steps>
+      <ingredients>
+        <ingredient productId="8" quantity="1" unit="pièce"/>
       </ingredients>
     </recipe>
   </recipes>
