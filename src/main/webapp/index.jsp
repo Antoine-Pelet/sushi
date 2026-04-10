@@ -67,7 +67,7 @@
             <% if (panierCount > 0) { %><span class="cart-badge"><%= panierCount %></span><% } %>
         </a>
         <a class="account-photo" href="<%= currentUser != null ? ctx + "/workspace?mode=account" : ctx + "/auth?returnPage=workspace&returnMode=account" %>" aria-label="<%= currentUser != null ? "Compte " + esc(currentUser.getUsername()) : "Compte" %>">
-            <span><%= esc(initial(currentUser)) %></span>
+            <% if (currentUser != null) { %><span><%= esc(initial(currentUser)) %></span><% } else { %><img src="<%= ctx %>/assets/img/sushef-happy.png" alt="Compte Sushef"><% } %>
         </a>
     </div>
 </header>

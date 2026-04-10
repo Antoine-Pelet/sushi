@@ -78,7 +78,7 @@
             <% if (cartCount > 0) { %><span class="cart-badge"><%= cartCount %></span><% } %>
         </a>
         <a class="account-photo" href="<%= currentUser != null ? ctx + "/workspace?mode=account" : ctx + "/auth?returnPage=workspace&returnMode=account" %>" aria-label="Compte Sushef">
-            <span><%= esc(initials(currentUser)) %></span>
+            <% if (currentUser != null) { %><span><%= esc(initials(currentUser)) %></span><% } else { %><img src="<%= ctx %>/assets/img/sushef-happy.png" alt="Compte Sushef"><% } %>
         </a>
     </div>
 </header>
