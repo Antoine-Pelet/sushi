@@ -67,6 +67,7 @@
         <ingredient productId="9" quantity="1" unit="pièce"/>
       </ingredients>
     </recipe>
+    
     <recipe difficulty="3" id="102" needsVinegaredRice="true" prepMinutes="28" price="14.5">
       <title>Nigiri thon</title>
       <description>1) Former des boudins de riz.
