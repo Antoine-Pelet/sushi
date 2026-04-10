@@ -1250,7 +1250,7 @@ code { display: block; padding: 12px 14px; border-radius: 14px; background: rgba
 .ingredient-row { display: grid; grid-template-columns: minmax(0, 1.6fr) 120px 120px auto; gap: 12px; align-items: end; }
 .step-row {
     display: grid;
-    grid-template-columns: minmax(0, 1.5fr) minmax(220px, 0.8fr) auto;
+    grid-template-columns: minmax(0, 1.4fr) minmax(220px, 0.82fr) minmax(220px, 0.82fr) auto;
     gap: 12px;
     align-items: end;
     padding: 14px;
@@ -1274,6 +1274,9 @@ code { display: block; padding: 12px 14px; border-radius: 14px; background: rgba
     gap: 12px;
     align-items: center;
 }
+.maker-image-picker--chef {
+    grid-template-columns: 92px minmax(0, 1fr);
+}
 .maker-image-picker--step {
     grid-template-columns: 92px minmax(0, 1fr);
 }
@@ -1284,6 +1287,11 @@ code { display: block; padding: 12px 14px; border-radius: 14px; background: rgba
     border-radius: 16px;
     border: 1px solid rgba(255,255,255,0.14);
     background: rgba(255,255,255,0.06);
+}
+.maker-image-preview--chef {
+    object-fit: contain;
+    padding: 8px;
+    background: rgba(255,255,255,0.03);
 }
 .admin-recipe-item { display: flex; justify-content: space-between; align-items: center; gap: 18px; }
 .step-indicator { display: inline-flex; align-items: center; justify-content: center; min-width: 96px; padding: 8px 16px; border-radius: 999px; background: rgba(255,255,255,0.08); }

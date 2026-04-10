@@ -8,6 +8,7 @@ public class Recette {
     private String titre;
     private String descriptionEtapes;
     private String imageCouverture;
+    private String imageSushef;
     private double prix;
     private int tempsPreparationMinutes;
     private int difficulte;
@@ -26,6 +27,9 @@ public class Recette {
 
     public String getImageCouverture() { return imageCouverture; }
     public void setImageCouverture(String imageCouverture) { this.imageCouverture = imageCouverture; }
+
+    public String getImageSushef() { return imageSushef; }
+    public void setImageSushef(String imageSushef) { this.imageSushef = imageSushef; }
 
     public double getPrix() { return prix; }
     public void setPrix(double prix) { this.prix = prix; }

@@ -53,6 +53,7 @@ public class AdminRecipeServlet extends BaseServlet {
         String[] units = request.getParameterValues("ingredientUnit");
         String[] stepTexts = request.getParameterValues("stepText");
         String[] stepImages = request.getParameterValues("stepImage");
+        String[] stepSushefImages = request.getParameterValues("stepSushefImage");
 
         List<SushiService.IngredientForm> ingredients = new ArrayList<>();
         List<SushiService.StepForm> steps = new ArrayList<>();
@@ -78,10 +79,11 @@ public class AdminRecipeServlet extends BaseServlet {
             for (int i = 0; i < stepTexts.length; i++) {
                 String text = stepTexts[i];
                 String image = stepImages != null && stepImages.length > i ? stepImages[i] : null;
+                String sushefImage = stepSushefImages != null && stepSushefImages.length > i ? stepSushefImages[i] : null;
                 if (text == null || text.isBlank()) {
                     continue;
                 }
-                steps.add(new SushiService.StepForm(text, image));
+                steps.add(new SushiService.StepForm(text, image, sushefImage));
             }
         }
 
@@ -90,6 +92,7 @@ public class AdminRecipeServlet extends BaseServlet {
                 recipeId,
                 request.getParameter("title"),
                 request.getParameter("coverImage"),
+                request.getParameter("sushefImage"),
                 requiredInt(request, "prepMinutes"),
                 requiredInt(request, "difficulty"),
                 request.getParameter("needsVinegaredRice") != null,

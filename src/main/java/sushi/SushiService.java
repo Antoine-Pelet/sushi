@@ -253,7 +253,7 @@ public class SushiService {
         }
     }
 
-    public Recette saveRecipe(int userId, Integer recipeId, String title, String coverImage, int prepMinutes, int difficulty, boolean needsVinegaredRice, List<IngredientForm> ingredientForms, List<StepForm> stepForms) {
+    public Recette saveRecipe(int userId, Integer recipeId, String title, String coverImage, String sushefImage, int prepMinutes, int difficulty, boolean needsVinegaredRice, List<IngredientForm> ingredientForms, List<StepForm> stepForms) {
         synchronized (lock) {
             StoreData data = repository.load();
             requireAdmin(data, userId);
@@ -301,6 +301,7 @@ public class SushiService {
                 EtapeRecette etape = new EtapeRecette();
                 etape.setTexte(form.text().trim());
                 etape.setImage(isBlank(form.image()) ? "/assets/img/recipe-step-prep.png" : form.image().trim());
+                etape.setImageSushef(isBlank(form.sushefImage()) ? "/assets/img/sushef-focused.png" : form.sushefImage().trim());
                 etapes.add(etape);
             }
             if (etapes.isEmpty()) {
@@ -318,6 +319,7 @@ public class SushiService {
             recette.setTitre(title.trim());
             recette.setDescriptionEtapes(buildLegacyDescription(etapes));
             recette.setImageCouverture(isBlank(coverImage) ? "/assets/img/recipe-step-finish.png" : coverImage.trim());
+            recette.setImageSushef(isBlank(sushefImage) ? "/assets/img/sushef-happy.png" : sushefImage.trim());
             recette.setPrix(calculatedPrice);
             recette.setTempsPreparationMinutes(prepMinutes);
             recette.setDifficulte(difficulty);
@@ -562,7 +564,7 @@ public class SushiService {
     public record IngredientForm(int productId, double quantity, String unit) {
     }
 
-    public record StepForm(String text, String image) {
+    public record StepForm(String text, String image, String sushefImage) {
     }
 
     public record DashboardData(

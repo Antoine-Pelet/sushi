@@ -56,6 +56,7 @@ public final class JsonUtil {
             steps.add("{"
                     + "\"text\":" + quote(etape.getTexte())
                     + ",\"image\":" + quote(etape.getImage())
+                    + ",\"sushefImage\":" + quote(etape.getImageSushef())
                     + "}");
         }
 
@@ -64,6 +65,7 @@ public final class JsonUtil {
                 + ",\"title\":" + quote(recette.getTitre())
                 + ",\"description\":" + quote(recette.getDescriptionEtapes())
                 + ",\"coverImage\":" + quote(recette.getImageCouverture())
+                + ",\"sushefImage\":" + quote(recette.getImageSushef())
                 + ",\"steps\":" + steps
                 + ",\"price\":" + number(recette.getPrix())
                 + ",\"prepMinutes\":" + recette.getTempsPreparationMinutes()

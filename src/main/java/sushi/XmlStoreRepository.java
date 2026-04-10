@@ -234,6 +234,7 @@ public class XmlStoreRepository {
             recette.setTitre(textOf(firstChild(recipeElement, "title")));
             recette.setDescriptionEtapes(textOf(firstChild(recipeElement, "description")));
             recette.setImageCouverture(textOf(firstChild(recipeElement, "coverImage")));
+            recette.setImageSushef(textOf(firstChild(recipeElement, "sushefImage")));
             recette.setEtapes(parseSteps(recipeElement));
 
             List<Ingredient> ingredients = new ArrayList<>();
@@ -269,6 +270,9 @@ public class XmlStoreRepository {
             }
             if (safe(recette.getImageCouverture()).isBlank()) {
                 recette.setImageCouverture("/assets/img/recipe-step-finish.png");
+            }
+            if (safe(recette.getImageSushef()).isBlank()) {
+                recette.setImageSushef("/assets/img/sushef-happy.png");
             }
             recette.setIngredients(ingredients);
             recipes.add(recette);
@@ -382,6 +386,7 @@ public class XmlStoreRepository {
             appendText(document, recipeElement, "title", recette.getTitre());
             appendText(document, recipeElement, "description", recette.getDescriptionEtapes());
             appendText(document, recipeElement, "coverImage", recette.getImageCouverture());
+            appendText(document, recipeElement, "sushefImage", recette.getImageSushef());
             writeSteps(document, recipeElement, recette);
 
             Element ingredientsElement = document.createElement("ingredients");
@@ -444,7 +449,14 @@ public class XmlStoreRepository {
             }
             EtapeRecette step = new EtapeRecette();
             step.setImage(safe(stepElement.getAttribute("image")).trim());
+            step.setImageSushef(safe(stepElement.getAttribute("sushefImage")).trim());
             step.setTexte(textOf(firstChild(stepElement, "text")));
+            if (safe(step.getImage()).isBlank()) {
+                step.setImage("/assets/img/recipe-step-prep.png");
+            }
+            if (safe(step.getImageSushef()).isBlank()) {
+                step.setImageSushef("/assets/img/sushef-focused.png");
+            }
             if (!safe(step.getTexte()).isBlank()) {
                 steps.add(step);
             }
@@ -466,6 +478,7 @@ public class XmlStoreRepository {
             EtapeRecette step = new EtapeRecette();
             step.setTexte(line.replaceFirst("^\\d+\\)\\s*", ""));
             step.setImage("/assets/img/recipe-step-prep.png");
+            step.setImageSushef("/assets/img/sushef-focused.png");
             steps.add(step);
         }
 
@@ -473,6 +486,7 @@ public class XmlStoreRepository {
             EtapeRecette step = new EtapeRecette();
             step.setTexte(description.trim());
             step.setImage("/assets/img/recipe-step-prep.png");
+            step.setImageSushef("/assets/img/sushef-focused.png");
             steps.add(step);
         }
 
@@ -489,6 +503,7 @@ public class XmlStoreRepository {
             }
             Element stepElement = document.createElement("step");
             stepElement.setAttribute("image", safe(etape.getImage()));
+            stepElement.setAttribute("sushefImage", safe(etape.getImageSushef()));
             stepsElement.appendChild(stepElement);
             appendText(document, stepElement, "text", etape.getTexte());
         }

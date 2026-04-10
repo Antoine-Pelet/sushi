@@ -196,6 +196,7 @@ public class ApiServlet extends BaseServlet {
         String[] units = request.getParameterValues("ingredientUnit");
         String[] stepTexts = request.getParameterValues("stepText");
         String[] stepImages = request.getParameterValues("stepImage");
+        String[] stepSushefImages = request.getParameterValues("stepSushefImage");
 
         if (productIds != null) {
             for (int i = 0; i < productIds.length; i++) {
@@ -217,10 +218,11 @@ public class ApiServlet extends BaseServlet {
             for (int i = 0; i < stepTexts.length; i++) {
                 String text = stepTexts[i];
                 String image = stepImages != null && stepImages.length > i ? stepImages[i] : null;
+                String sushefImage = stepSushefImages != null && stepSushefImages.length > i ? stepSushefImages[i] : null;
                 if (text == null || text.isBlank()) {
                     continue;
                 }
-                steps.add(new SushiService.StepForm(text, image));
+                steps.add(new SushiService.StepForm(text, image, sushefImage));
             }
         }
 
@@ -229,6 +231,7 @@ public class ApiServlet extends BaseServlet {
                 optionalInt(request, "recipeId"),
                 request.getParameter("title"),
                 request.getParameter("coverImage"),
+                request.getParameter("sushefImage"),
                 requiredInt(request, "prepMinutes"),
                 requiredInt(request, "difficulty"),
                 request.getParameter("needsVinegaredRice") != null,

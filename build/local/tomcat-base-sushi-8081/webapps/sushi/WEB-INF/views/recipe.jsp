@@ -8,9 +8,7 @@
 
     private int countCartItems(User user) {
         if (user == null) return 0;
-        int total = 0;
-        for (PanierItem item : user.getPanier()) total += item.getQuantite();
-        return total;
+        return user.getPanier().size();
     }
 
     private String initials(User user) {
@@ -20,12 +18,22 @@
 
     private int prepMinutes(Recette recette) {
         if (recette == null) return 0;
+        if (recette.getTempsPreparationMinutes() > 0) return recette.getTempsPreparationMinutes();
         return Math.max(20, recette.getIngredients().size() * 4);
     }
 
     private int difficultyScore(Recette recette) {
         if (recette == null) return 1;
-        return Math.max(1, Math.min(5, (int) Math.ceil(recette.getIngredients().size() / 2.0)));
+        int score = recette.getDifficulte();
+        if (score < 1 || score > 3) return 1;
+        return score;
+    }
+
+    private String difficultyFlowers(Recette recette) {
+        int score = difficultyScore(recette);
+        StringBuilder flowers = new StringBuilder();
+        for (int i = 0; i < score; i++) flowers.append("✿");
+        return flowers.toString();
     }
 
     private String ingredientLine(Ingredient ingredient) {
@@ -35,6 +43,19 @@
         String unit = ingredient.getUnite() == null ? "" : ingredient.getUnite().trim();
         String product = ingredient.getProduit().getNom() == null ? "" : ingredient.getProduit().getNom().trim();
         return (quantity + (unit.isBlank() ? " " : " " + unit + " ") + product).trim();
+    }
+
+    private String ingredientPrice(Ingredient ingredient) {
+        if (ingredient == null || ingredient.getProduit() == null) return "";
+        DecimalFormat money = new DecimalFormat("0.00");
+        return money.format(ingredient.getQuantite() * ingredient.getProduit().getPrixUnitaire()) + " €";
+    }
+
+    private String imageSrc(String ctx, String image) {
+        if (image == null || image.isBlank()) return ctx + "/assets/img/recipe-step-finish.png";
+        String value = image.trim();
+        if (value.startsWith("http://") || value.startsWith("https://") || value.startsWith("data:")) return value;
+        return value.startsWith("/") ? ctx + value : ctx + "/" + value;
     }
 %>
 <%
@@ -52,7 +73,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fiche recette</title>
-    <link rel="stylesheet" href="<%= ctx %>/assets/app.css">
+    <link rel="stylesheet" href="<%= ctx %>/assets/app.css?v=responsive-stack-1">
 </head>
 <body class="app-page app-page--catalog recipe-page">
 <header class="topbar topbar--catalog">
@@ -73,48 +94,39 @@
 <main class="catalog-shell">
     <section class="catalog-panel recipe-panel">
         <% if (recette == null) { %>
-        <p class="helper">Aucune recette disponible.</p>
+        <p class="helper">Aucune recette disponible</p>
         <% } else { %>
-        <div class="recipe-showcase">
-            <h1 class="recipe-showcase__title"><%= esc(recette.getTitre().toUpperCase(Locale.ROOT)) %></h1>
+        <div class="recipe-layout">
+            <div class="recipe-quadrant recipe-quadrant--media">
+                <% if (currentUser != null) { %>
+                <form class="favorite-form favorite-form--detail" method="post" action="<%= ctx %>/favorites/toggle">
+                    <input type="hidden" name="recipeId" value="<%= recette.getId() %>">
+                    <input type="hidden" name="returnPage" value="recipe">
+                    <input type="hidden" name="returnRecipeId" value="<%= recette.getId() %>">
+                    <button type="submit" class="favorite-button favorite-button--detail"><%= favorite ? "♥" : "♡" %></button>
+                </form>
+                <% } %>
+                <img class="recipe-detail-visual recipe-showcase__photo" src="<%= esc(imageSrc(ctx, recette.getImageCouverture())) %>" alt="Présentation de <%= esc(recette.getTitre()) %>">
+            </div>
 
-            <div class="recipe-showcase__card">
-                <div class="recipe-showcase__media">
-                    <div class="recipe-showcase__photo-frame">
-                        <% if (currentUser != null) { %>
-                        <form class="favorite-form favorite-form--detail" method="post" action="<%= ctx %>/favorites/toggle">
-                            <input type="hidden" name="recipeId" value="<%= recette.getId() %>">
-                            <input type="hidden" name="returnPage" value="recipe">
-                            <input type="hidden" name="returnRecipeId" value="<%= recette.getId() %>">
-                            <button type="submit" class="favorite-button favorite-button--detail"><%= favorite ? "♥" : "♡" %></button>
-                        </form>
-                        <% } else { %>
-                        <a class="favorite-button favorite-button--detail" href="<%= ctx %>/auth?returnPage=recipe&returnRecipeId=<%= recette.getId() %>" aria-label="Ajouter aux favoris">♡</a>
-                        <% } %>
-                        <img class="recipe-showcase__photo" src="<%= ctx %>/assets/img/recipe-step-finish.png" alt="Presentation de <%= esc(recette.getTitre()) %>">
-                    </div>
-
-                    <div class="recipe-showcase__stats">
-                        <div class="recipe-showcase__metric recipe-showcase__metric--difficulty">
-                            <span class="recipe-showcase__metric-icon recipe-showcase__metric-icon--petal">✿</span>
-                            <span class="recipe-showcase__metric-label">Difficulte <%= difficultyScore(recette) %></span>
-                        </div>
-                        <div class="recipe-showcase__divider"></div>
-                        <div class="recipe-showcase__metric recipe-showcase__metric--time">
-                            <span class="recipe-showcase__metric-icon" aria-hidden="true">
-                                <svg viewBox="0 0 64 64" role="presentation" focusable="false">
-                                    <circle cx="32" cy="34" r="22"></circle>
-                                    <path d="M32 20v15l10 8"></path>
-                                    <path d="M24 10h16"></path>
-                                </svg>
-                            </span>
-                            <span class="recipe-showcase__metric-label"><%= prepMinutes(recette) %> minutes</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="recipe-showcase__side">
-                    <div class="recipe-showcase__basket">
+            <div class="recipe-quadrant recipe-quadrant--summary">
+                <h1 class="recipe-detail-title"><%= esc(recette.getTitre().toUpperCase(Locale.ROOT)) %></h1>
+                <ul class="recipe-detail-meta">
+                    <li>
+                        <span class="recipe-showcase__metric-icon" aria-hidden="true">
+                            <svg viewBox="0 0 64 64" role="presentation" focusable="false">
+                                <circle cx="32" cy="34" r="22"></circle>
+                                <path d="M32 20v15l10 8"></path>
+                                <path d="M24 10h16"></path>
+                            </svg>
+                        </span>
+                        <strong><%= prepMinutes(recette) %> minutes</strong>
+                    </li>
+                    <li>
+                        <span class="recipe-showcase__metric-icon recipe-showcase__metric-icon--petal">✿</span>
+                        <strong><%= difficultyFlowers(recette) %> <%= difficultyScore(recette) == 1 ? "Facile" : difficultyScore(recette) == 2 ? "Moyen" : "Difficile" %></strong>
+                    </li>
+                    <li>
                         <span class="recipe-showcase__basket-icon" aria-hidden="true">
                             <svg viewBox="0 0 64 64" role="presentation" focusable="false">
                                 <path d="M18 25h28l-4 24H22z"></path>
@@ -122,34 +134,33 @@
                                 <path d="M14 25h36"></path>
                             </svg>
                         </span>
-                        <strong class="recipe-showcase__basket-count"><%= ingredientCount %></strong>
-                    </div>
+                        <strong><%= ingredientCount %> ingrédients</strong>
+                    </li>
+                </ul>
+            </div>
 
-                    <div class="recipe-showcase__divider recipe-showcase__divider--side"></div>
+            <div class="recipe-quadrant recipe-quadrant--ingredients">
+                <ul class="recipe-ingredient-list">
+                    <% for (Ingredient ingredient : recette.getIngredients()) { %>
+                    <li><span><%= esc(ingredientLine(ingredient)) %></span><strong><%= esc(ingredientPrice(ingredient)) %></strong></li>
+                    <% } %>
+                </ul>
+            </div>
 
-                    <ul class="recipe-showcase__ingredients">
-                        <% for (Ingredient ingredient : recette.getIngredients()) { %>
-                        <li class="recipe-showcase__ingredient"><%= esc(ingredientLine(ingredient)) %></li>
-                        <% } %>
-                    </ul>
-
-                    <div class="recipe-showcase__actions">
-                        <% if (currentUser != null) { %>
-                        <form method="post" action="<%= ctx %>/cart/add" class="recipe-action-form recipe-action-form--stack">
-                            <input type="hidden" name="recipeId" value="<%= recette.getId() %>">
-                            <input type="hidden" name="quantity" value="1">
-                            <input type="hidden" name="returnPage" value="recipe">
-                            <input type="hidden" name="returnRecipeId" value="<%= recette.getId() %>">
-                            <button type="submit" class="button button--outline recipe-detail-button recipe-detail-button--wide">Ajouter la recette au panier</button>
-                        </form>
-                        <% } else { %>
-                        <a class="button button--outline recipe-detail-button recipe-detail-button--wide" href="<%= ctx %>/auth?returnPage=recipe&returnRecipeId=<%= recette.getId() %>">Ajouter la recette au panier</a>
-                        <% } %>
-
-                        <a class="button button--outline recipe-detail-button" href="<%= ctx %>/cook?id=<%= recette.getId() %>">Commencer la recette</a>
-                        <a class="recipe-showcase__back" href="<%= ctx %>/app">Retour au catalogue</a>
-                    </div>
-                </div>
+            <div class="recipe-quadrant recipe-quadrant--actions">
+                <% if (currentUser != null) { %>
+                <form method="post" action="<%= ctx %>/cart/add" class="recipe-action-form">
+                    <input type="hidden" name="recipeId" value="<%= recette.getId() %>">
+                    <input type="hidden" name="quantity" value="1">
+                    <input type="hidden" name="returnPage" value="recipe">
+                    <input type="hidden" name="returnRecipeId" value="<%= recette.getId() %>">
+                    <button type="submit" class="button button--outline recipe-detail-button recipe-detail-button--wide">Ajouter la recette au panier</button>
+                </form>
+                <% } else { %>
+                <a class="button button--outline recipe-detail-button recipe-detail-button--wide" href="<%= ctx %>/auth?returnPage=recipe&returnRecipeId=<%= recette.getId() %>">Ajouter la recette au panier</a>
+                <% } %>
+                <a class="button button--outline recipe-detail-button recipe-detail-button--wide" href="<%= ctx %>/cook?id=<%= recette.getId() %>">Commencer la recette</a>
+                <a class="button button--outline recipe-detail-button recipe-detail-button--wide" href="<%= ctx %>/app">Retour au catalogue</a>
             </div>
         </div>
         <% } %>

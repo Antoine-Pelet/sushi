@@ -52,6 +52,16 @@
             return "";
         }
     }
+
+    private String stepSushefImage(Object step) {
+        if (step == null) return "";
+        try {
+            Object value = step.getClass().getMethod("getImageSushef").invoke(step);
+            return value == null ? "" : value.toString();
+        } catch (Exception ignored) {
+            return "";
+        }
+    }
 %>
 <%
     DashboardData dashboard = (DashboardData) request.getAttribute("dashboard");
@@ -96,6 +106,7 @@
         <div class="cook-player" data-step-player>
             <div class="cook-viewport">
                 <% for (int i = 0; i < recipeSteps.size(); i++) { Object step = recipeSteps.get(i); %>
+                <% String currentSushefImage = stepSushefImage(step); if (currentSushefImage == null || currentSushefImage.isBlank()) currentSushefImage = "/assets/img/sushef-focused.png"; %>
                 <article class="cook-slide cook-slide--step <%= i == 0 ? "is-active" : "" %>" data-step-slide <%= i == 0 ? "" : "hidden" %>>
                     <% if (i > 0) { %><button type="button" class="cook-nav cook-nav--inline cook-nav--inline-left" data-step-prev>‹</button><% } %>
                     <button type="button" class="cook-nav cook-nav--inline cook-nav--inline-right" data-step-next>›</button>
@@ -105,7 +116,7 @@
                         <% String stepLabel = stepText(step); if (stepLabel == null || stepLabel.isBlank()) stepLabel = fallbackStepText(i); %>
                         <p><%= esc(stepLabel) %></p>
                     </div>
-                    <img class="cook-chef cook-chef--right" src="<%= ctx %>/assets/img/sushef-focused.png" alt="Sushef">
+                    <img class="cook-chef cook-chef--right" src="<%= esc(imageSrc(ctx, currentSushefImage)) %>" alt="Sushef">
                 </article>
                 <% } %>
 
