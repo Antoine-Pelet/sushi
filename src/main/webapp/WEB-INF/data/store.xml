@@ -24,7 +24,7 @@
       <cart/>
     </user>
   </users>
-  <products nextId="19">
+  <products nextId="20">
     <product id="1" name="Riz" price="0.02" stock="7300" unit="g"/>
     <product id="2" name="Vinaigre de riz" price="0.015" stock="2415" unit="ml"/>
     <product id="3" name="Sucre" price="0.004" stock="2972" unit="g"/>
@@ -39,12 +39,13 @@
     <product id="12" name="Gingembre mariné" price="0.02" stock="1000" unit="g"/>
     <product id="13" name="Graines de sésame" price="0.018" stock="790" unit="g"/>
     <product id="14" name="Mayonnaise" price="0.2" stock="1000" unit="g"/>
-    <product id="15" name="oeufs" price="0.15" stock="200" unit="pièces"/>
+    <product id="15" name="oeuf" price="0.15" stock="200" unit="pièce"/>
     <product id="16" name="Branches d'épinard" price="1" stock="200" unit="branche"/>
-    <product id="17" name="Bâtonnets de crabe" price="0.5" stock="200" unit="pièces"/>
-    <product id="18" name="Crevettes" price="1.5" stock="600" unit="pièces"/>
+    <product id="17" name="Bâtonnets de crabe" price="0.5" stock="200" unit="pièce"/>
+    <product id="18" name="Crevette" price="1.5" stock="600" unit="pièce"/>
+    <product id="19" name="Boite de thon" price="1" stock="100" unit="pièce"/>
   </products>
-  <recipes nextId="109">
+  <recipes nextId="110">
     <recipe difficulty="3" id="101" needsVinegaredRice="true" prepMinutes="20" price="34.45">
       <title>Maki saumon avocat</title>
       <description>1) Tranchez les filets de saumon en longues bandes
@@ -200,6 +201,45 @@ Roulez la feuille de nori en cône en prenant soin que le bord le plus fin soit 
         <ingredient productId="11" quantity="40" unit="ml"/>
         <ingredient productId="6" quantity="200" unit="g"/>
         <ingredient productId="7" quantity="200" unit="g"/>
+      </ingredients>
+    </recipe>
+    <recipe difficulty="2" id="109" needsVinegaredRice="false" prepMinutes="50" price="13.259999999999998">
+      <title>Onigiri</title>
+      <description>1) Préparer le riz vinaigré japonais : après avoir fait tremper le riz 1h dans un saladier égoutter et le laisser reposer 30 min.&#13;
+&#13;
+Dans une casserole, mélanger le riz avec 20cl d’eau. Faire chauffer sur feu moyen et couvrir dès que l’eau bouillonne. Cuire 5 min sans soulever le couvercle. Baisser le feu et laisser cuire encore 5 min. Retirer la casserole du feu, sans retirer le couvercle et laisser reposer 10 min.&#13;
+&#13;
+Placer le riz dans un saladier et ajouter le vinaigre. Laissez refroidir à température ambiante
+2) Emietter le thon et ajouter la mayonnaise. Le mélanger avec la sauce soja
+3) Mouiller ses mains dans un bol d’eau froide. Prendre une boule de riz (environ 50 g) et la compresser pour bien tasser le riz. Faire un creux au centre et y déposer une cuillerée de garniture, refermer la boule de riz tout autour. Aplatir la boule formée et lui donner une forme de triangle.&#13;
+Décorer d’un rectangle de feuille d’algue nori. Répéter l'opération jusqu'à finir le riz et la garniture.&#13;
+Servir avec de la sauce soja et du wasabi</description>
+      <coverImage>/assets/img/onigiri.jpeg</coverImage>
+      <sushefImage>/assets/img/sushef-happy.png</sushefImage>
+      <steps>
+        <step image="/assets/img/recette5etape1 - Moyenne.jpeg" sushefImage="/assets/img/sushef-constellation.png">
+          <text>Préparer le riz vinaigré japonais : après avoir fait tremper le riz 1h dans un saladier égoutter et le laisser reposer 30 min.&#13;
+&#13;
+Dans une casserole, mélanger le riz avec 20cl d’eau. Faire chauffer sur feu moyen et couvrir dès que l’eau bouillonne. Cuire 5 min sans soulever le couvercle. Baisser le feu et laisser cuire encore 5 min. Retirer la casserole du feu, sans retirer le couvercle et laisser reposer 10 min.&#13;
+&#13;
+Placer le riz dans un saladier et ajouter le vinaigre. Laissez refroidir à température ambiante</text>
+        </step>
+        <step image="/assets/img/recette5etape2 - Moyenne.jpeg" sushefImage="/assets/img/sushef-focused.png">
+          <text>Emietter le thon et ajouter la mayonnaise. Le mélanger avec la sauce soja</text>
+        </step>
+        <step image="/assets/img/recette5etape3 - Moyenne.jpeg" sushefImage="/assets/img/sushef-calm.png">
+          <text>Mouiller ses mains dans un bol d’eau froide. Prendre une boule de riz (environ 50 g) et la compresser pour bien tasser le riz. Faire un creux au centre et y déposer une cuillerée de garniture, refermer la boule de riz tout autour. Aplatir la boule formée et lui donner une forme de triangle.&#13;
+Décorer d’un rectangle de feuille d’algue nori. Répéter l'opération jusqu'à finir le riz et la garniture.&#13;
+Servir avec de la sauce soja et du wasabi</text>
+        </step>
+      </steps>
+      <ingredients>
+        <ingredient productId="14" quantity="30" unit="g"/>
+        <ingredient productId="1" quantity="200" unit="g"/>
+        <ingredient productId="5" quantity="2" unit="feuilles"/>
+        <ingredient productId="11" quantity="30" unit="ml"/>
+        <ingredient productId="2" quantity="80" unit="ml"/>
+        <ingredient productId="19" quantity="1" unit="pièce"/>
       </ingredients>
     </recipe>
   </recipes>
