@@ -33,7 +33,7 @@
         <ingredient produitId="4" quantite="3" unite="g"/>
         <ingredient produitId="5" quantite="2" unite="feuilles"/>
         <ingredient produitId="6" quantite="120" unite="g"/>
-        <ingredient produitId="9" quantite="1" unite="piece"/>
+        <ingredient produitId="9" quantite="1" unite="pièce"/>
         <ingredient produitId="11" quantite="20" unite="ml"/>
       </ingredients>
     </recette>
@@ -70,7 +70,7 @@
         <ingredient produitId="3" quantite="10" unite="g"/>
         <ingredient produitId="4" quantite="3" unite="g"/>
         <ingredient produitId="5" quantite="2" unite="feuilles"/>
-        <ingredient produitId="8" quantite="0.5" unite="piece"/>
+        <ingredient produitId="8" quantite="0.5" unite="pièce"/>
         <ingredient produitId="13" quantite="10" unite="g"/>
       </ingredients>
     </recette>

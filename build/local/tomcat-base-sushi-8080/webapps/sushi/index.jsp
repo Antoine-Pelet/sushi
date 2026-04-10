@@ -23,9 +23,7 @@
 
     private int cartCount(User user) {
         if (user == null) return 0;
-        int total = 0;
-        for (PanierItem item : user.getPanier()) total += item.getQuantite();
-        return total;
+        return user.getPanier().size();
     }
 
     private String initial(User user) {
@@ -44,6 +42,10 @@
         SushiService.DashboardData dashboard = AppServices.getService(application).getDashboardData(userId, null);
         currentUser = dashboard.currentUser();
         panierCount = cartCount(currentUser);
+        if (currentUser != null && currentUser.isAdmin()) {
+            response.sendRedirect(ctx + "/workspace?mode=admin");
+            return;
+        }
     }
 %>
 <!DOCTYPE html>
@@ -52,7 +54,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sushef</title>
-    <link rel="stylesheet" href="<%= ctx %>/assets/app.css">
+    <link rel="stylesheet" href="<%= ctx %>/assets/app.css?v=responsive-stack-1">
 </head>
 <body class="landing-page">
 <header class="topbar topbar--landing">
@@ -74,10 +76,9 @@
     <section class="landing-hero">
         <div class="landing-copy">
             <h1>Be your own Sushi chef</h1>
-            <a class="landing-cta" href="<%= ctx %>/app">Decouvrir</a>
+            <a class="landing-cta" href="<%= ctx %>/app">Découvrir</a>
         </div>
     </section>
 </main>
 </body>
 </html>
-

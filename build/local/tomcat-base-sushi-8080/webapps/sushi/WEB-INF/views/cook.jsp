@@ -8,9 +8,7 @@
 
     private int countCartItems(User user) {
         if (user == null) return 0;
-        int total = 0;
-        for (PanierItem item : user.getPanier()) total += item.getQuantite();
-        return total;
+        return user.getPanier().size();
     }
 
     private String initials(User user) {
@@ -18,20 +16,47 @@
         return user.getUsername().substring(0, 1).toUpperCase(Locale.ROOT);
     }
 
-    private List<List<String>> chunkSteps(List<String> steps, int size) {
-        List<List<String>> chunks = new ArrayList<>();
-        if (steps == null || steps.isEmpty()) return chunks;
-        for (int i = 0; i < steps.size(); i += size) {
-            chunks.add(new ArrayList<>(steps.subList(i, Math.min(i + size, steps.size()))));
+    private String imageSrc(String ctx, String image) {
+        if (image == null || image.isBlank()) return ctx + "/assets/img/recipe-step-prep.png";
+        String value = image.trim();
+        if (value.startsWith("http://") || value.startsWith("https://") || value.startsWith("data:")) return value;
+        return value.startsWith("/") ? ctx + value : ctx + "/" + value;
+    }
+
+    private String stepText(Object step) {
+        if (step == null) return "";
+        try {
+            Object value = step.getClass().getMethod("getTexte").invoke(step);
+            return value == null ? "" : value.toString();
+        } catch (Exception ignored) {
+            return "";
         }
-        return chunks;
+    }
+
+    private String fallbackStepText(int index) {
+        String[] samples = {
+            "Cuire et assaisonner le riz.",
+            "Étaler le riz sur la feuille de nori.",
+            "Ajouter la garniture puis rouler délicatement.",
+            "Découper les makis et dresser l'assiette."
+        };
+        return samples[Math.floorMod(index, samples.length)];
+    }
+
+    private String stepImage(Object step) {
+        if (step == null) return "";
+        try {
+            Object value = step.getClass().getMethod("getImage").invoke(step);
+            return value == null ? "" : value.toString();
+        } catch (Exception ignored) {
+            return "";
+        }
     }
 %>
 <%
     DashboardData dashboard = (DashboardData) request.getAttribute("dashboard");
     Recette recette = (Recette) request.getAttribute("selectedRecipe");
-    List<String> recipeSteps = (List<String>) request.getAttribute("recipeSteps");
-    List<List<String>> stepGroups = chunkSteps(recipeSteps, 4);
+    List<?> recipeSteps = (List<?>) request.getAttribute("recipeSteps");
     User currentUser = dashboard.currentUser();
     String ctx = request.getContextPath();
     int cartCount = countCartItems(currentUser);
@@ -43,8 +68,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Realisation</title>
-    <link rel="stylesheet" href="<%= ctx %>/assets/app.css">
+    <title>Réalisation</title>
+    <link rel="stylesheet" href="<%= ctx %>/assets/app.css?v=responsive-stack-1">
 </head>
 <body class="app-page app-page--catalog">
 <header class="topbar topbar--catalog">
@@ -64,8 +89,11 @@
 
 <main class="catalog-shell">
     <section class="catalog-panel cook-panel">
+        <div class="cook-back-row">
+            <a class="back-link cook-back-link" href="<%= recette != null ? ctx + "/recipe?id=" + recette.getId() : ctx + "/app" %>" data-history-back>Retour</a>
+        </div>
         <% if (recette == null) { %>
-        <p class="helper">Aucune recette disponible.</p>
+        <p class="helper">Aucune recette disponible</p>
         <% } else { %>
         <div class="cook-player" data-step-player>
             <div class="cook-viewport">
@@ -75,38 +103,41 @@
                     <div class="cook-copy">
                         <div class="accent cook-accent"></div>
                         <h1>Bienvenue Chef&nbsp;!</h1>
-                        <p>Pret pour apprendre a faire <%= esc(recette.getTitre()) %> avec Sushef&nbsp;?</p>
-                        <p>Cette recette necessite du riz vinaigre</p>
+                        <p>Prêt pour apprendre à faire <%= esc(recette.getTitre()) %> avec Sushef&nbsp;?</p>
+                        <% if (recette.isNecessiteRizVinaigre()) { %>
+                        <p>Cette recette nécessite du riz vinaigré</p>
+                        <% } %>
                         <div class="cook-intro-actions">
-                            <a class="button button--outline" href="<%= ctx %>/cook?id=<%= recette.getId() %>&start=1">Suivre la recette du riz vinaigre</a>
+                            <% if (recette.isNecessiteRizVinaigre()) { %>
+                            <a class="button button--outline" href="<%= ctx %>/cook?id=<%= recette.getId() %>&start=1">Suivre la recette du riz vinaigré</a>
+                            <% } %>
                             <a class="button button--ghost" href="<%= ctx %>/cook-steps?id=<%= recette.getId() %>">Commencer la recette</a>
                         </div>
                     </div>
                     <img class="cook-chef cook-chef--center" src="<%= ctx %>/assets/img/sushef-happy.png" alt="Sushef">
                 </article>
 
-                <% for (int i = 0; i < stepGroups.size(); i++) { List<String> group = stepGroups.get(i); %>
+                <% for (int i = 0; i < recipeSteps.size(); i++) { Object step = recipeSteps.get(i); %>
                 <article class="cook-slide cook-slide--step <%= startIndex == (i + 1) ? "is-active" : "" %>" data-step-slide <%= startIndex == (i + 1) ? "" : "hidden" %>>
                     <% if (i > 0) { %><button type="button" class="cook-nav cook-nav--inline cook-nav--inline-left" data-step-prev>‹</button><% } %>
                     <button type="button" class="cook-nav cook-nav--inline cook-nav--inline-right" data-step-next>›</button>
                     <div class="cook-blossom cook-blossom--left"></div>
-                    <img class="cook-photo" src="<%= ctx %>/assets/img/recipe-step-prep.png" alt="Preparation recette">
+                    <img class="cook-photo" src="<%= esc(imageSrc(ctx, stepImage(step))) %>" alt="Etape <%= i + 1 %>">
                     <div class="cook-step-text">
-                        <% for (String step : group) { %>
-                        <p><%= esc(step) %></p>
-                        <% } %>
+                        <% String stepLabel = stepText(step); if (stepLabel == null || stepLabel.isBlank()) stepLabel = fallbackStepText(i); %>
+                        <p><%= esc(stepLabel) %></p>
                     </div>
                     <img class="cook-chef cook-chef--right" src="<%= ctx %>/assets/img/sushef-focused.png" alt="Sushef">
                 </article>
                 <% } %>
 
-                <article class="cook-slide cook-slide--final <%= startIndex == (stepGroups.size() + 1) ? "is-active" : "" %>" data-step-slide <%= startIndex == (stepGroups.size() + 1) ? "" : "hidden" %>>
+                <article class="cook-slide cook-slide--final <%= startIndex == (recipeSteps.size() + 1) ? "is-active" : "" %>" data-step-slide <%= startIndex == (recipeSteps.size() + 1) ? "" : "hidden" %>>
                     <button type="button" class="cook-nav cook-nav--inline cook-nav--inline-left" data-step-prev>‹</button>
-                    <img class="cook-photo cook-photo--final" src="<%= ctx %>/assets/img/recipe-step-finish.png" alt="Recette terminee">
+                    <img class="cook-photo cook-photo--final" src="<%= esc(imageSrc(ctx, recette.getImageCouverture())) %>" alt="Recette terminée">
                     <div class="cook-blossom cook-blossom--right"></div>
                     <div class="cook-final-copy">
                         <h2>Sushef dit 10/10&nbsp;!</h2>
-                        <p>Bon appetit</p>
+                        <p>Bon appétit</p>
                         <a class="button button--outline" href="<%= ctx %>/app">Revenir aux recettes</a>
                     </div>
                     <img class="cook-chef cook-chef--score" src="<%= ctx %>/assets/img/sushef-score.png" alt="Sushef final">
@@ -120,5 +151,3 @@
 <script src="<%= ctx %>/assets/app.js"></script>
 </body>
 </html>
-
-

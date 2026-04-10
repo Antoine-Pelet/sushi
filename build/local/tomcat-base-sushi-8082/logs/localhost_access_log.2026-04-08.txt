@@ -25,3 +25,12 @@
 127.0.0.1 - - [08/Apr/2026:12:45:14 +0200] "GET /sushi/workspace?mode=recipes HTTP/1.1" 200 7927
 127.0.0.1 - - [08/Apr/2026:12:45:14 +0200] "GET /sushi/assets/app.js HTTP/1.1" 304 -
 127.0.0.1 - - [08/Apr/2026:12:45:14 +0200] "GET /sushi/assets/app.css HTTP/1.1" 304 -
+127.0.0.1 - - [08/Apr/2026:16:32:44 +0200] "GET /sushi/workspace HTTP/1.1" 200 3656
+127.0.0.1 - - [08/Apr/2026:16:32:44 +0200] "GET /sushi/assets/app.js HTTP/1.1" 304 -
+127.0.0.1 - - [08/Apr/2026:16:32:44 +0200] "GET /sushi/assets/app.css HTTP/1.1" 304 -
+127.0.0.1 - - [08/Apr/2026:16:32:44 +0200] "GET /sushi/assets/img/fond.png HTTP/1.1" 304 -
+127.0.0.1 - - [08/Apr/2026:16:32:46 +0200] "GET /sushi/workspace HTTP/1.1" 200 3656
+127.0.0.1 - - [08/Apr/2026:16:33:03 +0200] "GET /sushi/auth?returnPage=workspace&returnMode=account HTTP/1.1" 200 3737
+127.0.0.1 - - [08/Apr/2026:16:33:03 +0200] "GET /sushi/assets/img/sushef-right.png HTTP/1.1" 304 -
+127.0.0.1 - - [08/Apr/2026:16:33:11 +0200] "GET /sushi/app HTTP/1.1" 200 9028
+127.0.0.1 - - [08/Apr/2026:16:34:37 +0200] "GET /sushi/app HTTP/1.1" 200 9028

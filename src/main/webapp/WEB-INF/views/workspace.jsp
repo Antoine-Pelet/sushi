@@ -52,10 +52,18 @@
         return current != null && current.trim().equals(expected);
     }
 
-    private boolean knownRecipeImage(String current) {
-        return sameImage(current, "/assets/img/recipe-step-prep.png")
-                || sameImage(current, "/assets/img/recipe-step-finish.png")
-                || sameImage(current, "/assets/img/fond.png");
+    private boolean containsImage(Collection<String> imagePaths, String current) {
+        if (imagePaths == null || imagePaths.isEmpty()) return false;
+        for (String imagePath : imagePaths) {
+            if (sameImage(current, imagePath)) return true;
+        }
+        return false;
+    }
+
+    private String fileName(String path) {
+        if (path == null || path.isBlank()) return "";
+        int slash = path.lastIndexOf('/');
+        return slash >= 0 ? path.substring(slash + 1) : path;
     }
 
     private String imageSrc(String ctx, String image, String fallback) {
@@ -76,6 +84,24 @@
     String flashType = (String) request.getAttribute("flashType");
     String flashMessage = (String) request.getAttribute("flashMessage");
     String ctx = request.getContextPath();
+    List<String> assetImages = new ArrayList<>();
+    Set<String> assetResourcePaths = application.getResourcePaths("/assets/img/");
+    if (assetResourcePaths != null) {
+        for (String assetPath : assetResourcePaths) {
+            if (assetPath == null || assetPath.endsWith("/")) continue;
+            String lowerPath = assetPath.toLowerCase(Locale.ROOT);
+            if (lowerPath.endsWith(".png") || lowerPath.endsWith(".jpg") || lowerPath.endsWith(".jpeg") || lowerPath.endsWith(".gif") || lowerPath.endsWith(".webp") || lowerPath.endsWith(".svg")) {
+                assetImages.add(assetPath);
+            }
+        }
+    }
+    Collections.sort(assetImages);
+    if (assetImages.isEmpty()) {
+        assetImages.add("/assets/img/recipe-step-finish.png");
+        assetImages.add("/assets/img/recipe-step-prep.png");
+    }
+    String defaultCoverImage = containsImage(assetImages, "/assets/img/recipe-step-finish.png") ? "/assets/img/recipe-step-finish.png" : assetImages.get(0);
+    String defaultStepImage = containsImage(assetImages, "/assets/img/recipe-step-prep.png") ? "/assets/img/recipe-step-prep.png" : assetImages.get(0);
     DecimalFormat money = new DecimalFormat("0.00");
     DecimalFormat qty = new DecimalFormat("0.##");
     int cartCount = countCartItems(currentUser);
@@ -250,15 +276,15 @@
                         <input type="hidden" name="returnMode" value="recipes">
                         <div class="builder-chip"><%= recetteEdition == null ? "Nouvelle recette" : "Edition" %></div>
                         <label>Titre<input type="text" name="title" value="<%= recetteEdition == null ? "" : esc(recetteEdition.getTitre()) %>" required></label>
-                        <% String coverImage = recetteEdition == null || recetteEdition.getImageCouverture() == null || recetteEdition.getImageCouverture().isBlank() ? "/assets/img/recipe-step-finish.png" : recetteEdition.getImageCouverture(); %>
+                        <% String coverImage = recetteEdition == null || recetteEdition.getImageCouverture() == null || recetteEdition.getImageCouverture().isBlank() ? defaultCoverImage : recetteEdition.getImageCouverture().trim(); %>
                         <label class="maker-image-field">Image de couverture
                             <span class="maker-image-picker">
-                                <img class="maker-image-preview" data-image-preview src="<%= esc(imageSrc(ctx, coverImage, "/assets/img/recipe-step-finish.png")) %>" alt="Aperçu couverture">
+                                <img class="maker-image-preview" data-image-preview src="<%= esc(imageSrc(ctx, coverImage, defaultCoverImage)) %>" alt="Aperçu couverture">
                                 <select name="coverImage" data-image-choice required>
-                                    <option value="/assets/img/recipe-step-finish.png" <%= sameImage(coverImage, "/assets/img/recipe-step-finish.png") ? "selected" : "" %>>Présentation</option>
-                                    <option value="/assets/img/recipe-step-prep.png" <%= sameImage(coverImage, "/assets/img/recipe-step-prep.png") ? "selected" : "" %>>Préparation</option>
-                                    <option value="/assets/img/fond.png" <%= sameImage(coverImage, "/assets/img/fond.png") ? "selected" : "" %>>Fond Sushef</option>
-                                    <% if (!coverImage.isBlank() && !knownRecipeImage(coverImage)) { %><option value="<%= esc(coverImage) %>" selected>Image actuelle</option><% } %>
+                                    <% for (String assetImage : assetImages) { %>
+                                        <option value="<%= esc(assetImage) %>" <%= sameImage(coverImage, assetImage) ? "selected" : "" %>><%= esc(fileName(assetImage)) %></option>
+                                    <% } %>
+                                    <% if (!coverImage.isBlank() && !containsImage(assetImages, coverImage)) { %><option value="<%= esc(coverImage) %>" selected>actuelle - <%= esc(fileName(coverImage)) %></option><% } %>
                                 </select>
                             </span>
                         </label>
@@ -268,10 +294,10 @@
                         <div class="section-head"><div><p class="eyebrow">Étapes</p><h2>Réalisation</h2></div><button type="button" class="button button--ghost" data-add-step>Ajouter une étape</button></div>
                         <div id="step-rows">
                             <% if (recetteEdition == null || recipeStepsEdition.isEmpty()) { %>
-                                <div class="step-row"><label>Texte<textarea name="stepText" rows="3" placeholder="Cuire et assaisonner le riz." required></textarea></label><label class="maker-image-field">Image<span class="maker-image-picker maker-image-picker--step"><img class="maker-image-preview" data-image-preview src="<%= ctx %>/assets/img/recipe-step-prep.png" alt="Aperçu étape"><select name="stepImage" data-image-choice><option value="/assets/img/recipe-step-prep.png" selected>Préparation</option><option value="/assets/img/recipe-step-finish.png">Présentation</option><option value="/assets/img/fond.png">Fond Sushef</option></select></span></label><button type="button" class="icon-pill" data-remove-step>×</button></div>
+                                <div class="step-row"><label>Texte<textarea name="stepText" rows="3" placeholder="Cuire et assaisonner le riz." required></textarea></label><label class="maker-image-field">Image<span class="maker-image-picker maker-image-picker--step"><img class="maker-image-preview" data-image-preview src="<%= esc(imageSrc(ctx, defaultStepImage, defaultStepImage)) %>" alt="Aperçu étape"><select name="stepImage" data-image-choice><% for (String assetImage : assetImages) { %><option value="<%= esc(assetImage) %>" <%= sameImage(defaultStepImage, assetImage) ? "selected" : "" %>><%= esc(fileName(assetImage)) %></option><% } %></select></span></label><button type="button" class="icon-pill" data-remove-step>×</button></div>
                             <% } else { for (Object etape : recipeStepsEdition) { %>
-                                <% String currentStepImage = stepImage(etape); if (currentStepImage == null || currentStepImage.isBlank()) currentStepImage = "/assets/img/recipe-step-prep.png"; %>
-                                <div class="step-row"><label>Texte<textarea name="stepText" rows="3" placeholder="Décrivez cette étape." required><%= esc(stepText(etape)) %></textarea></label><label class="maker-image-field">Image<span class="maker-image-picker maker-image-picker--step"><img class="maker-image-preview" data-image-preview src="<%= esc(imageSrc(ctx, currentStepImage, "/assets/img/recipe-step-prep.png")) %>" alt="Aperçu étape"><select name="stepImage" data-image-choice><option value="/assets/img/recipe-step-prep.png" <%= sameImage(currentStepImage, "/assets/img/recipe-step-prep.png") ? "selected" : "" %>>Préparation</option><option value="/assets/img/recipe-step-finish.png" <%= sameImage(currentStepImage, "/assets/img/recipe-step-finish.png") ? "selected" : "" %>>Présentation</option><option value="/assets/img/fond.png" <%= sameImage(currentStepImage, "/assets/img/fond.png") ? "selected" : "" %>>Fond Sushef</option><% if (!currentStepImage.isBlank() && !knownRecipeImage(currentStepImage)) { %><option value="<%= esc(currentStepImage) %>" selected>Image actuelle</option><% } %></select></span></label><button type="button" class="icon-pill" data-remove-step>×</button></div>
+                                <% String currentStepImage = stepImage(etape); if (currentStepImage == null || currentStepImage.isBlank()) currentStepImage = defaultStepImage; else currentStepImage = currentStepImage.trim(); %>
+                                <div class="step-row"><label>Texte<textarea name="stepText" rows="3" placeholder="Décrivez cette étape." required><%= esc(stepText(etape)) %></textarea></label><label class="maker-image-field">Image<span class="maker-image-picker maker-image-picker--step"><img class="maker-image-preview" data-image-preview src="<%= esc(imageSrc(ctx, currentStepImage, defaultStepImage)) %>" alt="Aperçu étape"><select name="stepImage" data-image-choice><% for (String assetImage : assetImages) { %><option value="<%= esc(assetImage) %>" <%= sameImage(currentStepImage, assetImage) ? "selected" : "" %>><%= esc(fileName(assetImage)) %></option><% } %><% if (!currentStepImage.isBlank() && !containsImage(assetImages, currentStepImage)) { %><option value="<%= esc(currentStepImage) %>" selected>actuelle - <%= esc(fileName(currentStepImage)) %></option><% } %></select></span></label><button type="button" class="icon-pill" data-remove-step>×</button></div>
                             <% }} %>
                         </div>
                         <div class="section-head"><div><p class="eyebrow">Ingrédients</p><h2>Composition</h2></div><button type="button" class="button button--ghost" data-add-ingredient>Ajouter une ligne</button></div>
@@ -320,7 +346,7 @@
     <div class="ingredient-row"><select name="ingredientProductId" required><option value="">Produit</option><% for (Produit produit : produits) { %><option value="<%= produit.getId() %>" data-unit="<%= esc(produit.getUnite()) %>"><%= esc(produit.getNom()) %></option><% } %></select><input type="number" step="0.01" min="0" name="ingredientQuantity" placeholder="Quantité" required><input type="text" name="ingredientUnit" placeholder="Unité"><button type="button" class="icon-pill" data-remove-ingredient>×</button></div>
 </template>
 <template id="step-template">
-    <div class="step-row"><label>Texte<textarea name="stepText" rows="3" placeholder="Décrivez cette étape." required></textarea></label><label class="maker-image-field">Image<span class="maker-image-picker maker-image-picker--step"><img class="maker-image-preview" data-image-preview src="<%= ctx %>/assets/img/recipe-step-prep.png" alt="Aperçu étape"><select name="stepImage" data-image-choice><option value="/assets/img/recipe-step-prep.png" selected>Préparation</option><option value="/assets/img/recipe-step-finish.png">Présentation</option><option value="/assets/img/fond.png">Fond Sushef</option></select></span></label><button type="button" class="icon-pill" data-remove-step>×</button></div>
+    <div class="step-row"><label>Texte<textarea name="stepText" rows="3" placeholder="Décrivez cette étape." required></textarea></label><label class="maker-image-field">Image<span class="maker-image-picker maker-image-picker--step"><img class="maker-image-preview" data-image-preview src="<%= esc(imageSrc(ctx, defaultStepImage, defaultStepImage)) %>" alt="Aperçu étape"><select name="stepImage" data-image-choice><% for (String assetImage : assetImages) { %><option value="<%= esc(assetImage) %>" <%= sameImage(defaultStepImage, assetImage) ? "selected" : "" %>><%= esc(fileName(assetImage)) %></option><% } %></select></span></label><button type="button" class="icon-pill" data-remove-step>×</button></div>
 </template>
 </body>
 </html>
