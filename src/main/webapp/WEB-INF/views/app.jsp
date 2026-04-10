@@ -92,7 +92,7 @@
 
         <div class="catalog-scroll">
             <% if (recettes.isEmpty()) { %>
-            <p class="helper">Aucune recette disponible pour le moment.</p>
+            <p class="helper">Aucune recette disponible pour le moment</p>
             <% } else { %>
             <div class="catalog-grid">
                 <% for (int i = 0; i < recettes.size(); i++) {
@@ -107,7 +107,7 @@
                         <ul class="catalog-card__meta">
                             <li><span class="catalog-icon">⏱</span><strong><%= prepMinutes(recette) %> min</strong></li>
                             <li><span class="catalog-icon"><%= difficultyFlowers(recette) %></span><strong><%= difficultyLabel(recette) %></strong></li>
-                            <li><span class="catalog-icon">🧺</span><strong><%= recette.getIngredients().size() %> ingredients</strong></li>
+                            <li><span class="catalog-icon">🧺</span><strong><%= recette.getIngredients().size() %> ingrédients</strong></li>
                         </ul>
                     </div>
                 </article>

@@ -109,7 +109,7 @@ public class ApiServlet extends BaseServlet {
         session.setAttribute("userId", user.getId());
 
         SushiService.DashboardData dashboard = service(request).getDashboardData(user.getId(), null);
-        sendJson(response, HttpServletResponse.SC_OK, JsonUtil.success("Connexion reussie",
+        sendJson(response, HttpServletResponse.SC_OK, JsonUtil.success("Connexion réussie",
                 JsonUtil.user(user, recipesById(dashboard.recettes()))));
     }
 
@@ -123,7 +123,7 @@ public class ApiServlet extends BaseServlet {
         session.setAttribute("userId", user.getId());
 
         SushiService.DashboardData dashboard = service(request).getDashboardData(user.getId(), null);
-        sendJson(response, HttpServletResponse.SC_OK, JsonUtil.success("Compte cree",
+        sendJson(response, HttpServletResponse.SC_OK, JsonUtil.success("Compte créé",
                 JsonUtil.user(user, recipesById(dashboard.recettes()))));
     }
 
@@ -132,7 +132,7 @@ public class ApiServlet extends BaseServlet {
         if (session != null) {
             session.invalidate();
         }
-        sendJson(response, HttpServletResponse.SC_OK, JsonUtil.success("Deconnexion reussie"));
+        sendJson(response, HttpServletResponse.SC_OK, JsonUtil.success("Déconnexion réussie"));
     }
 
     private void handleFavoriteToggle(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -143,7 +143,7 @@ public class ApiServlet extends BaseServlet {
 
         service(request).toggleFavorite(userId, requiredInt(request, "recipeId"));
         SushiService.DashboardData dashboard = service(request).getDashboardData(userId, null);
-        sendJson(response, HttpServletResponse.SC_OK, JsonUtil.success("Favoris mis a jour",
+        sendJson(response, HttpServletResponse.SC_OK, JsonUtil.success("Favoris mis à jour",
                 JsonUtil.user(dashboard.currentUser(), recipesById(dashboard.recettes()))));
     }
 
@@ -155,7 +155,7 @@ public class ApiServlet extends BaseServlet {
 
         service(request).addToCart(userId, requiredInt(request, "recipeId"), optionalInt(request, "quantity", 1));
         SushiService.DashboardData dashboard = service(request).getDashboardData(userId, null);
-        sendJson(response, HttpServletResponse.SC_OK, JsonUtil.success("Panier mis a jour",
+        sendJson(response, HttpServletResponse.SC_OK, JsonUtil.success("Panier mis à jour",
                 JsonUtil.user(dashboard.currentUser(), recipesById(dashboard.recettes()))));
     }
 
@@ -167,7 +167,7 @@ public class ApiServlet extends BaseServlet {
 
         service(request).removeFromCart(userId, requiredInt(request, "productId"));
         SushiService.DashboardData dashboard = service(request).getDashboardData(userId, null);
-        sendJson(response, HttpServletResponse.SC_OK, JsonUtil.success("Panier mis a jour",
+        sendJson(response, HttpServletResponse.SC_OK, JsonUtil.success("Panier mis à jour",
                 JsonUtil.user(dashboard.currentUser(), recipesById(dashboard.recettes()))));
     }
 
@@ -180,7 +180,7 @@ public class ApiServlet extends BaseServlet {
         Commande commande = service(request).checkout(userId);
         List<Commande> orders = new ArrayList<>();
         orders.add(commande);
-        sendJson(response, HttpServletResponse.SC_OK, JsonUtil.success("Commande validee", JsonUtil.orders(orders)));
+        sendJson(response, HttpServletResponse.SC_OK, JsonUtil.success("Commande validée", JsonUtil.orders(orders)));
     }
 
     private void handleAdminRecipeSave(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -238,7 +238,7 @@ public class ApiServlet extends BaseServlet {
 
         SushiService.DashboardData dashboard = service(request).getDashboardData(userId, null);
         boolean favorite = dashboard.currentUser() != null && dashboard.currentUser().getFavoris().contains(recette.getId());
-        sendJson(response, HttpServletResponse.SC_OK, JsonUtil.success("Recette enregistree",
+        sendJson(response, HttpServletResponse.SC_OK, JsonUtil.success("Recette enregistrée",
                 JsonUtil.recipe(recette, dashboard.disponibilites().getOrDefault(recette.getId(), 0), favorite)));
     }
 
@@ -249,7 +249,7 @@ public class ApiServlet extends BaseServlet {
         }
 
         service(request).deleteRecipe(userId, requiredInt(request, "recipeId"));
-        sendJson(response, HttpServletResponse.SC_OK, JsonUtil.success("Recette supprimee"));
+        sendJson(response, HttpServletResponse.SC_OK, JsonUtil.success("Recette supprimée"));
     }
 
     private void handleAdminProductSave(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -269,7 +269,7 @@ public class ApiServlet extends BaseServlet {
 
         List<Produit> products = new ArrayList<>();
         products.add(produit);
-        sendJson(response, HttpServletResponse.SC_OK, JsonUtil.success("Produit enregistre", JsonUtil.products(products)));
+        sendJson(response, HttpServletResponse.SC_OK, JsonUtil.success("Produit enregistré", JsonUtil.products(products)));
     }
 
     private Map<Integer, Recette> recipesById(List<Recette> recettes) {
@@ -284,7 +284,7 @@ public class ApiServlet extends BaseServlet {
         if ("Connexion requise.".equals(message)) {
             return HttpServletResponse.SC_UNAUTHORIZED;
         }
-        if ("Acces reserve a l'administrateur.".equals(message)) {
+        if ("Accès réservé à l'administrateur.".equals(message)) {
             return HttpServletResponse.SC_FORBIDDEN;
         }
         return HttpServletResponse.SC_BAD_REQUEST;

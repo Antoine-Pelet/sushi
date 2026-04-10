@@ -76,7 +76,7 @@
     <section class="landing-hero">
         <div class="landing-copy">
             <h1>Be your own Sushi chef</h1>
-            <a class="landing-cta" href="<%= ctx %>/app">Decouvrir</a>
+            <a class="landing-cta" href="<%= ctx %>/app">Découvrir</a>
         </div>
     </section>
 </main>

@@ -18,7 +18,7 @@ public class OrderServlet extends BaseServlet {
             }
             ensureAdminSiteAccessDenied(request);
             service(request).checkout(userId);
-            setFlash(request, "success", "Commande validee et stock mis a jour.");
+            setFlash(request, "success", "Commande validée et stock mis à jour");
         } catch (SushiException exception) {
             setFlash(request, "error", exception.getMessage());
         }

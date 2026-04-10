@@ -47,7 +47,9 @@ public class AuthServlet extends BaseServlet {
         User user = service(request).login(request.getParameter("username"), request.getParameter("password"));
         HttpSession session = request.getSession(true);
         session.setAttribute("userId", user.getId());
-        setFlash(request, "success", "Connexion reussie pour " + user.getUsername() + ".");
+        if (!user.isAdmin()) {
+            setFlash(request, "success", "Connexion réussie pour " + user.getUsername());
+        }
         return user;
     }
 
@@ -59,7 +61,7 @@ public class AuthServlet extends BaseServlet {
         );
         HttpSession session = request.getSession(true);
         session.setAttribute("userId", user.getId());
-        setFlash(request, "success", "Compte cree pour " + user.getUsername() + ".");
+        setFlash(request, "success", "Compte créé pour " + user.getUsername());
         return user;
     }
 

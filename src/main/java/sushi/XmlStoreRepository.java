@@ -572,19 +572,19 @@ public class XmlStoreRepository {
         data.setNextCommandeId(1);
 
         List<Produit> produits = new ArrayList<>();
-        produits.add(new Produit(1, "Riz a sushi", 8000, "g", 0.02));
+        produits.add(new Produit(1, "Riz à sushi", 8000, "g", 0.02));
         produits.add(new Produit(2, "Vinaigre de riz", 2500, "ml", 0.015));
         produits.add(new Produit(3, "Sucre", 3000, "g", 0.004));
         produits.add(new Produit(4, "Sel", 1500, "g", 0.002));
         produits.add(new Produit(5, "Feuilles de nori", 80, "feuilles", 0.35));
         produits.add(new Produit(6, "Saumon frais", 2500, "g", 0.045));
         produits.add(new Produit(7, "Thon frais", 2000, "g", 0.052));
-        produits.add(new Produit(8, "Concombre", 30, "piece", 0.9));
-        produits.add(new Produit(9, "Avocat", 24, "piece", 1.2));
+        produits.add(new Produit(8, "Concombre", 30, "pièce", 0.9));
+        produits.add(new Produit(9, "Avocat", 24, "pièce", 1.2));
         produits.add(new Produit(10, "Wasabi", 400, "g", 0.08));
         produits.add(new Produit(11, "Sauce soja", 3000, "ml", 0.012));
-        produits.add(new Produit(12, "Gingembre marine", 1000, "g", 0.02));
-        produits.add(new Produit(13, "Graines de sesame", 800, "g", 0.018));
+        produits.add(new Produit(12, "Gingembre mariné", 1000, "g", 0.02));
+        produits.add(new Produit(13, "Graines de sésame", 800, "g", 0.018));
         data.setProduits(produits);
 
         Map<Integer, Produit> produitsById = new HashMap<>();
@@ -596,7 +596,7 @@ public class XmlStoreRepository {
         recettes.add(createRecipe(
                 101,
                 "Maki saumon avocat",
-                "1) Cuire et assaisonner le riz.\n2) Etaler le riz sur la feuille de nori.\n3) Ajouter saumon et avocat, rouler puis decouper.",
+                "1) Cuire et assaisonner le riz.\n2) Étaler le riz sur la feuille de nori.\n3) Ajouter saumon et avocat, rouler puis découper.",
                 "/assets/img/recipe-step-finish.png",
                 12.90,
                 35,
@@ -608,12 +608,12 @@ public class XmlStoreRepository {
                 ingredient(produitsById.get(4), 3, "g"),
                 ingredient(produitsById.get(5), 2, "feuilles"),
                 ingredient(produitsById.get(6), 120, "g"),
-                ingredient(produitsById.get(9), 1, "piece")
+                ingredient(produitsById.get(9), 1, "pièce")
         ));
         recettes.add(createRecipe(
                 102,
                 "Nigiri thon",
-                "1) Former des boudins de riz.\n2) Deposer le thon sur chaque piece.\n3) Servir avec wasabi et sauce soja.",
+                "1) Former des boudins de riz.\n2) Déposer le thon sur chaque pièce.\n3) Servir avec wasabi et sauce soja.",
                 "/assets/img/recipe-step-finish.png",
                 14.50,
                 28,
@@ -629,8 +629,8 @@ public class XmlStoreRepository {
         ));
         recettes.add(createRecipe(
                 103,
-                "California concombre sesame",
-                "1) Etaler le riz sur le nori puis retourner.\n2) Garnir avec concombre et rouler.\n3) Parsemer de sesame, decouper et servir.",
+                "California concombre sésame",
+                "1) Étaler le riz sur le nori puis retourner.\n2) Garnir avec concombre et rouler.\n3) Parsemer de sésame, découper et servir.",
                 "/assets/img/recipe-step-finish.png",
                 9.50,
                 22,
@@ -641,7 +641,7 @@ public class XmlStoreRepository {
                 ingredient(produitsById.get(3), 10, "g"),
                 ingredient(produitsById.get(4), 3, "g"),
                 ingredient(produitsById.get(5), 2, "feuilles"),
-                ingredient(produitsById.get(8), 0.5, "piece"),
+                ingredient(produitsById.get(8), 0.5, "pièce"),
                 ingredient(produitsById.get(13), 10, "g")
         ));
         data.setRecettes(recettes);

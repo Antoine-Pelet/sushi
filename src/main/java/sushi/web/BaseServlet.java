@@ -60,14 +60,14 @@ public abstract class BaseServlet extends HttpServlet {
 
     protected void ensureAdminSiteAccessDenied(HttpServletRequest request) {
         if (isAdminUser(request)) {
-            throw new IllegalStateException("Acces site non disponible pour un administrateur.");
+            throw new IllegalStateException("Accès site non disponible pour un administrateur.");
         }
     }
 
     protected void setFlash(HttpServletRequest request, String type, String message) {
         HttpSession session = request.getSession(true);
         session.setAttribute("flashType", type);
-        session.setAttribute("flashMessage", message);
+        session.setAttribute("flashMessage", normalizeFlashMessage(message));
     }
 
     protected Flash consumeFlash(HttpServletRequest request) {
@@ -140,7 +140,7 @@ public abstract class BaseServlet extends HttpServlet {
     protected int requiredInt(HttpServletRequest request, String parameterName) {
         String raw = request.getParameter(parameterName);
         if (raw == null || raw.isBlank()) {
-            throw new IllegalArgumentException("Parametre manquant: " + parameterName);
+            throw new IllegalArgumentException("Paramètre manquant: " + parameterName);
         }
         return Integer.parseInt(raw.trim());
     }
@@ -164,7 +164,7 @@ public abstract class BaseServlet extends HttpServlet {
     protected double requiredDouble(HttpServletRequest request, String parameterName) {
         String raw = request.getParameter(parameterName);
         if (raw == null || raw.isBlank()) {
-            throw new IllegalArgumentException("Parametre manquant: " + parameterName);
+            throw new IllegalArgumentException("Paramètre manquant: " + parameterName);
         }
         return Double.parseDouble(raw.trim().replace(',', '.'));
     }
@@ -204,6 +204,17 @@ public abstract class BaseServlet extends HttpServlet {
     }
 
     protected record Flash(String type, String message) {
+    }
+
+    private String normalizeFlashMessage(String message) {
+        if (message == null) {
+            return "";
+        }
+        String normalized = message.trim();
+        while (normalized.endsWith(".")) {
+            normalized = normalized.substring(0, normalized.length() - 1).trim();
+        }
+        return normalized;
     }
 
     protected void appendQuery(List<String> query, String key, String value) {

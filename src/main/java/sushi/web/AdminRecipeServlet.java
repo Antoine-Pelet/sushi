@@ -25,7 +25,7 @@ public class AdminRecipeServlet extends BaseServlet {
 
             if (request.getServletPath().endsWith("/save")) {
                 Recette recette = handleSave(request, userId);
-                setFlash(request, "success", "Recette enregistree.");
+                setFlash(request, "success", "Recette enregistrée");
                 response.sendRedirect(buildRedirectTarget(
                         request.getContextPath(),
                         request.getParameter("returnPage"),
@@ -37,7 +37,7 @@ public class AdminRecipeServlet extends BaseServlet {
                 return;
             } else {
                 service(request).deleteRecipe(userId, requiredInt(request, "recipeId"));
-                setFlash(request, "success", "Recette supprimee.");
+                setFlash(request, "success", "Recette supprimée");
             }
         } catch (IllegalArgumentException | SushiException exception) {
             setFlash(request, "error", exception.getMessage());

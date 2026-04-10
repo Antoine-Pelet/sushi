@@ -22,14 +22,14 @@ public class CartServlet extends BaseServlet {
                 int recipeId = requiredInt(request, "recipeId");
                 int quantity = optionalInt(request, "quantity", 1);
                 service(request).addToCart(userId, recipeId, quantity);
-                setFlash(request, "success", "Recette ajoutee au panier.");
+                setFlash(request, "success", "Recette ajoutée au panier");
             } else if (request.getServletPath().endsWith("/clear")) {
                 service(request).clearCart(userId);
-                setFlash(request, "success", "Panier vide.");
+                setFlash(request, "success", "Panier vidé");
             } else {
                 int productId = requiredInt(request, "productId");
                 service(request).removeFromCart(userId, productId);
-                setFlash(request, "success", "Panier mis a jour.");
+                setFlash(request, "success", "Panier mis à jour");
             }
         } catch (IllegalArgumentException | SushiException exception) {
             setFlash(request, "error", exception.getMessage());

@@ -78,10 +78,10 @@ public class SushiService {
 
         String normalizedUsername = username.trim();
         if (!normalizedUsername.matches("^[A-Za-z0-9._-]{3,30}$")) {
-            throw new SushiException("Le nom d'utilisateur doit contenir entre 3 et 30 caracteres (lettres, chiffres, . _ -).");
+            throw new SushiException("Le nom d'utilisateur doit contenir entre 3 et 30 caractères (lettres, chiffres, . _ -).");
         }
         if (password.length() < 4) {
-            throw new SushiException("Le mot de passe doit contenir au moins 4 caracteres.");
+            throw new SushiException("Le mot de passe doit contenir au moins 4 caractères.");
         }
         if (!password.equals(confirmPassword)) {
             throw new SushiException("La confirmation du mot de passe ne correspond pas.");
@@ -90,7 +90,7 @@ public class SushiService {
         synchronized (lock) {
             StoreData data = repository.load();
             if (findUserByUsername(data, normalizedUsername) != null) {
-                throw new SushiException("Ce nom d'utilisateur existe deja.");
+                throw new SushiException("Ce nom d'utilisateur existe déjà.");
             }
 
             User user = new User();
@@ -123,7 +123,7 @@ public class SushiService {
 
     public void addToCart(int userId, int recipeId, int quantity) {
         if (quantity <= 0) {
-            throw new SushiException("La quantite doit etre strictement positive.");
+            throw new SushiException("La quantité doit être strictement positive.");
         }
 
         synchronized (lock) {
@@ -142,7 +142,7 @@ public class SushiService {
                 }
                 Produit produit = productsById.get(ingredient.getProduit().getId());
                 if (produit == null) {
-                    throw new SushiException("Une recette reference un produit inexistant.");
+                    throw new SushiException("Une recette référence un produit inexistant.");
                 }
                 double nextQuantity = quantitiesAfterAdd.getOrDefault(produit.getId(), 0D) + ingredient.getQuantite() * quantity;
                 if (nextQuantity > produit.getStock() + 0.0001D) {
@@ -174,7 +174,7 @@ public class SushiService {
             User user = requireUser(data, userId);
             PanierItem item = findCartItem(user, productId);
             if (item == null) {
-                throw new SushiException("Cet ingredient n'est pas dans le panier.");
+                throw new SushiException("Cet ingrédient n'est pas dans le panier.");
             }
 
             user.getPanier().remove(item);
@@ -219,7 +219,7 @@ public class SushiService {
             for (PanierItem panierItem : user.getPanier()) {
                 Produit produit = productsById.get(panierItem.getProduitId());
                 if (produit == null) {
-                    throw new SushiException("Un ingredient du panier n'existe plus.");
+                    throw new SushiException("Un ingrédient du panier n'existe plus.");
                 }
 
                 double nextStock = remainingStock.get(produit.getId()) - panierItem.getQuantite();
@@ -262,16 +262,16 @@ public class SushiService {
                 throw new SushiException("Le titre est obligatoire.");
             }
             if (prepMinutes <= 0) {
-                throw new SushiException("Le temps de preparation doit etre superieur a zero.");
+                throw new SushiException("Le temps de préparation doit être supérieur à zéro.");
             }
             if (difficulty < 1 || difficulty > 3) {
-                throw new SushiException("La difficulte doit etre comprise entre 1 et 3.");
+                throw new SushiException("La difficulté doit être comprise entre 1 et 3.");
             }
             if (ingredientForms == null || ingredientForms.isEmpty()) {
-                throw new SushiException("La recette doit contenir au moins un ingredient.");
+                throw new SushiException("La recette doit contenir au moins un ingrédient.");
             }
             if (stepForms == null || stepForms.isEmpty()) {
-                throw new SushiException("La recette doit contenir au moins une etape.");
+                throw new SushiException("La recette doit contenir au moins une étape.");
             }
 
             Map<Integer, Produit> productsById = buildProductMap(data);
@@ -280,10 +280,10 @@ public class SushiService {
             for (IngredientForm form : ingredientForms) {
                 Produit produit = productsById.get(form.productId());
                 if (produit == null) {
-                    throw new SushiException("Un ingredient reference un produit inconnu.");
+                    throw new SushiException("Un ingrédient référence un produit inconnu.");
                 }
                 if (form.quantity() <= 0D) {
-                    throw new SushiException("Les quantites d'ingredients doivent etre positives.");
+                    throw new SushiException("Les quantités d'ingrédients doivent être positives.");
                 }
                 Ingredient ingredient = new Ingredient();
                 ingredient.setProduit(produit);
@@ -304,7 +304,7 @@ public class SushiService {
                 etapes.add(etape);
             }
             if (etapes.isEmpty()) {
-                throw new SushiException("Chaque recette doit contenir au moins une etape avec du texte.");
+                throw new SushiException("Chaque recette doit contenir au moins une étape avec du texte.");
             }
 
             Recette recette = recipeId == null ? null : findRecipe(data, recipeId);
@@ -366,10 +366,10 @@ public class SushiService {
             requireAdmin(data, userId);
 
             if (isBlank(name) || isBlank(unit)) {
-                throw new SushiException("Nom, unite et stock produit sont obligatoires.");
+                throw new SushiException("Nom, unité et stock produit sont obligatoires.");
             }
             if (stock < 0D || price < 0D) {
-                throw new SushiException("Stock et prix doivent etre positifs.");
+                throw new SushiException("Stock et prix doivent être positifs.");
             }
 
             Produit produit = productId == null ? null : findProduct(data, productId);
@@ -456,7 +456,7 @@ public class SushiService {
     private User requireAdmin(StoreData data, int userId) {
         User user = requireUser(data, userId);
         if (!user.isAdmin()) {
-            throw new SushiException("Acces reserve a l'administrateur.");
+            throw new SushiException("Accès réservé à l'administrateur.");
         }
         return user;
     }

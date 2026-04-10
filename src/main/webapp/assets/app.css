@@ -1466,6 +1466,40 @@ code { display: block; padding: 12px 14px; border-radius: 14px; background: rgba
     color: #fff;
     cursor: pointer;
 }
+
+.workspace-page--admin .workspace-panel__inner {
+    height: 100%;
+    min-height: 0;
+}
+
+.workspace-page--admin .section-head {
+    flex: 0 0 auto;
+}
+
+.workspace-page--admin .admin-grid {
+    flex: 1 1 auto;
+    min-height: 0;
+    gap: clamp(12px, 2vh, 18px);
+    grid-auto-rows: minmax(0, 1fr);
+}
+
+.workspace-page--admin .admin-tile {
+    min-height: clamp(118px, 24vh, 180px);
+    padding: clamp(14px, 2vw, 20px);
+    border-radius: 24px;
+}
+
+.workspace-page--admin .admin-tile span {
+    font-size: clamp(2.5rem, 7vh, 3.4rem);
+}
+
+.workspace-page--admin .admin-tile strong {
+    font-size: clamp(1rem, 2.5vh, 1.18rem);
+}
+
+.workspace-page--admin .admin-tile__button {
+    padding: clamp(14px, 2vw, 20px);
+}
 .builder-chip {
     width: fit-content;
     margin: 0 auto 12px;

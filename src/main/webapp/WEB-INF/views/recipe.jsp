@@ -94,7 +94,7 @@
 <main class="catalog-shell">
     <section class="catalog-panel recipe-panel">
         <% if (recette == null) { %>
-        <p class="helper">Aucune recette disponible.</p>
+        <p class="helper">Aucune recette disponible</p>
         <% } else { %>
         <div class="recipe-layout">
             <div class="recipe-quadrant recipe-quadrant--media">
@@ -106,7 +106,7 @@
                     <button type="submit" class="favorite-button favorite-button--detail"><%= favorite ? "♥" : "♡" %></button>
                 </form>
                 <% } %>
-                <img class="recipe-detail-visual recipe-showcase__photo" src="<%= esc(imageSrc(ctx, recette.getImageCouverture())) %>" alt="Presentation de <%= esc(recette.getTitre()) %>">
+                <img class="recipe-detail-visual recipe-showcase__photo" src="<%= esc(imageSrc(ctx, recette.getImageCouverture())) %>" alt="Présentation de <%= esc(recette.getTitre()) %>">
             </div>
 
             <div class="recipe-quadrant recipe-quadrant--summary">
@@ -134,7 +134,7 @@
                                 <path d="M14 25h36"></path>
                             </svg>
                         </span>
-                        <strong><%= ingredientCount %> ingredients</strong>
+                        <strong><%= ingredientCount %> ingrédients</strong>
                     </li>
                 </ul>
             </div>

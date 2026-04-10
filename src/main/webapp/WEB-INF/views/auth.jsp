@@ -92,15 +92,15 @@
             <div class="flowers flowers--left"><span></span><span></span><span></span><span></span><span></span></div>
             <div class="flowers flowers--right"><span></span><span></span><span></span><span></span><span></span></div>
             <div class="auth-copy">
-                <p class="eyebrow">Acces compte</p>
+                <p class="eyebrow">Accès compte</p>
                 <div class="accent"></div>
-                <h1><%= showRegister ? "Creer votre compte" : "Reprendre votre session" %></h1>
-                <p class="auth-lead"><%= showRegister ? "Creez votre profil Sushef pour enregistrer vos favoris, votre panier et vos commandes." : "Connectez-vous pour retrouver vos favoris, votre panier, vos commandes et votre espace de travail Sushef." %></p>
+                <h1><%= showRegister ? "Créer votre compte" : "Reprendre votre session" %></h1>
+                <p class="auth-lead"><%= showRegister ? "Créez votre profil Sushef pour enregistrer vos favoris, votre panier et vos commandes" : "Connectez-vous pour retrouver vos favoris, votre panier, vos commandes et votre espace de travail Sushef" %></p>
             </div>
             <div class="auth-highlights">
-                <span class="auth-pill">Favoris sauvegardes</span>
-                <span class="auth-pill">Panier synchronise</span>
-                <span class="auth-pill">Commandes conservees</span>
+                <span class="auth-pill">Favoris sauvegardés</span>
+                <span class="auth-pill">Panier synchronisé</span>
+                <span class="auth-pill">Commandes conservées</span>
             </div>
             <div class="auth-demo">
                 <a class="button button--ghost" href="<%= ctx %>/app">Voir le catalogue</a>
@@ -118,7 +118,7 @@
                 <div class="section-head auth-card__head">
                     <div>
                         <p class="eyebrow"><%= showRegister ? "Inscription" : "Connexion" %></p>
-                        <h2><%= showRegister ? "Creer un compte utilisateur" : "Saisir vos identifiants" %></h2>
+                        <h2><%= showRegister ? "Créer un compte utilisateur" : "Saisir vos identifiants" %></h2>
                     </div>
                 </div>
 
@@ -130,11 +130,11 @@
                     <input type="hidden" name="returnMode" value="<%= esc(returnMode) %>">
                     <input type="hidden" name="returnSection" value="<%= esc(returnSection) %>">
                     <label>Nom d'utilisateur<input type="text" name="username" placeholder="chef_maki" required></label>
-                    <label>Mot de passe<input type="password" name="password" placeholder="Au moins 4 caracteres" required></label>
+                    <label>Mot de passe<input type="password" name="password" placeholder="Au moins 4 caractères" required></label>
                     <label>Confirmation<input type="password" name="confirmPassword" placeholder="Retapez le mot de passe" required></label>
-                    <button type="submit" class="button button--outline">Creer mon compte</button>
+                    <button type="submit" class="button button--outline">Créer mon compte</button>
                 </form>
-                <p class="helper">Deja inscrit ? <a class="auth-inline-link" href="<%= switchHref %>">Se connecter</a></p>
+                <p class="helper">Déjà inscrit ? <a class="auth-inline-link" href="<%= switchHref %>">Se connecter</a></p>
                 <% } else { %>
                 <form method="post" action="<%= ctx %>/auth/login" class="auth-form">
                     <input type="hidden" name="returnPage" value="<%= esc(returnPage) %>">
@@ -146,7 +146,7 @@
                     <label>Mot de passe<input type="password" name="password" placeholder="demo" required></label>
                     <button type="submit" class="button button--outline">Se connecter</button>
                 </form>
-                <p class="helper">Pas encore inscrit ? <a class="auth-inline-link" href="<%= switchHref %>">Creer un compte</a></p>
+                <p class="helper">Pas encore inscrit ? <a class="auth-inline-link" href="<%= switchHref %>">Créer un compte</a></p>
                 <% } %>
             </article>
             <% } else { %>
@@ -158,13 +158,13 @@
                         <p><%= currentUser.isAdmin() ? "Administrateur" : "Utilisateur" %></p>
                     </div>
                 </div>
-                <p class="helper">Votre session est active. Vous pouvez retourner a votre espace, continuer votre navigation ou vous deconnecter.</p>
+                <p class="helper">Votre session est active. Vous pouvez retourner à votre espace, continuer votre navigation ou vous déconnecter</p>
                 <div class="auth-actions">
-                    <a class="button button--outline" href="<%= ctx %>/workspace?mode=account">Aller a mon espace</a>
+                    <a class="button button--outline" href="<%= ctx %>/workspace?mode=account">Aller à mon espace</a>
                     <a class="button button--ghost" href="<%= ctx %>/app">Voir les recettes</a>
                     <form method="post" action="<%= ctx %>/auth/logout">
                         <input type="hidden" name="returnPage" value="auth">
-                        <button type="submit" class="danger-button">Se deconnecter</button>
+                        <button type="submit" class="danger-button">Se déconnecter</button>
                     </form>
                 </div>
             </article>

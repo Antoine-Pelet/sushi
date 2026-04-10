@@ -36,9 +36,9 @@
     private String fallbackStepText(int index) {
         String[] samples = {
             "Cuire et assaisonner le riz.",
-            "Etaler le riz sur la feuille de nori.",
-            "Ajouter la garniture puis rouler delicatement.",
-            "Decouper les makis et dresser l'assiette."
+            "Étaler le riz sur la feuille de nori.",
+            "Ajouter la garniture puis rouler délicatement.",
+            "Découper les makis et dresser l'assiette."
         };
         return samples[Math.floorMod(index, samples.length)];
     }
@@ -68,7 +68,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Realisation</title>
+    <title>Réalisation</title>
     <link rel="stylesheet" href="<%= ctx %>/assets/app.css?v=responsive-stack-1">
 </head>
 <body class="app-page app-page--catalog">
@@ -93,7 +93,7 @@
             <a class="back-link cook-back-link" href="<%= recette != null ? ctx + "/recipe?id=" + recette.getId() : ctx + "/app" %>" data-history-back>Retour</a>
         </div>
         <% if (recette == null) { %>
-        <p class="helper">Aucune recette disponible.</p>
+        <p class="helper">Aucune recette disponible</p>
         <% } else { %>
         <div class="cook-player" data-step-player>
             <div class="cook-viewport">
@@ -103,13 +103,13 @@
                     <div class="cook-copy">
                         <div class="accent cook-accent"></div>
                         <h1>Bienvenue Chef&nbsp;!</h1>
-                        <p>Pret pour apprendre a faire <%= esc(recette.getTitre()) %> avec Sushef&nbsp;?</p>
+                        <p>Prêt pour apprendre à faire <%= esc(recette.getTitre()) %> avec Sushef&nbsp;?</p>
                         <% if (recette.isNecessiteRizVinaigre()) { %>
-                        <p>Cette recette necessite du riz vinaigre</p>
+                        <p>Cette recette nécessite du riz vinaigré</p>
                         <% } %>
                         <div class="cook-intro-actions">
                             <% if (recette.isNecessiteRizVinaigre()) { %>
-                            <a class="button button--outline" href="<%= ctx %>/cook?id=<%= recette.getId() %>&start=1">Suivre la recette du riz vinaigre</a>
+                            <a class="button button--outline" href="<%= ctx %>/cook?id=<%= recette.getId() %>&start=1">Suivre la recette du riz vinaigré</a>
                             <% } %>
                             <a class="button button--ghost" href="<%= ctx %>/cook-steps?id=<%= recette.getId() %>">Commencer la recette</a>
                         </div>
@@ -133,11 +133,11 @@
 
                 <article class="cook-slide cook-slide--final <%= startIndex == (recipeSteps.size() + 1) ? "is-active" : "" %>" data-step-slide <%= startIndex == (recipeSteps.size() + 1) ? "" : "hidden" %>>
                     <button type="button" class="cook-nav cook-nav--inline cook-nav--inline-left" data-step-prev>‹</button>
-                    <img class="cook-photo cook-photo--final" src="<%= esc(imageSrc(ctx, recette.getImageCouverture())) %>" alt="Recette terminee">
+                    <img class="cook-photo cook-photo--final" src="<%= esc(imageSrc(ctx, recette.getImageCouverture())) %>" alt="Recette terminée">
                     <div class="cook-blossom cook-blossom--right"></div>
                     <div class="cook-final-copy">
                         <h2>Sushef dit 10/10&nbsp;!</h2>
-                        <p>Bon appetit</p>
+                        <p>Bon appétit</p>
                         <a class="button button--outline" href="<%= ctx %>/app">Revenir aux recettes</a>
                     </div>
                     <img class="cook-chef cook-chef--score" src="<%= ctx %>/assets/img/sushef-score.png" alt="Sushef final">

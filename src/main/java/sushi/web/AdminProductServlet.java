@@ -27,7 +27,7 @@ public class AdminProductServlet extends BaseServlet {
                     request.getParameter("unit"),
                     requiredDouble(request, "price")
             );
-            setFlash(request, "success", "Produit enregistre.");
+            setFlash(request, "success", "Produit enregistré");
         } catch (IllegalArgumentException | SushiException exception) {
             setFlash(request, "error", exception.getMessage());
         }

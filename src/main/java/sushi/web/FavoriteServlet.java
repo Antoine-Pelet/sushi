@@ -23,7 +23,7 @@ public class FavoriteServlet extends BaseServlet {
             }
             ensureAdminSiteAccessDenied(request);
             service(request).toggleFavorite(userId, requiredInt(request, "recipeId"));
-            setFlash(request, "success", "Favoris mis a jour.");
+            setFlash(request, "success", "Favoris mis à jour");
         } catch (IllegalArgumentException | SushiException exception) {
             setFlash(request, "error", exception.getMessage());
         }
